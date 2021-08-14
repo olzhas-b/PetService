@@ -15,7 +15,7 @@ limitations under the License.
 */
 package main
 
-import "github.com/olzhas-b/PetService/cmd"
+import "github.com/olzhas-b/PetService/backEnd/cmd"
 
 func main() {
 	cmd.Execute()
