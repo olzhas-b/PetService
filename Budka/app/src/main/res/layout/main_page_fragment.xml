@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="#ECEFF6"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.core.widget.NestedScrollView
@@ -266,9 +267,12 @@
     </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/nearPetSitterRv"
+            tools:listitem="@layout/nearest_pet_sitter_item"
+            tools:itemCount="3"
+            tools:orientation="horizontal"
             android:layout_marginTop="15dp"
             android:orientation="horizontal"
-            android:layout_marginStart="15dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
     </LinearLayout>
@@ -299,7 +303,6 @@
                     android:gravity="end"
                     android:layout_weight="1"
                     android:layout_marginEnd="15dp"
-
                     android:layout_marginTop="15dp"
                     android:layout_height="wrap_content"
                     android:text="Показать все"
@@ -309,11 +312,14 @@
             </LinearLayout>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/mainPagePetsRv"
+                tools:listitem="@layout/item_nearest_pets"
+                tools:itemCount="3"
+                tools:orientation="horizontal"
                 android:layout_marginTop="15dp"
-                android:layout_marginStart="15dp"
-                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                />
         </LinearLayout>
     </LinearLayout>
             <LinearLayout
@@ -353,7 +359,7 @@
                     android:src="@drawable/banner"/>
                     <Button
                         android:text="Подробнее"
-                        android:background="@drawable/myButton"
+                        android:background="@drawable/my_button"
                         android:layout_height="40dp"
                         android:theme="@style/appMainTheme"
                         android:layout_width="130dp"

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Budka</string>
+    <string name="pet">Питомец</string>
+    <string name="petSitter">Зооняня</string>
 </resources>
