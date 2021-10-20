@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/petSitterCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:elevation="10dp"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+        <ImageView
+            android:id="@+id/perSitterIv"
+            android:layout_width="match_parent"
+            android:layout_height="230dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/petSitter"
+            tools:src="@drawable/akimbek" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/gradient_pet_sitter_bg">
+
+            </FrameLayout>
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:layout_gravity="end|bottom"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:id="@+id/petSitterPriceTv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/poppins_bold"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                tools:text="₸ 3 000/час" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="end|top"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="10dp"
+>
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_bookmark"
+                />
+        </LinearLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <RatingBar
+                android:id="@+id/petSitterRb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="?android:attr/ratingBarStyleSmall"
+                android:theme="@style/MyRatingBar"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:rating="4"
+                android:layout_marginStart="15dp"
+                android:layout_marginBottom="22.5dp"
+                />
+            <TextView
+                android:id="@+id/petSitterReviewsTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:layout_marginStart="5dp"
+                app:layout_constraintStart_toEndOf="@id/petSitterRb"
+                app:layout_constraintTop_toTopOf="@id/petSitterRb"
+                tools:text = "(421)"/>
+            <ImageView
+                android:id="@+id/petSitterLocationIc"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ic_location"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintStart_toStartOf="@id/petSitterRb"
+                app:layout_constraintBottom_toTopOf="@id/petSitterRb"/>
+            <TextView
+                android:id="@+id/petSitterLocationTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:layout_marginStart="5dp"
+                app:layout_constraintStart_toEndOf="@id/petSitterLocationIc"
+                app:layout_constraintTop_toTopOf="@id/petSitterLocationIc"
+                tools:text = "Район Медеуский"/>
+            <TextView
+                android:id="@+id/petSitterNameTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:fontFamily="@font/quicksand_bold"
+                android:textSize="17sp"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintStart_toStartOf="@id/petSitterLocationIc"
+                app:layout_constraintBottom_toTopOf="@id/petSitterLocationIc"
+                tools:text = "Акимбек"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

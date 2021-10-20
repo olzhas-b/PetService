@@ -14,7 +14,12 @@
         <!-- Customize your theme here. -->
 
     </style>
-    <style name="appMainTheme" parent = "Theme.AppCompat.Light.NoActionBar">
+    <style name="appMainTheme" parent = "Theme.AppCompat">
         <item name="colorPrimary">@color/mainColor</item>
+    </style>
+
+    <style name="MyRatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@android:color/white</item>
+        <item name="colorControlActivated">@android:color/white</item>
     </style>
 </resources>
