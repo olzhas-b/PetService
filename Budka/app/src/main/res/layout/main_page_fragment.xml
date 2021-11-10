@@ -38,8 +38,10 @@
             android:layout_width="fill_parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@id/mainPageServiceMenu1"
-            android:layout_height="100dp"
+            android:layout_height="60dp"
             android:layout_weight="1"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
             android:layout_marginBottom="25dp"
 
             android:gravity="center"
@@ -69,7 +71,7 @@
 
                     android:text="Зооняни"
                     android:textAlignment="center"
-                    android:textSize="22sp">
+                    android:textSize="16sp">
 
                 </TextView>
             </LinearLayout>
@@ -97,7 +99,7 @@
                     android:gravity="top|center"
                     android:text="Выгул"
                     android:textAlignment="center"
-                    android:textSize="22sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -123,7 +125,7 @@
 
                     android:text="Ветеринары"
                     android:textAlignment="center"
-                    android:textSize="22sp" />
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
@@ -133,10 +135,13 @@
         <LinearLayout
             android:id="@+id/mainPageServiceMenu1"
             android:layout_width="fill_parent"
-            android:layout_height="100dp"
+            android:layout_height="60dp"
             android:layout_below="@+id/mainPageServiceMenu"
             android:layout_weight="1"
             android:gravity="center"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginBottom="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:orientation="horizontal">
@@ -164,7 +169,7 @@
                     android:gravity="top|center"
                     android:text="Дрессировка"
                     android:textAlignment="center"
-                    android:textSize="20sp">
+                    android:textSize="14sp">
 
                 </TextView>
             </LinearLayout>
@@ -192,7 +197,7 @@
                     android:gravity="top|center"
                     android:text="Груминг"
                     android:textAlignment="center"
-                    android:textSize="22sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -217,7 +222,7 @@
                     android:text="Зоогостиницы"
                     android:textColor="@color/white"
                     android:textAlignment="center"
-                    android:textSize="20sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -353,10 +358,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                 <ImageView
+                    android:id="@+id/bannerIv"
                     android:layout_width="match_parent"
                     android:layout_height="223dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/banner"/>
+                    android:scaleType="centerCrop"/>
                     <Button
                         android:text="Подробнее"
                         android:background="@drawable/my_button"

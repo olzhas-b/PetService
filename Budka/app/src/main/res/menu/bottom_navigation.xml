@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/mainPageFragment"
+        android:icon="@drawable/ic_mainpage"
+        android:title="Гланая" />
+<!--    <item-->
+<!--        android:id="@+id/favouritePageFragment"-->
+<!--        android:icon="@drawable/ic_favorite_black_filled"-->
+<!--        android:title="Избранное" />-->
+<!--    <item-->
+<!--        android:id="@+id/createAnnouncement"-->
+<!--        android:icon="@drawable/ic_create"-->
+<!--        android:title="Создать" />-->
+<!--    <item-->
+<!--        android:id="@+id/jobsFragment"-->
+<!--        android:icon="@drawable/ic_jobs"-->
+<!--        android:title="Работа" />-->
+<!--    <item-->
+<!--        android:id="@+id/UserFragment"-->
+<!--        android:icon="@drawable/ic_profile"-->
+<!--        android:title="Профиль" />-->
+
+
+
+</menu>

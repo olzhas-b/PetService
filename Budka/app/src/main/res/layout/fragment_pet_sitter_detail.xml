@@ -1,0 +1,524 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F6F6F6"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="5dp"
+        android:elevation="9dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="10dp"
+            tools:src="@drawable/ic_back_arrow_white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+        <ImageView
+            android:id="@+id/bookmark"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="15dp"
+            tools:src="@drawable/ic_filled_bookmark"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="25dp"
+
+            tools:src="@drawable/ic_share_white"
+            app:layout_constraintEnd_toStartOf="@id/bookmark"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/shadow_effect"
+ >
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="230dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/akimbek"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="210dp">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/profileCv"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="25dp"
+                app:cardCornerRadius="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeWidth="3dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitCenter"
+                    tools:src="@drawable/img_akimbek_profile" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/petSitterNameTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/avenir_black"
+                android:textColor="@color/black"
+                android:textSize="17sp"
+                app:layout_constraintEnd_toEndOf="@id/profileCv"
+                app:layout_constraintTop_toBottomOf="@id/profileCv"
+                tools:text="Акимбек" />
+
+            <TextView
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/avenir_ltstd_roman"
+                android:textAlignment="textEnd"
+                android:textColor="#82808B"
+                android:textSize="17sp"
+                app:layout_constraintEnd_toEndOf="@id/petSitterNameTv"
+                app:layout_constraintTop_toBottomOf="@id/petSitterNameTv"
+                tools:text="Медеуский район, Алматы, Казахстан" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+        <LinearLayout
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/shadow_effect"
+            android:elevation="8dp"
+            android:layout_marginTop="13dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/header">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/trueno_round_bd"
+                android:text="Описание"
+                android:textColor="@color/black"
+                android:textSize="23sp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/petSitterDescription"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:textSize="17sp"
+                android:layout_marginEnd="25dp"
+                android:textColor="#312F42"/>
+        </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/acceptablePetTypes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/shadow_effect"
+                android:elevation="8dp"
+                android:layout_marginTop="13dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/description">
+
+                <TextView
+                    android:layout_width="300dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/trueno_round_bd"
+                    android:text="Приемлимые виды питомцев"
+                    android:textColor="@color/black"
+                    android:textSize="23sp"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginBottom="30dp"
+
+                    tools:listitem="@layout/item_pet_type"
+
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:spanCount="2"
+                    tools:itemCount="3"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/acceptablePetSizes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/shadow_effect"
+                android:elevation="8dp"
+                android:layout_marginTop="13dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/acceptablePetTypes">
+
+                <TextView
+                    android:layout_width="300dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/trueno_round_bd"
+                    android:text="Приемлимые размеры питомцев"
+                    android:textColor="@color/black"
+                    android:textSize="23sp"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    tools:listitem="@layout/item_pet_size"
+                    android:layout_marginBottom="30dp"
+
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:spanCount="3"
+                    tools:itemCount="5"/>
+            </LinearLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/otherProperties"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shadow_effect"
+                android:elevation="8dp"
+                android:layout_marginTop="13dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/acceptablePetSizes">
+                <TextView
+                    android:id="@+id/otherPropertiesTv"
+                    android:layout_width="300dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/trueno_round_bd"
+                    android:text="Прочее"
+                    android:textColor="@color/black"
+                    android:textSize="23sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <androidx.constraintlayout.helper.widget.Flow
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/otherPropertiesTv"
+            app:layout_constraintTop_toBottomOf="@id/otherPropertiesTv"
+                    app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical"
+            app:flow_verticalGap="10dp"
+            app:constraint_referenced_ids="petQuantityLl, walkingLl,appartmenLl, foregroundLl, emergencyLl, bordingLl, lastActivityLl"
+            android:fontFamily="@font/avenir_ltstd_roman"
+            android:textColor="@color/black"
+            android:textSize="17sp"/>
+
+    <TextView
+        android:id="@+id/petQuantityLl"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+
+        android:text="Количество питомцев"
+        android:fontFamily="@font/avenir_ltstd_roman"
+        android:textColor="@color/gray"
+        android:textSize="17sp" />
+
+    <TextView
+            android:id="@+id/appartmenLl"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:text="Тип недвежисоти"
+            android:fontFamily="@font/avenir_ltstd_roman"
+            android:textColor="@color/gray"
+            android:textSize="17sp" />
+                <TextView
+                    android:id="@+id/walkingLl"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:text="Прогулки в день"
+                    android:fontFamily="@font/avenir_ltstd_roman"
+                    android:textColor="@color/gray"
+                    android:textSize="17sp"
+                    tools:ignore="MissingConstraints" />
+                <TextView
+                    android:id="@+id/foregroundLl"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:text="Размер двора"
+                    android:fontFamily="@font/avenir_ltstd_roman"
+                    android:textColor="@color/gray"
+                    android:textSize="17sp"
+                    tools:ignore="MissingConstraints"
+                    />
+                <TextView
+                    android:id="@+id/emergencyLl"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:text="Аварийный транспорт"
+                    android:fontFamily="@font/avenir_ltstd_roman"
+                    android:textColor="@color/gray"
+                    android:textSize="17sp"
+                    tools:ignore="MissingConstraints"
+                    />
+    <TextView
+        android:id="@+id/bordingLl"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:text="Выезд"
+        android:fontFamily="@font/avenir_ltstd_roman"
+        android:textColor="@color/gray"
+        android:textSize="17sp"
+        tools:ignore="MissingConstraints"
+        />
+    <TextView
+        android:id="@+id/lastActivityLl"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:text="Последняя активность"
+        android:fontFamily="@font/avenir_ltstd_roman"
+        android:textColor="@color/gray"
+        android:textSize="17sp"
+        tools:ignore="MissingConstraints"
+        />
+
+
+
+
+    <TextView
+        android:id="@+id/petQuantityTv"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+
+        tools:text="4"
+        android:fontFamily="@font/avenir_ltstd_roman"
+        android:textColor="@color/black"
+        android:textSize="17sp"
+        android:layout_marginStart="100dp"
+        app:layout_constraintStart_toEndOf="@id/petQuantityLl"
+        app:layout_constraintTop_toTopOf="@id/petQuantityLl"
+        />
+
+    <TextView
+        android:id="@+id/appartmenTv"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        tools:text="3"
+        android:fontFamily="@font/avenir_ltstd_roman"
+        android:textColor="@color/black"
+        android:textSize="17sp"
+        android:layout_marginStart="100dp"
+        app:layout_constraintStart_toEndOf="@id/appartmenLl"
+        app:layout_constraintTop_toTopOf="@id/appartmenLl"
+        />
+    <TextView
+        android:id="@+id/walkingTv"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        tools:text="Дом"
+        android:fontFamily="@font/avenir_ltstd_roman"
+        android:textColor="@color/black"
+        android:textSize="17sp"
+        android:layout_marginStart="100dp"
+        app:layout_constraintStart_toEndOf="@id/walkingLl"
+        app:layout_constraintTop_toTopOf="@id/walkingLl"
+        />
+    <TextView
+        android:id="@+id/foregroundTv"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        tools:text="Большой"
+        android:fontFamily="@font/avenir_ltstd_roman"
+        android:textColor="@color/black"
+        android:textSize="17sp"
+        android:layout_marginStart="100dp"
+        app:layout_constraintStart_toEndOf="@id/foregroundLl"
+        app:layout_constraintTop_toTopOf="@id/foregroundLl"
+        />
+    <TextView
+        android:id="@+id/emergencyTv"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        tools:text="Есть"
+        android:fontFamily="@font/avenir_ltstd_roman"
+        android:textColor="@color/black"
+        android:textSize="17sp"
+        android:layout_marginStart="100dp"
+        app:layout_constraintStart_toEndOf="@id/emergencyLl"
+        app:layout_constraintTop_toTopOf="@id/emergencyLl"
+        />
+    <TextView
+        android:id="@+id/bordingTv"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        tools:text="Есть"
+        android:fontFamily="@font/avenir_ltstd_roman"
+        android:textColor="@color/black"
+        android:textSize="17sp"
+        android:layout_marginStart="100dp"
+        app:layout_constraintStart_toEndOf="@id/bordingLl"
+        app:layout_constraintTop_toTopOf="@id/bordingLl"
+        />
+    <TextView
+        android:id="@+id/lastActivityTv"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        tools:text="Вчера"
+        android:fontFamily="@font/avenir_ltstd_roman"
+        android:textColor="@color/black"
+        android:textSize="17sp"
+        android:layout_marginStart="100dp"
+        app:layout_constraintStart_toEndOf="@id/lastActivityLl"
+        app:layout_constraintTop_toTopOf="@id/lastActivityLl"
+        />
+
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <LinearLayout
+                android:id="@+id/pets"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/shadow_effect"
+                android:elevation="8dp"
+                android:layout_marginTop="13dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/otherProperties">
+
+                <TextView
+                    android:layout_width="300dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/trueno_round_bd"
+                    android:text="Питомцы"
+                    android:textColor="@color/black"
+                    android:textSize="23sp"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginBottom="30dp"
+                    android:layout_marginTop="15dp"
+                    tools:listitem="@layout/item_pet"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    tools:itemCount="3"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/otherService"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/shadow_effect"
+                android:elevation="8dp"
+                android:layout_marginTop="13dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/pets">
+
+                <TextView
+                    android:layout_width="300dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/trueno_round_bd"
+                    android:text="Другие услуги"
+                    android:textColor="@color/black"
+                    android:textSize="23sp"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginBottom="30dp"
+
+                    tools:listitem="@layout/item_other_service"
+
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:spanCount="2"
+                    tools:itemCount="3"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/shadow_effect"
+                android:elevation="8dp"
+                android:layout_marginTop="13dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/otherService">
+
+                <TextView
+                    android:layout_width="300dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/trueno_round_bd"
+                    android:text="Расположение"
+                    android:textColor="@color/black"
+                    android:textSize="23sp"/>
+                <TextView
+                    android:layout_width = "200dp"
+                    android:layout_height = "wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:textSize="19sp"
+                    android:layout_marginBottom="30dp"
+                    android:fontFamily="@font/avenir_ltstd_roman"
+                    tools:text="@string/location" />
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
