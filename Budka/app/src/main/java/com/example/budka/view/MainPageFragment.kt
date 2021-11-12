@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.budka.R
@@ -41,6 +42,7 @@ class MainPageFragment: Fragment() {
         Picasso.get().load(R.drawable.banner).fit().centerCrop().placeholder(R.drawable.banner).into(viewBinding.bannerIv)
         setupAdapter()
         setObservers()
+        setOnClickListener()
     }
 
     private fun setObservers(){
@@ -76,7 +78,10 @@ class MainPageFragment: Fragment() {
 
     }
 
-    private fun setOnClickListener(view: View){
+    private fun setOnClickListener(){
+        petSitterBtn.setOnClickListener {
+            it.findNavController().navigate(MainPageFragmentDirections.actionMainPageFragmentToServiceProvidersFragment())
+        }
 
     }
 

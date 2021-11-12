@@ -7,6 +7,21 @@
     <fragment
         android:id="@+id/mainPageFragment"
         android:name="com.example.budka.view.MainPageFragment"
-        android:label="MainPageFragment"/>
+        android:label="MainPageFragment">
+        <action
+            android:id="@+id/action_mainPageFragment_to_service_providers_fragment"
+            app:destination="@id/service_providers_fragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/service_providers_fragment"
+        android:name="com.example.budka.view.ServiceProvidersListFragment"
+        android:label="ServiceProvidersListFragment">
+
+        <action
+            android:id="@+id/action_service_providers_fragment_to_mainPageFragment"
+            app:destination="@id/mainPageFragment" />
+    </fragment>
+
 
 </navigation>

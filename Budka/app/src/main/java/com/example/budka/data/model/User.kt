@@ -1,6 +1,7 @@
 package com.example.budka.data.model
 
 data class User(
+    val id: Int,
     val username: String,
     val first_name: String,
     val last_name: String,
@@ -17,6 +18,7 @@ data class User(
 )
 
 data class Services(
+    val id: Int,
     val serviceType: String,
     val serviceDetail: ServiceDetail
 )
