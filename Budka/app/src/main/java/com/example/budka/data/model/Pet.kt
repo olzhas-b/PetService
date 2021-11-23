@@ -6,5 +6,9 @@ data class Pet(
     val breed: String,
     val weight: Int,
     val avatar: String,
-    val user: User
+    val user: PetOwner?
+)
+
+data class PetResponse(
+    val pets: List<Pet>
 )

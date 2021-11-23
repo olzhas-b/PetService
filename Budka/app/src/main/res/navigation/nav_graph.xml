@@ -21,7 +21,28 @@
         <action
             android:id="@+id/action_service_providers_fragment_to_mainPageFragment"
             app:destination="@id/mainPageFragment" />
+        <action
+            android:id="@+id/action_service_providers_fragment_to_service_provider_detail_fragment"
+            app:destination="@id/service_provider_detail_fragment" />
+        <argument
+            android:name="serviceType"
+            app:argType="string"/>
     </fragment>
+
+    <fragment
+        android:id="@+id/service_provider_detail_fragment"
+        android:name="com.example.budka.view.ServiceProviderDetailFragment"
+        android:label="ServiceProviderDetailFragment">
+
+        <action
+            android:id="@+id/action_service_providers_fragment_to_service_providers_fragment"
+            app:destination="@id/service_providers_fragment" />
+        <argument
+            android:name="user"
+            app:argType="com.example.budka.data.model.ServiceProvider"/>
+
+    </fragment>
+
 
 
 </navigation>

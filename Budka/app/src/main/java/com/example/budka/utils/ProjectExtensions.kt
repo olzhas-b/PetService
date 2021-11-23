@@ -16,7 +16,7 @@ import java.util.*
 
 fun TextView.setUpPriceMask(
     text: String?,
-    currencyModel: CurrencyModel?= null,
+    currencyCode: String?= null,
     pricePerTime: String?
 ){
     setMaxLength(11)
@@ -26,7 +26,7 @@ fun TextView.setUpPriceMask(
         formatSymbols.decimalSeparator = '.'
         formatSymbols.groupingSeparator = ' '
         val localeKz = Locale("ru", "kz")
-        val currency = Currency.getInstance(currencyModel?.currencyCode?:"KZT")
+        val currency = Currency.getInstance(currencyCode?:"KZT")
 
         if (pricePerTime != null) {
             val finalText = "$amount ${currency.getSymbol(localeKz)}/$pricePerTime"

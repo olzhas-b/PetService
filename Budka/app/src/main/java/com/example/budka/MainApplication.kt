@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.budka.R
+import com.example.budka.di.networkModule
 import com.example.budka.di.repositoryModule
 import com.example.budka.di.useCaseModule
 import com.example.budka.di.viewModelModule
@@ -20,7 +21,7 @@ class MainApplication: Application(){
         startKoin{
             androidLogger()
             androidContext(this@MainApplication)
-            koin.loadModules(listOf(viewModelModule, useCaseModule, repositoryModule))
+            koin.loadModules(listOf(viewModelModule, useCaseModule, repositoryModule, networkModule))
             koin.createRootScope()
         }
     }

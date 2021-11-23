@@ -40,6 +40,9 @@ class MainPageFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Picasso.get().load(R.drawable.banner).fit().centerCrop().placeholder(R.drawable.banner).into(viewBinding.bannerIv)
+        if(savedInstanceState==null){
+        petSittersListViewModel.fetchPetSittersList("petSitting")
+        }
         setupAdapter()
         setObservers()
         setOnClickListener()
@@ -80,7 +83,7 @@ class MainPageFragment: Fragment() {
 
     private fun setOnClickListener(){
         petSitterBtn.setOnClickListener {
-            it.findNavController().navigate(MainPageFragmentDirections.actionMainPageFragmentToServiceProvidersFragment())
+            it.findNavController().navigate(MainPageFragmentDirections.actionMainPageFragmentToServiceProvidersFragment("petSitting"))
         }
 
     }

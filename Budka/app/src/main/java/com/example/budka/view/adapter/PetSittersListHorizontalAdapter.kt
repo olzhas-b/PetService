@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.budka.data.model.Pet
+import com.example.budka.data.model.ServiceProvider
 import com.example.budka.data.model.User
 import com.example.budka.databinding.ItemNearestPetsBinding
 import com.example.budka.databinding.NearestPetSitterItemBinding
@@ -12,7 +13,7 @@ import com.example.budka.view.adapter.viewHolder.PetsListHorizontalViewHolder
 
 class PetSittersListHorizontalAdapter internal constructor(
 ): RecyclerView.Adapter<PetSittersListHorizontalViewHolder>() {
-    var petSitterList: List<User> = emptyList()
+    var petSitterList: List<ServiceProvider> = emptyList()
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -32,7 +33,7 @@ class PetSittersListHorizontalAdapter internal constructor(
         return  petSitterList.size
     }
 
-    fun updatePetSittersList(petSitterList: List<User>){
+    fun updatePetSittersList(petSitterList: List<ServiceProvider>){
         this.petSitterList = petSitterList
         notifyDataSetChanged()
     }

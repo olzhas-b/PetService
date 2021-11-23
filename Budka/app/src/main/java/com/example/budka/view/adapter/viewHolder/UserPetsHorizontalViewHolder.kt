@@ -8,17 +8,14 @@ import com.example.budka.databinding.ItemNearestPetsBinding
 import com.example.budka.databinding.ItemPetBinding
 import com.squareup.picasso.Picasso
 
-class PetsListHorizontalViewHolder constructor(
-    val itemPetBinding: ItemNearestPetsBinding
+class UserPetsHorizontalViewHolder (
+    val itemPetBinding: ItemPetBinding
 ): RecyclerView.ViewHolder(itemPetBinding.root) {
 
     @SuppressLint("SetTextI18n")
     fun setUp(petsData: Pet){
-        itemPetBinding.mainPagePetNameTv.text = petsData.name
-        itemPetBinding.mainPagePetOwnerNameTv.text = petsData.user?.first_name+" "+ petsData.user?.last_name
-        Picasso.get().load(petsData.avatar).fit().centerCrop().placeholder(R.drawable.img_aktos).into(itemPetBinding.mainPagePetsIv)
+        itemPetBinding.petNameTv.text = petsData.name
+        Picasso.get().load(petsData.avatar).fit().centerCrop().placeholder(R.drawable.img_aktos).into(itemPetBinding.petsAvatarIv)
 
     }
-
-
 }
