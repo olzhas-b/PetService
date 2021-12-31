@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/service_providers_fragment"
+    android:id="@+id/ServiceProvidersListFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#E5E5E5"
@@ -33,13 +33,14 @@
             app:layout_constraintStart_toEndOf="@id/petSitterLocationIv"
             app:layout_constraintBottom_toBottomOf="@id/petSitterLocationIv"
             android:textColor="@color/black"
-            android:textSize="28sp"
+            android:textSize="14sp"
             android:fontFamily="@font/quicksand_bold"
             android:textAlignment="center"
             android:layout_gravity="center"
             android:layout_marginStart="8dp"
             />
         <ImageButton
+            android:id="@+id/petSitterFilterIb"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="@id/petSitterLocationTv"
             android:src="@drawable/ic_filter"

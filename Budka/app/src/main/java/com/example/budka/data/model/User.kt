@@ -1,5 +1,8 @@
 package com.example.budka.data.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
 data class User(
     val id: Int,
     val username: String,
@@ -32,6 +35,7 @@ data class ServiceProvidersList(
     val users: List<ServiceProvider>
 )
 
+@Parcelize
 data class ServiceProvider(
     val id: Int,
     val username: String,
@@ -42,12 +46,12 @@ data class ServiceProvider(
     val location: String?,
     val avatar: String,
     val average_rating: Double,
-    val serviceId: Int,
+    val service_id: Int,
     val serviceType: String,
     val price: Int,
     val currencyCode: String?,
     val pricePerTime: String?
-)
+): Parcelable
 
 
 
@@ -65,13 +69,15 @@ data class PetSitterDetail(
     val services: List<Services>?
 )
 
-
+data class ServiceResponse(
+    val services: List<Services>?
+)
 
 data class Services(
     val id: Int,
     val serviceType: String?,
     val price: Int,
-    val currencyModel: CurrencyModel,
+    val currencyCode: String?,
     val pricePerTime: String?,
 )
 

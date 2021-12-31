@@ -9,10 +9,10 @@
 <!--        android:id="@+id/favouritePageFragment"-->
 <!--        android:icon="@drawable/ic_favorite_black_filled"-->
 <!--        android:title="Избранное" />-->
-<!--    <item-->
-<!--        android:id="@+id/createAnnouncement"-->
-<!--        android:icon="@drawable/ic_create"-->
-<!--        android:title="Создать" />-->
+    <item
+        android:id="@+id/createServiceApplicationFragment"
+        android:icon="@drawable/ic_create"
+        android:title="Создать" />
 <!--    <item-->
 <!--        android:id="@+id/jobsFragment"-->
 <!--        android:icon="@drawable/ic_jobs"-->

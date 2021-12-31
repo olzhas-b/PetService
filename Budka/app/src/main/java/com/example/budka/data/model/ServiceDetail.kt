@@ -7,7 +7,7 @@ data class ServiceDetail(
     val acceptablePets: List<String>?,
     val acceptableSize: List<String>?,
     val additionalProperties: List<Properties>?,
-    val user: PetSitterDetail?
+//    val user: PetSitterDetail?
 )
 
 data class Properties(

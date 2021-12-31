@@ -138,4 +138,9 @@ dependencies {
 
     //Shimmer Layout
     implementation 'io.supercharge:shimmerlayout:2.1.0'
+
+    implementation 'dev.icerock.moko:parcelize:0.7.1'
+
+    //Google Services
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
 }

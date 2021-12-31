@@ -18,7 +18,6 @@ class ServiceProvidersViewHolder constructor(
     @SuppressLint("SetTextI18n")
     fun setUp(serviceProviderData: ServiceProvider){
         itemPetSitterBinding.petSitterRb.rating = serviceProviderData.average_rating.toFloat()
-        Picasso.get().isLoggingEnabled = true
         Picasso.get().load(serviceProviderData.avatar).fit().centerCrop().into(itemPetSitterBinding.perSitterIv)
         itemPetSitterBinding.petSitterNameTv.text = serviceProviderData.first_name +' '+ serviceProviderData.last_name
         itemPetSitterBinding.petSitterLocationTv.text = serviceProviderData.location

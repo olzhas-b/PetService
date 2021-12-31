@@ -150,7 +150,7 @@
                 android:id="@+id/serviceDescriptionTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/petSitterDescription"
+                tools:text="@string/petSitterDescription"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:textSize="17sp"
@@ -315,6 +315,7 @@
                     android:textColor="@color/black"
                     android:textSize="23sp"/>
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/userServicesRv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
