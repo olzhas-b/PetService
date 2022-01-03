@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ /**
+  ~  * Created by Ali Ashkeyev on 03.01.2022, 22:55
+  ~  * Copyright (c) 2022 . All rights reserved.
+  ~  * Last modified 03.01.2022, 22:53
+  ~  */
+  -->
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/countryBlock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/text_view_countries"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp"
+            android:text="Страны"
+            android:textSize="20sp" />
+
+        <AutoCompleteTextView
+            android:id="@+id/countriesEdV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:completionHint="Select a country"
+            android:completionThreshold="1"
+            android:dropDownAnchor="@id/text_view_countries"
+            android:hint="Выберите страну"
+            android:popupBackground="@color/white" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/cityBlock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/countryBlock">
+
+        <TextView
+            android:id="@+id/text_view_cities"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp"
+            android:text="Города"
+            android:textSize="20sp" />
+
+        <AutoCompleteTextView
+            android:id="@+id/cityEdV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:completionHint="Select a country"
+            android:completionThreshold="1"
+            android:dropDownAnchor="@id/text_view_countries"
+            android:hint="Выберите город"
+            android:popupBackground="@color/white" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/petTypeBlock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cityBlock">
+
+        <TextView
+            android:id="@+id/text_view_pet_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp"
+            android:text="Выберите вид питомца"
+            android:textSize="20sp" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/corner_input"
+        >
+
+    <Spinner
+        android:id="@+id/petTypeSp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dropdown"/>
+    </LinearLayout>
+
+    </LinearLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:theme="@style/appMainTheme"
+        android:background="@drawable/my_button"
+        android:text="Применить фильтр"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/petTypeBlock"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
