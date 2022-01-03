@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import com.example.budka.R
 import com.example.budka.data.model.PetSize
 import com.example.budka.data.model.PetType
@@ -30,6 +31,7 @@ class CreateServiceApplicationFragment : Fragment() {
         setPetTypes()
         setPetSize()
         setServiceType()
+        setListeners()
     }
 
     private fun setPetTypes() {
@@ -67,6 +69,12 @@ class CreateServiceApplicationFragment : Fragment() {
             R.layout.item_pet_type_filter, R.id.text_view_pet_type_item, petSizeList
         )
         viewBinding.petSizeSp.adapter = sizeAdapter
+    }
+
+    private fun setListeners(){
+        viewBinding.navigateConfirmBtn.setOnClickListener {
+            it.findNavController().navigate(CreateServiceApplicationFragmentDirections.actionCreateServiceApplicationFragmentToConfirmServiceApplicationFragment())
+        }
     }
 }
 

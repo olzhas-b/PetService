@@ -58,7 +58,22 @@
         android:id="@+id/createServiceApplicationFragment"
         android:name="com.example.budka.view.CreateServiceApplicationFragment"
         android:label="CreateServiceApplicationFragment"
-        />
+        >
+
+        <action
+            android:id="@+id/action_createServiceApplicationFragment_to_confirmServiceApplicationFragment"
+            app:destination="@id/confirmServiceApplicationFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/confirmServiceApplicationFragment"
+        android:name="com.example.budka.view.ConfirmServiceApplicationFragment"
+        android:label="confirmServiceApplicationFragment">
+
+        <action
+            android:id="@+id/action_confirmServiceApplicationFragment_to_createServiceApplicationFragment"
+            app:destination="@id/createServiceApplicationFragment" />
+    </fragment>
 
 
 

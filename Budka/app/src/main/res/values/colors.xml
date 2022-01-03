@@ -12,4 +12,5 @@
     <color name="gray">#82808B</color>
     <color name="grey">#EDEEF0</color>
     <color name="pricePerAmount">#B3BFBF</color>
+    <color name="inputColor">#EDF1FA</color>
 </resources>
