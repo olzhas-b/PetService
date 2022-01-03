@@ -40,10 +40,8 @@ class ServiceProviderFilterFragment:Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if(savedInstanceState==null){
-            countriesListViewModel.fetchCountryList()
-        }
-        countriesListViewModel.getCountryList().observe(viewLifecycleOwner, Observer {
+
+        countriesListViewModel.fetchCountryList().observe(viewLifecycleOwner, Observer {
             setCountries(it)
         })
         setPetTypes()

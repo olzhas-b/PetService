@@ -42,7 +42,7 @@ class ConfirmServiceApplicationFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        countriesListViewModel.getCountryList().observe(viewLifecycleOwner, {
+        countriesListViewModel.fetchCountryList().observe(viewLifecycleOwner, {
             setCountries(it)
         })
         setListeners()

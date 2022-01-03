@@ -11,11 +11,9 @@ class CountriesListViewModel (private val countryListUseCase: CountryListUseCase
     private var countryList = MutableLiveData<List<CountryData>>()
 
 
-    fun fetchCountryList() {
-        countryList = countryListUseCase.getCountries() as MutableLiveData<List<CountryData>>
+    fun fetchCountryList() : LiveData<List<CountryData>>{
+        return countryListUseCase.getCountries() as MutableLiveData<List<CountryData>>
     }
 
-    fun getCountryList(): LiveData<List<CountryData>> {
-        return countryList
-    }
+
 }
