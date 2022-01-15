@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ /**
+  ~  * Created by Ali Ashkeyev on 12.01.22 21:13
+  ~  * Copyright (c) 2022 . All rights reserved.
+  ~  * Last modified 12.01.22 21:13
+  ~  */
+  -->
+
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="30dp"
+        >
+        <TextView
+            android:id="@+id/pageTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="Создать сервис"
+            android:textAlignment="center"
+            android:textSize="32dp"
+            android:layout_margin="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <LinearLayout
+            android:id="@+id/serviceTypeBLock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pageTitle">
+
+            <TextView
+                android:id="@+id/text_view_serviceType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
+                android:text="Выберите вид услуги"
+                android:textSize="20sp" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/corner_input"
+                >
+
+                <Spinner
+                    android:id="@+id/serviceTypeSp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:listitem="@layout/item_pet_type_filter"
+                    android:spinnerMode="dropdown"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/summaryBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/serviceTypeBLock">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
+                android:text="Описание"
+                android:textSize="20sp"/>
+            <EditText
+                android:id="@+id/summaryEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:background="@drawable/corner_input"
+                android:minHeight="150dp"
+                android:hint="Печатать..."
+                android:gravity="top"
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/petTypeBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/summaryBlock">
+
+            <TextView
+                android:id="@+id/text_view_pet_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
+                android:text="Выберите виды питомцев для обслуживание"
+                android:textSize="20sp" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/corner_input"
+                >
+                <com.example.budka.utils.MultiSpinner
+                    android:id="@+id/petTypeSp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    tools:listitem="@layout/item_pet_type_filter"
+                    android:spinnerMode="dropdown"
+                    android:layout_weight="1"
+                     />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/petSizeBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/petTypeBlock">
+
+            <TextView
+                android:id="@+id/text_view_pet_size"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
+                android:text="Выберите размеры питомцев для обслуживание"
+                android:textSize="20sp" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/corner_input"
+                >
+
+                <com.example.budka.utils.MultiSpinner
+                    android:id="@+id/petSizeSp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:listitem="@layout/item_pet_type_filter"
+                    android:spinnerMode="dropdown"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/countryBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/petSizeBlock"
+            >
+
+            <TextView
+                android:id="@+id/text_view_countries"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
+                android:text="Страны"
+                android:textSize="20sp" />
+
+            <AutoCompleteTextView
+                android:id="@+id/countriesEdV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:completionHint="Select a country"
+                android:completionThreshold="1"
+                android:dropDownAnchor="@id/text_view_countries"
+                android:hint="Выберите страну"
+                android:popupBackground="@color/white" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/cityBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/countryBlock">
+
+            <TextView
+                android:id="@+id/text_view_cities"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
+                android:text="Города"
+                android:textSize="20sp" />
+
+            <AutoCompleteTextView
+                android:id="@+id/cityEdV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:completionHint="Select a country"
+                android:completionThreshold="1"
+                android:dropDownAnchor="@id/text_view_countries"
+                android:hint="Выберите город"
+                android:popupBackground="@color/white" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/optionalNavigateBtn"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:theme="@style/appMainTheme"
+            android:background="@drawable/my_button"
+            android:text="Далее"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cityBlock"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

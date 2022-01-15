@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ /**
   ~  * Created by Ali Ashkeyev on 03.01.2022, 22:55
   ~  * Copyright (c) 2022 . All rights reserved.
@@ -32,14 +31,13 @@
             app:destination="@id/service_provider_detail_fragment" />
         <argument
             android:name="serviceType"
-            app:argType="string"/>
+            app:argType="string" />
         <action
             android:id="@+id/action_service_providers_fragment_to_pet_sitters_filter_fragment"
             app:destination="@id/service_provider_filter_fragment" />
         <action
             android:id="@+id/action_ServiceProvidersListFragment_to_mainPageFragment"
-            app:destination="@id/mainPageFragment"
-             />
+            app:destination="@id/mainPageFragment" />
     </fragment>
 
     <fragment
@@ -52,21 +50,19 @@
             app:destination="@id/ServiceProvidersListFragment" />
         <argument
             android:name="user"
-            app:argType="com.example.budka.data.model.ServiceProvider"/>
+            app:argType="com.example.budka.data.model.ServiceProvider" />
 
     </fragment>
 
     <fragment
         android:id="@+id/service_provider_filter_fragment"
         android:name="com.example.budka.view.ServiceProviderFilterFragment"
-        android:label="PetSittersFilterFragment"
-        />
+        android:label="PetSittersFilterFragment" />
 
     <fragment
         android:id="@+id/createServiceApplicationFragment"
         android:name="com.example.budka.view.CreateServiceApplicationFragment"
-        android:label="CreateServiceApplicationFragment"
-        >
+        android:label="CreateServiceApplicationFragment">
 
         <action
             android:id="@+id/action_createServiceApplicationFragment_to_confirmServiceApplicationFragment"
@@ -83,6 +79,49 @@
             app:destination="@id/createServiceApplicationFragment" />
     </fragment>
 
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.budka.view.ProfileFragment"
+        android:label="ProfileFragment" >
+        <action
+            android:id="@+id/action_profileFragment_to_myServices"
+            app:destination="@id/myServices" />
+    </fragment>
+    <fragment
+        android:id="@+id/myServices"
+        android:name="com.example.budka.view.MyServicesFragment"
+        android:label="MyServicesFragment">
 
+        <action
+            android:id="@+id/action_myServices_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_myServices_to_createServiceRequiredFragment"
+            app:destination="@id/createServiceRequiredFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createServiceRequiredFragment"
+        android:name="com.example.budka.view.CreateServiceRequiredFragment"
+        android:label="CreateServiceRequiredFragment" >
+        <action
+            android:id="@+id/action_createServiceRequiredFragment_to_myServices"
+            app:destination="@id/myServices" />
+        <action
+            android:id="@+id/action_createServiceRequiredFragment_to_createServiceOptionalFragment"
+            app:destination="@id/createServiceOptionalFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createServiceOptionalFragment"
+        android:name="com.example.budka.view.CreateServiceOptionalFragment"
+        android:label="CreateServiceOptionalFragment" >
+        <action
+            android:id="@+id/action_createServiceOptionalFragment_to_createServiceRequiredFragment"
+            app:destination="@id/createServiceRequiredFragment" />
+
+        <argument
+            android:name="requiredField"
+            app:argType="com.example.budka.data.model.ServiceRequiredField" />
+
+    </fragment>
 
 </navigation>

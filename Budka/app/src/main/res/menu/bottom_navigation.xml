@@ -25,10 +25,10 @@
 <!--        android:id="@+id/jobsFragment"-->
 <!--        android:icon="@drawable/ic_jobs"-->
 <!--        android:title="Работа" />-->
-<!--    <item-->
-<!--        android:id="@+id/UserFragment"-->
-<!--        android:icon="@drawable/ic_profile"-->
-<!--        android:title="Профиль" />-->
+    <item
+        android:id="@+id/profileFragment"
+        android:icon="@drawable/ic_profile"
+        android:title="Профиль" />
 
 
 

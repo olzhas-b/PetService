@@ -11,10 +11,7 @@ package com.example.budka.data.api
 import com.example.budka.data.model.*
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
-import retrofit2.http.Url
+import retrofit2.http.*
 
 interface ApiService {
     @GET("pets")
@@ -34,5 +31,10 @@ interface ApiService {
 
     @GET
     fun getCountries(@Url url: String): Deferred<Response<Countries>>
+
+    @POST("user/sign-in")
+    fun validateWithLogin(
+        @Body data: SignInModel
+    ):Deferred<Response<LoginResponse>>
 
 }

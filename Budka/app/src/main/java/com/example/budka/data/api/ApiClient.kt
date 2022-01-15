@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit
 
 object ApiClient { fun create(okHttpClient: OkHttpClient): ApiService {
     return Retrofit.Builder()
-        .baseUrl(BASE_URL)
+        .baseUrl("http://127.0.0.1:8000/api/v1/")
         .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(CoroutineCallAdapterFactory())
         .client(okHttpClient)

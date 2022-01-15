@@ -12,6 +12,7 @@ import com.example.budka.data.api.ApiClient
 import com.example.budka.data.repository.DataStore.*
 import com.example.budka.domain.useCase.*
 import com.example.budka.viewModel.*
+import org.koin.android.ext.koin.androidApplication
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -21,6 +22,11 @@ val viewModelModule = module {
     viewModel {ServiceDetailViewModel(get())}
     viewModel {ServicesViewModel(get())}
     viewModel { CountriesListViewModel(get())}
+    viewModel { CreateServiceViewModel() }
+}
+
+val SignInViewModeModule = module{
+    viewModel { SignInViewModel(get()) }
 }
 
 val useCaseModule = module {
@@ -31,12 +37,20 @@ val useCaseModule = module {
     single { CountryListUseCase(get<CountriesDataStore>()) }
 }
 
+val SignInUseCaseModule = module{
+    single { LoginUseCase(get<LoginDataStore>()) }
+}
+
 val repositoryModule = module{
     single{PetsListDataStore(get())}
     single{PetSittersListDataStore(get())}
     single{ServiceDetailDataStore(get())}
     single{ServicesDataStore(get())}
     single { CountriesDataStore(get()) }
+}
+
+val SignInRepositoryModule = module {
+    single { LoginDataStore(get(), androidApplication()) }
 }
 
 val networkModule = module {
