@@ -5,36 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="44e36ab3-fabc-4002-9092-567f0b24b8d3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/AuthService/.env" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/AuthService/handler.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backEnd/.env" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backEnd/config/config.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backEnd/pkg/database/postgres.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backEnd/pkg/interfaces/repositories/image.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backEnd/pkg/interfaces/repositories/pet.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backEnd/pkg/interfaces/services/image.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backEnd/pkg/interfaces/services/pet.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backEnd/pkg/repositories/postgres/image.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backEnd/pkg/repositories/postgres/pet.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backEnd/pkg/repositories/repositories.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backEnd/pkg/services/image.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backEnd/pkg/services/pet.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backEnd/pkg/services/services.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backEnd/pkg/transport/restful/common/response.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backEnd/pkg/transport/restful/handler/handler.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backEnd/pkg/transport/restful/handler/pet.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backEnd/pkg/transport/restful/handler/user.go" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../hello_world_crud/Dockerfile" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../hello_world_crud/docker-compose.yml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../hello_world_crud/server.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backEnd/cmd/generate.go" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/cmd/generate.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backEnd/cmd/root.go" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/cmd/root.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backEnd/consts/error.go" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/consts/error.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backEnd/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backEnd/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backEnd/pkg/transport/transport.go" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/pkg/transport/transport.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,7 +55,7 @@
     <property name="go.modules.go.list.on.any.changes.was.set" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
     <property name="go.watchers.conflict.with.on.save.actions.check.performed" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/AuthService" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
