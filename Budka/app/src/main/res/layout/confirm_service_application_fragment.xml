@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ /**
+  ~  * Created by Ali Ashkeyev on 03.01.2022, 22:55
+  ~  * Copyright (c) 2022 . All rights reserved.
+  ~  * Last modified 03.01.2022, 22:53
+  ~  */
+  -->
+
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="30dp"
+        >
+        <TextView
+            android:id="@+id/pageTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="Выберите период и локацию для оказании  услуги"
+            android:textAlignment="center"
+            android:textSize="32dp"
+            android:layout_margin="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/startDateTimeBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/corner_date_time"
+            android:orientation="horizontal"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:padding="16dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pageTitle">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/startDateBlock"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:descendantFocusability="blocksDescendants"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintEnd_toEndOf="@id/startDivider"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:focusable="true">
+
+            <TextView
+                android:id="@+id/startDateLl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Дата начала"
+                android:textColor="@color/gray"
+                android:textSize="12sp"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/startDateEt"
+                app:layout_constraintStart_toStartOf="parent"/>
+            <EditText
+                android:id="@+id/startDateEt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="09.05.2021"
+                app:layout_constraintHorizontal_bias="0"
+                android:textColor="@color/black"
+                android:layout_marginTop="10dp"
+                android:clickable="false"
+                android:textSize="14sp"
+                android:cursorVisible="false"
+                android:focusable="false"
+                app:layout_constraintEnd_toStartOf="@id/startDateIv"
+                app:layout_constraintTop_toBottomOf="@id/startDateLl"
+                app:layout_constraintStart_toStartOf="parent"/>
+            <ImageView
+                android:id="@+id/startDateIv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/startDateEt"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintBottom_toBottomOf="@id/startDateEt"
+                android:src="@drawable/ic_calendar___calendar_event"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <View
+                android:id="@+id/startDivider"
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:background="@color/pricePerAmount"
+                android:orientation="vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/startDateBlock"
+                app:layout_constraintBottom_toBottomOf="@id/startDateBlock"
+                />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/startTimeBlock"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:layout_marginStart="8dp"
+                android:descendantFocusability="blocksDescendants"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toEndOf="@id/startDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:focusable="true">
+
+                <TextView
+                    android:id="@+id/startTimeLl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Время"
+                    android:textColor="@color/gray"
+                    android:textSize="12sp"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/startTimeEt"
+                    app:layout_constraintStart_toStartOf="parent"/>
+                <EditText
+                    android:id="@+id/startTimeEt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="15:00"
+                    app:layout_constraintHorizontal_bias="0"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="10dp"
+                    android:clickable="false"
+                    android:textSize="14sp"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    app:layout_constraintEnd_toStartOf="@id/startTimeIv"
+                    app:layout_constraintTop_toBottomOf="@id/startTimeLl"
+                    app:layout_constraintStart_toStartOf="parent"/>
+                <ImageView
+                    android:id="@+id/startTimeIv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/startTimeEt"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintBottom_toBottomOf="@id/startTimeEt"
+                    android:src="@drawable/ic_clock"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/endDateTimeBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/corner_date_time"
+            android:orientation="horizontal"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:padding="16dp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/startDateTimeBlock">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/endDateBlock"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:descendantFocusability="blocksDescendants"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintEnd_toEndOf="@id/endDivider"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:focusable="true">
+
+                <TextView
+                    android:id="@+id/endDateLl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Дата завершения"
+                    android:textColor="@color/gray"
+                    android:textSize="12sp"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/endDateEt"
+                    app:layout_constraintStart_toStartOf="parent"/>
+                <EditText
+                    android:id="@+id/endDateEt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="09.05.2021"
+                    app:layout_constraintHorizontal_bias="0"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="10dp"
+                    android:clickable="false"
+                    android:textSize="14sp"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    app:layout_constraintEnd_toStartOf="@id/endDateIv"
+                    app:layout_constraintTop_toBottomOf="@id/endDateLl"
+                    app:layout_constraintStart_toStartOf="parent"/>
+                <ImageView
+                    android:id="@+id/endDateIv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/endDateEt"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintBottom_toBottomOf="@id/endDateEt"
+                    android:src="@drawable/ic_calendar___calendar_event"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <View
+                android:id="@+id/endDivider"
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:background="@color/pricePerAmount"
+                android:orientation="vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/endDateBlock"
+                app:layout_constraintBottom_toBottomOf="@id/endDateBlock"
+                />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/endTimeBlock"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:layout_marginStart="8dp"
+                android:descendantFocusability="blocksDescendants"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toEndOf="@id/endDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:focusable="true">
+
+                <TextView
+                    android:id="@+id/endTimeLl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Время"
+                    android:textColor="@color/gray"
+                    android:textSize="12sp"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/endTimeEt"
+                    app:layout_constraintStart_toStartOf="parent"/>
+                <EditText
+                    android:id="@+id/endTimeEt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="15:00"
+                    app:layout_constraintHorizontal_bias="0"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="10dp"
+                    android:clickable="false"
+                    android:textSize="14sp"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    app:layout_constraintEnd_toStartOf="@id/endTimeIv"
+                    app:layout_constraintTop_toBottomOf="@id/endTimeLl"
+                    app:layout_constraintStart_toStartOf="parent"/>
+                <ImageView
+                    android:id="@+id/endTimeIv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/endTimeEt"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintBottom_toBottomOf="@id/endTimeEt"
+                    android:src="@drawable/ic_clock"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/countryBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/endDateTimeBlock">
+
+            <TextView
+                android:id="@+id/text_view_countries"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
+                android:textColor="@color/black"
+                android:text="Страны"
+                android:textSize="20sp" />
+
+            <AutoCompleteTextView
+                android:id="@+id/countriesEdV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:completionHint="Select a country"
+                android:completionThreshold="1"
+                android:dropDownAnchor="@id/text_view_countries"
+                android:hint="Выберите страну"
+                android:popupBackground="@color/white" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/cityBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+
+            android:padding="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/countryBlock">
+
+            <TextView
+                android:id="@+id/text_view_cities"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
+                android:textColor="@color/black"
+                android:text="Города"
+                android:textSize="20sp" />
+
+            <AutoCompleteTextView
+                android:id="@+id/cityEdV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:completionHint="Select a country"
+                android:completionThreshold="1"
+                android:dropDownAnchor="@id/text_view_countries"
+                android:hint="Выберите город"
+                android:popupBackground="@color/white" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/servicePlaceBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cityBlock">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
+                android:textColor="@color/black"
+                android:text="Место для передержки"
+                android:textSize="20sp"/>
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="У себя"
+                    android:checked="true"
+                    android:textSize="14sp"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="У зооняни"
+                    android:textSize="14sp"
+                    android:layout_marginStart="50dp"/>
+            </RadioGroup>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/messageBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/servicePlaceBlock">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
+                android:textColor="@color/black"
+                android:text="Примечания (необязательно)"
+                android:textSize="20sp"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:background="@drawable/corner_input"
+                android:minHeight="150dp"
+                android:hint="Печатать..."
+                android:gravity="top"
+                />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/confirmBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:theme="@style/appMainTheme"
+            android:background="@drawable/confirm_button"
+            android:text="Завершить"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="32dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/messageBlock"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

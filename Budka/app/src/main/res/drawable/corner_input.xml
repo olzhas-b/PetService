@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ /**
+  ~  * Created by Ali Ashkeyev on 03.01.2022, 22:55
+  ~  * Copyright (c) 2022 . All rights reserved.
+  ~  * Last modified 03.01.2022, 22:53
+  ~  */
+  -->
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle" >
+
+    <corners
+        android:bottomLeftRadius="8dp"
+        android:bottomRightRadius="8dp"
+        android:radius="60dp"
+        android:topLeftRadius="8dp"
+        android:topRightRadius="8dp" />
+
+    <solid android:color="@color/inputColor" />
+
+    <padding
+        android:bottom="0dp"
+        android:left="0dp"
+        android:right="0dp"
+        android:top="0dp" />
+
+
+
+</shape>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ /**
+  ~  * Created by Ali Ashkeyev on 03.01.2022, 22:55
+  ~  * Copyright (c) 2022 . All rights reserved.
+  ~  * Last modified 03.01.2022, 22:53
+  ~  */
+  -->
+
+<font-family xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:fontProviderAuthority="com.google.android.gms.fonts"
+        app:fontProviderPackage="com.google.android.gms"
+        app:fontProviderQuery="name=Poppins&amp;weight=500"
+        app:fontProviderCerts="@array/com_google_android_gms_fonts_certs">
+</font-family>

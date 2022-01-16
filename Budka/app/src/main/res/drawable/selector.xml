@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ /**
+  ~  * Created by Ali Ashkeyev on 03.01.2022, 22:55
+  ~  * Copyright (c) 2022 . All rights reserved.
+  ~  * Last modified 03.01.2022, 22:53
+  ~  */
+  -->
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_checked="true"
+    android:color="@color/detailsMainColor"/>
+
+    <item android:state_checked="false"
+        android:color="@color/black"/>
+</selector>
