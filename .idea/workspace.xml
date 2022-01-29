@@ -5,27 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="44e36ab3-fabc-4002-9092-567f0b24b8d3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backEnd/pkg/transport/restful/handler/service_detail.go" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../hello_world_crud/Dockerfile" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../hello_world_crud/docker-compose.yml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../hello_world_crud/server.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backEnd/cmd/start.go" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/cmd/start.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backEnd/db/data_init.sql" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/db/data_init.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backEnd/pkg/interfaces/repositories/image.go" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/pkg/interfaces/repositories/image.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backEnd/pkg/interfaces/repositories/pet.go" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/pkg/interfaces/repositories/pet.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backEnd/pkg/interfaces/services/image.go" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/pkg/interfaces/services/image.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backEnd/pkg/interfaces/services/pet.go" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/pkg/interfaces/services/pet.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backEnd/pkg/models/image.go" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/pkg/models/image.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backEnd/pkg/repositories/postgres/image.go" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/pkg/repositories/postgres/image.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backEnd/pkg/repositories/postgres/pet.go" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/pkg/repositories/postgres/pet.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backEnd/pkg/repositories/repositories.go" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/pkg/repositories/repositories.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backEnd/pkg/services/image.go" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/pkg/services/image.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backEnd/pkg/services/pet.go" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/pkg/services/pet.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backEnd/pkg/services/services.go" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/pkg/services/services.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backEnd/pkg/transport/restful/handler/handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/pkg/transport/restful/handler/handler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backEnd/pkg/transport/restful/handler/image.go" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/pkg/transport/restful/handler/image.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backEnd/tools/converter.go" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/tools/converter.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
