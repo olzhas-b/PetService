@@ -13,5 +13,6 @@ func InitPostgres() (*gorm.DB, error) {
 		return nil, err
 	}
 	config := fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=disable port=%s", envs["HOST"], envs["USER"], envs["PASSWORD"], envs["NAME"], envs["DBPORT"])
+	println("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww" + config)
 	return gorm.Open(postgres.Open(config), &gorm.Config{})
 }

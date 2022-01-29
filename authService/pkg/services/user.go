@@ -42,12 +42,13 @@ func (s *UserService) ServiceSignIn(userCred models.UserCredential) (accessToken
 		err = fmt.Errorf("UserService.ServiceSingIn got error: %w", err)
 		return
 	}
-
-	if err = s.authRedis.Store(fmt.Sprintf("%s_%d", consts.AccessToken, tokenClaim.ID), accessToken, s.tokenConfig.AccessTtl); err != nil {
+	key := fmt.Sprintf("%s_%d", consts.AccessToken, tokenClaim.ID)
+	if err = s.authRedis.Store(key, accessToken, s.tokenConfig.AccessTtl); err != nil {
 		err = fmt.Errorf("UserService.ServiceSingIn got error: %w", err)
 		return
 	}
-	if err = s.authRedis.Store(fmt.Sprintf("%s_%d", consts.RefreshToken, tokenClaim.ID), refreshToken, s.tokenConfig.RefreshTtl); err != nil {
+	key = fmt.Sprintf("%s_%d", consts.RefreshToken, tokenClaim.ID)
+	if err = s.authRedis.Store(key, refreshToken, s.tokenConfig.RefreshTtl); err != nil {
 		err = fmt.Errorf("UserService.ServiceSingIn got error: %w", err)
 		return
 	}
@@ -56,8 +57,14 @@ func (s *UserService) ServiceSignIn(userCred models.UserCredential) (accessToken
 }
 
 func (s *UserService) ServiceUpdateToken(token string) (accessToken, refreshToken string, err error) {
-	//TODO implement me
-	panic("implement me")
+	claims, err := s.auth.ParseToken(token, true)
+	if err != nil {
+		return "", "", err
+	}
+	if err := s.ServiceLogOut(token); err != nil {
+		return "", "", err
+	}
+	return s.auth.GenerateToken(claims)
 }
 
 func (s *UserService) ServiceLogOut(token string) (err error) {
@@ -66,10 +73,13 @@ func (s *UserService) ServiceLogOut(token string) (err error) {
 		return fmt.Errorf("UserService.ServiceLogOut got error: %w", err)
 	}
 
-	if err = s.authRedis.Delete(fmt.Sprintf("%s_%d", consts.AccessToken, claims.ID)); err != nil {
+	key := fmt.Sprintf("%s_%d", consts.AccessToken, claims.ID)
+	if err = s.authRedis.Delete(key); err != nil {
 		return fmt.Errorf("UserService.ServiceLogOut got error: %w", err)
 	}
-	if err = s.authRedis.Delete(fmt.Sprintf("%s_%d", consts.RefreshToken, claims.ID)); err != nil {
+
+	key = fmt.Sprintf("%s_%d", consts.RefreshToken, claims.ID)
+	if err = s.authRedis.Delete(key); err != nil {
 		return fmt.Errorf("UserService.ServiceLogOut got error: %w", err)
 	}
 

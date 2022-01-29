@@ -40,7 +40,7 @@ func (s *Server) RunHTTPServer(config *config.Config, routes *handler.Handler) e
 	if err != nil {
 		return err
 	}
-	return s.HTTPServer.Listen("0.0.0.0:8001")
+	return s.HTTPServer.Listen("0.0.0.0:8081")
 }
 
 func (s *Server) Shutdown(ctx context.Context) error {

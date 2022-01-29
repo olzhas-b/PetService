@@ -2,6 +2,8 @@ package models
 
 import "time"
 
+type UserType int64
+
 type User struct {
 	ID            int64     `json:"id"`
 	Login         string    `gorm:"login" json:"login"`

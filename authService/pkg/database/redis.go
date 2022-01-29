@@ -1,19 +1,18 @@
 package database
 
 import (
-	"context"
 	"github.com/go-redis/redis"
 	"log"
 )
 
 func InitRedis() (*redis.Client, error) {
 	client := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
+		Addr:     "redis-db:6379",
 		Password: "",
 		DB:       2,
 	})
 
-	pong, err := client.Ping(context.TODO()).Result()
+	pong, err := client.Ping().Result()
 	if err != nil {
 		return client, err
 	}

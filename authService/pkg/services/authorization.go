@@ -83,7 +83,7 @@ func (s *AuthorizationService) ParseToken(token string, isAccess bool) (tokenCla
 		}
 		tokenClaim.Iat = int64(iat)
 
-		userType, ok := claims["type"].(float64)
+		userType, ok := claims["userType"].(float64)
 		if !ok {
 			return tokenClaim, fmt.Errorf("field userType not found")
 		}

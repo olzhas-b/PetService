@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/olzhas-b/PetService/backEnd/pkg/services"
+	"github.com/olzhas-b/PetService/backEnd/pkg/transport/restful/middles"
 )
 
 type Handler struct {
@@ -13,13 +14,6 @@ type Handler struct {
 func NewHandler(services *services.Services) *Handler {
 	return &Handler{services: services}
 }
-
-//func MiddlewareHelloWorld() fiber.Handler {
-//	return func(c *fiber.Ctx) error {
-//		println("Hello World")
-//		return c.Next()
-//	}
-//}
 
 func (h *Handler) InitializeRoutes(srv *fiber.App) error {
 	srv.Use(
@@ -36,6 +30,7 @@ func (h *Handler) InitializeRoutes(srv *fiber.App) error {
 		//		ContextPassword: "",
 		//	},
 		//),
+
 	)
 	h.AddRoutes(srv)
 	return nil
@@ -43,9 +38,9 @@ func (h *Handler) InitializeRoutes(srv *fiber.App) error {
 
 func (h *Handler) AddRoutes(srv *fiber.App) {
 
-	v1 := srv.Group("/api/v1")
+	v1 := srv.Group("/api/v1", middles.SetContextHolder(h.services))
 
-	user := v1.Group("/user")
+	user := v1.Group("/user", middles.AuthorizationMiddleWare(h.services))
 	{
 
 		user.Post("/sign-up", h.CtlCreateUser) // create
@@ -55,7 +50,7 @@ func (h *Handler) AddRoutes(srv *fiber.App) {
 		//user.Get("/:id", h.CtlGetUser)
 	}
 
-	service := v1.Group("/service")
+	service := v1.Group("/service", middles.AuthorizationMiddleWare(h.services))
 	{
 		service.Get("", h.CtlGetAllServiceProvider)
 		service.Post("", h.CtlCreateService)

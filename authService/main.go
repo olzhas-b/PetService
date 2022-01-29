@@ -12,6 +12,7 @@ import (
 )
 
 func main() {
+	time.Sleep(time.Second * 30)
 	db, err := database.InitPostgres()
 	if err != nil {
 		log.Fatalf("postgres connection was failed: %v", err)
@@ -25,8 +26,8 @@ func main() {
 	repo := repositories.NewRepositories(db)
 
 	tokenConfig := models.TokenConfig{
-		AccessSecret:  "",
-		RefreshSecret: "",
+		AccessSecret:  "asdflsadaqjwe123DEavlkjl12312312",
+		RefreshSecret: "fadsf0ivoi@vlka0sd123,vk234/adsf;1!1231$$$#123",
 		AccessTtl:     time.Minute * 5,
 		RefreshTtl:    time.Hour * 100000,
 	}

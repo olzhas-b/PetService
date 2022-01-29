@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/olzhas-b/PetService/authService/consts"
 	"github.com/olzhas-b/PetService/authService/modules/logger"
@@ -33,12 +34,16 @@ func (h *Handler) CtlCreateUser(ctx *fiber.Ctx) error {
 }
 
 func (h *Handler) CtlSignIn(ctx *fiber.Ctx) error {
-	println("sing-in request")
-	userCred := extractCredential(ctx)
+	var userCred models.UserCredential
+	if err := ctx.BodyParser(&userCred); err != nil {
+		return fmt.Errorf("Couldn't parse body err: %v", err)
+	}
+
 	accessToken, refreshToken, err := h.services.ServiceSignIn(userCred)
 	if err != nil {
 		return common.GenShortResponse(ctx, consts.DBSelectErr, "", "")
 	}
+
 	resp := map[string]string{
 		"accessToken":  accessToken,
 		"refreshToken": refreshToken,
@@ -53,7 +58,17 @@ func (h *Handler) CtlSignOut(ctx *fiber.Ctx) error {
 }
 
 func (h *Handler) CtlUpdateToken(ctx *fiber.Ctx) error {
-	return nil
+	token := tools.GetToken(ctx)
+	accessToken, refreshToken, err := h.services.IUserService.ServiceUpdateToken(token)
+	if err != nil {
+		return common.GenShortResponse(ctx, consts.DBSelectErr, "", "")
+	}
+
+	resp := map[string]string{
+		"accessToken":  accessToken,
+		"refreshToken": refreshToken,
+	}
+	return common.GenShortResponse(ctx, consts.Success, resp, "")
 }
 
 func (h *Handler) CtlServiceGetAllUsers(ctx *fiber.Ctx) error {
@@ -67,12 +82,6 @@ func (h *Handler) CtlServiceGetAllUsers(ctx *fiber.Ctx) error {
 }
 
 func extractCredential(ctx *fiber.Ctx) (userCred models.UserCredential) {
-	cred := struct {
-		Username string
-		Password string
-	}{}
-	ctx.BodyParser(&cred)
-
 	userCred.Username, userCred.Password = ctx.FormValue("username"), ctx.FormValue("password")
 	return
 }
