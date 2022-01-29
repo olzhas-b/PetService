@@ -1,23 +1,37 @@
 package handler
 
 import (
+	"fmt"
 	"github.com/gofiber/fiber/v2"
+	"github.com/olzhas-b/PetService/backEnd/consts"
+	"github.com/olzhas-b/PetService/backEnd/pkg/models"
+	"github.com/olzhas-b/PetService/backEnd/pkg/transport/restful/common"
 	"github.com/olzhas-b/PetService/backEnd/tools"
-	"strings"
 )
 
 func (h *Handler) CtlGetImage(ctx *fiber.Ctx) error {
-	name := ctx.Params("id")
-	list := strings.Split(name, ".")
-	id := tools.StrToInt64(list[0])
-	image, err := h.services.IImageService.ServiceGetImage(id)
+	url := ctx.Params("fileName")
+	image, err := h.services.IImageService.ServiceGetImageByFileName(url)
 	if err != nil {
 		return err
 	}
-	return ctx.JSON(image)
+	ctx.Set("Content-Type", fmt.Sprintf("%s;charset=%s", image.ContentType, "utf-8"))
+	ctx.Set("Content-Length", tools.IntToStr(len(image.Content)))
+	return ctx.Send(image.Content)
 }
 
 func (h *Handler) CtlCreateImage(ctx *fiber.Ctx) error {
+	var image models.ImageToSave
+	form, err := ctx.MultipartForm()
+	if err != nil {
+		return common.GenShortResponse(ctx, consts.FileUploadErr, "", err.Error())
+	}
+	files := form.File["files"]
+	image.Files = files
+	err = h.services.IImageService.ServiceSaveImage(image)
+	if err != nil {
+		return common.GenShortResponse(ctx, consts.FileUploadErr, err.Error(), err.Error())
+	}
 	return nil
 }
 

@@ -3,5 +3,6 @@ package services
 import "github.com/olzhas-b/PetService/backEnd/pkg/models"
 
 type IImageService interface {
-	ServiceGetImage(id int64) (models.Image, error)
+	ServiceGetImageByFileName(name string) (image models.Image, err error)
+	ServiceSaveImage(image models.ImageToSave) (err error)
 }

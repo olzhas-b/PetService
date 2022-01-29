@@ -10,14 +10,13 @@ import (
 	"github.com/olzhas-b/PetService/backEnd/pkg/transport/restful/handler"
 	"github.com/spf13/cobra"
 	"log"
-	"time"
 )
 
 var startCmd = &cobra.Command{
 	Use:   "start",
 	Short: "start server",
 	Run: func(cmd *cobra.Command, args []string) {
-		time.Sleep(time.Second * 30)
+		//time.Sleep(time.Second * 30)
 		db, err := database.InitPostgres()
 		if err != nil {
 			log.Fatalf("failed connection with postgres err: %v", err)
