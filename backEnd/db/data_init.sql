@@ -9,4 +9,4 @@ values ('olz');
 
 
 insert into "additional_properties" ("service_id", "label", "text")
-values (1, "information", "this is important info");
+values (1, 'information', 'this is important info');

@@ -8,6 +8,8 @@
       <change afterPath="$PROJECT_DIR$/../hello_world_crud/Dockerfile" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../hello_world_crud/docker-compose.yml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../hello_world_crud/server.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backEnd/db/data_init.sql" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/db/data_init.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
