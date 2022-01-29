@@ -9,6 +9,7 @@
 package com.example.budka.di
 
 import com.example.budka.data.api.ApiClient
+import com.example.budka.data.model.SessionManager
 import com.example.budka.data.repository.DataStore.*
 import com.example.budka.domain.useCase.*
 import com.example.budka.viewModel.*
@@ -22,7 +23,6 @@ val viewModelModule = module {
     viewModel {ServiceDetailViewModel(get())}
     viewModel {ServicesViewModel(get())}
     viewModel { CountriesListViewModel(get())}
-    viewModel { CreateServiceViewModel() }
 }
 
 val SignInViewModeModule = module{
@@ -56,5 +56,10 @@ val SignInRepositoryModule = module {
 val networkModule = module {
     single { ApiClient.create(okHttpClient = get())}
     single { ApiClient.getOkHttpClient(authInterceptor = get())}
-    single { ApiClient.getAuthInterceptor()}
+    single { ApiClient.getAuthInterceptor(sessionManager = get<SessionManager>())}
+
+}
+
+val sessionManagerModule = module {
+    single { SessionManager(androidApplication()) }
 }

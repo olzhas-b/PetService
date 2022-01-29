@@ -10,11 +10,17 @@ package com.example.budka.view
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebSettings
+import android.webkit.WebView
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -44,6 +50,7 @@ class ServiceProviderDetailFragment: Fragment() {
     private lateinit var otherPropertiesAdapter: OtherPropertiesAdapter
     private lateinit var userPetsAdapter: UserPetsAdapter
     private lateinit var userServicesAdapter: UserServicesAdapter
+    private lateinit var webView:WebView
 
 
     override fun onCreateView(
@@ -56,12 +63,25 @@ class ServiceProviderDetailFragment: Fragment() {
 
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         serviceProvider = arg.user
+        viewBinding.mapSnapshot.settings.javaScriptEnabled = true
+        val htmlData = "<html><head><style Type=\"text/css\"> img { position: absolute; width: 300px; height: 300px; left: 50%; top: 50%; margin-left: -150px; margin-top: -150px; }</style> </head> <body> <img src=\"https://static-maps.yandex.ru/1.x/?lang=ru&ll=76.944609,43.227016&pt=76.944609,43.227016,pm2rdm&size=450,450&z=16&l=map\"> </body> </html>"
+        viewBinding.mapSnapshot.loadData(htmlData, "text/html", "UTF-8")
         serviceDetailViewModel.fetchServiceDetail(serviceProvider.service_id)
         petListViewModel.fetchUserPetsList(serviceProvider.id)
         servicesViewModel.fetchUserServicesList(serviceProvider.id)
+
+        viewBinding.mapSnapshot.setOnTouchListener(View.OnTouchListener(){
+            view, motionEvent ->
+            when(motionEvent.action){
+                MotionEvent.ACTION_DOWN->  view.findNavController().navigate(ServiceProviderDetailFragmentDirections.actionServiceProviderDetailFragmentToMapsFragment(false))
+
+            }
+            return@OnTouchListener true
+        })
         setUpAdapter()
         setObservers()
     }
@@ -136,9 +156,5 @@ class ServiceProviderDetailFragment: Fragment() {
         userServicesRv.setHasFixedSize(true)
         userServicesRv.setItemViewCacheSize(20)
         userServicesRv.isNestedScrollingEnabled =  false
-
-
     }
-
-
 }

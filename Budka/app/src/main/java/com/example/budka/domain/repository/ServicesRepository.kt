@@ -9,9 +9,17 @@
 package com.example.budka.domain.repository
 
 import androidx.lifecycle.LiveData
+import com.example.budka.data.model.CreateServiceModel
 import com.example.budka.data.model.Pet
+import com.example.budka.data.model.Properties
 import com.example.budka.data.model.Services
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 
 interface ServicesRepository {
     fun getUserServices(user_id:Int): LiveData<List<Services>>
+    fun createService(images: List<MultipartBody.Part>,
+                      partMap: Map<String, RequestBody>,
+                      properties: List<Properties>
+    ): LiveData<CreateServiceModel>
 }

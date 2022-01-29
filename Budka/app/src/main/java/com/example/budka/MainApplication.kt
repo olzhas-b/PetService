@@ -27,7 +27,7 @@ class MainApplication: Application(){
             androidLogger()
             androidContext(this@MainApplication)
             koin.loadModules(listOf(viewModelModule, useCaseModule, repositoryModule, networkModule,
-            SignInViewModeModule, SignInUseCaseModule, SignInRepositoryModule))
+            SignInViewModeModule, SignInUseCaseModule, SignInRepositoryModule, sessionManagerModule))
             koin.createRootScope()
         }
     }

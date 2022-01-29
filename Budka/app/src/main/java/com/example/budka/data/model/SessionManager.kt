@@ -10,6 +10,7 @@ package com.example.budka.data.model
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 
 class SessionManager (context: Context) {
     private var prefs: SharedPreferences = context.getSharedPreferences("Login", Context.MODE_PRIVATE)

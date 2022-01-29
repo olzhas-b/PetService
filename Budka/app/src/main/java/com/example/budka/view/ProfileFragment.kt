@@ -8,17 +8,20 @@
 
 package com.example.budka.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import com.example.budka.data.model.SessionManager
 import com.example.budka.databinding.FragmentProfileBinding
 
 class ProfileFragment: Fragment() {
     private var _viewBinding: FragmentProfileBinding? = null
     private val viewBinding get() = _viewBinding!!
+    private lateinit var sessionManager: SessionManager
 
 
     override fun onCreateView(
@@ -26,6 +29,7 @@ class ProfileFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        sessionManager = SessionManager(requireContext())
         _viewBinding = FragmentProfileBinding.inflate(inflater, container, false)
         return viewBinding.root
 
@@ -44,6 +48,14 @@ class ProfileFragment: Fragment() {
     private fun setListeners(){
         viewBinding.myServicesLayout.setOnClickListener {
             it.findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToMyServices())
+        }
+        viewBinding.infoLayout.setOnClickListener {
+            sessionManager.deleteSession()
+            val intent = Intent(activity, LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            activity?.finish()
+
         }
     }
 }

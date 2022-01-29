@@ -9,6 +9,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/mainPageFragment">
     <fragment
@@ -51,6 +52,9 @@
         <argument
             android:name="user"
             app:argType="com.example.budka.data.model.ServiceProvider" />
+        <action
+            android:id="@+id/action_service_provider_detail_fragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
 
     </fragment>
 
@@ -109,6 +113,9 @@
         <action
             android:id="@+id/action_createServiceRequiredFragment_to_createServiceOptionalFragment"
             app:destination="@id/createServiceOptionalFragment" />
+        <action
+            android:id="@+id/action_createServiceRequiredFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
     </fragment>
     <fragment
         android:id="@+id/createServiceOptionalFragment"
@@ -122,6 +129,21 @@
             android:name="requiredField"
             app:argType="com.example.budka.data.model.ServiceRequiredField" />
 
+    </fragment>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.example.budka.view.MapsFragment"
+        android:label="fragment_maps"
+        tools:layout="@layout/fragment_maps" >
+        <action
+            android:id="@+id/action_mapsFragment_to_service_provider_detail_fragment"
+            app:destination="@id/service_provider_detail_fragment" />
+        <argument
+            android:name="setLocation"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/action_mapsFragment_to_createServiceRequiredFragment"
+            app:destination="@id/createServiceRequiredFragment" />
     </fragment>
 
 </navigation>

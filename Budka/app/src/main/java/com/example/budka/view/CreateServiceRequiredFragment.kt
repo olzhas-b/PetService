@@ -24,15 +24,13 @@ import com.example.budka.data.model.*
 import com.example.budka.databinding.CreateServiceRequiredFragmentBinding
 import com.example.budka.utils.MultiSpinner
 import com.example.budka.viewModel.CountriesListViewModel
-import com.example.budka.viewModel.CreateServiceViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 import kotlin.reflect.typeOf
 
-class CreateServiceRequiredFragment : Fragment() {
+class CreateServiceRequiredFragment : Fragment(), MapsFragment.SendLocationInterface {
     private var _viewBinding: CreateServiceRequiredFragmentBinding? = null
     private val viewBinding get() = _viewBinding!!
     private val countriesListViewModel: CountriesListViewModel by viewModel()
-    private val createServiceViewModel: CreateServiceViewModel by viewModel()
 
 
     override fun onCreateView(
@@ -64,11 +62,21 @@ class CreateServiceRequiredFragment : Fragment() {
     }
 
     private fun setListeners(){
+        viewBinding.mapIv.setOnClickListener {
+            val fragment = MapsFragment(true, this)
+            activity?.supportFragmentManager?.beginTransaction()?.add(R.id.createServiceRequiredFragment, fragment)?.addToBackStack("requiredFm")?.commit()
+//            it.findNavController().navigate(CreateServiceRequiredFragmentDirections.actionCreateServiceRequiredFragmentToMapsFragment(true))
+
+        }
         viewBinding.optionalNavigateBtn.setOnClickListener {
-            val serviceType = viewBinding.serviceTypeSp.selectedItem.toString()
+            var serviceType: Int = 0
+            ServiceType.from(viewBinding.serviceTypeSp.selectedItem.toString())?.let {
+                serviceType = ServiceType.valueOf(it.name).ordinal + 1
+            }
+
             val summary = viewBinding.summaryEt.text.toString()
-            val petType = viewBinding.petTypeSp.selectedItem.toString().split(',').toList()
-            val petSize = viewBinding.petSizeSp.selectedItem.toString().split(',').toList()
+            val petType = viewBinding.petTypeSp.selectedItem.toString()
+            val petSize = viewBinding.petSizeSp.selectedItem.toString()
             val country = viewBinding.countriesEdV.text.toString()
             val city = viewBinding.cityEdV.text.toString()
             val requireFields = ServiceRequiredField(serviceType, summary, petType, petSize, country, city)
@@ -141,11 +149,20 @@ class CreateServiceRequiredFragment : Fragment() {
 
     private fun setPetSize() {
         val petSizeList = mutableListOf<String>()
-        for (size in PetSize.values()) {
-            petSizeList.add(size.value)
-        }
-        viewBinding.petSizeSp.setItems(petSizeList, "Выбрать") {
-        }
+        petSizeList.add("меньше 5кг")
+        petSizeList.add("меньше 10кг")
+        petSizeList.add("меньше 20кг")
+        petSizeList.add("меньше 40кг")
+        petSizeList.add("больше 40кг")
+        val petSizeAdapter = ArrayAdapter<String>(
+            requireActivity(),
+            R.layout.item_pet_type_filter, R.id.text_view_pet_type_item, petSizeList
+        )
+        viewBinding.petSizeSp.adapter = petSizeAdapter
+    }
+
+    override fun sendLocation(longitude: Double, latitude: Double) {
+        Log.d("hejj", longitude.toString())
     }
 
 

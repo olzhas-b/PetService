@@ -52,6 +52,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:elevation="2dp"
+                android:layout_marginBottom="5dp"
                 android:background="@drawable/corner_input"
                 >
 
@@ -59,6 +61,7 @@
                     android:id="@+id/serviceTypeSp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+
                     tools:listitem="@layout/item_pet_type_filter"
                     android:spinnerMode="dropdown"/>
             </LinearLayout>
@@ -84,6 +87,8 @@
                 android:inputType="textMultiLine"
                 android:background="@drawable/corner_input"
                 android:minHeight="150dp"
+                android:layout_marginBottom="5dp"
+                android:elevation="2dp"
                 android:hint="Печатать..."
                 android:gravity="top"
                 />
@@ -109,6 +114,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:elevation="2dp"
+                android:layout_marginBottom="5dp"
                 android:background="@drawable/corner_input"
                 >
                 <com.example.budka.utils.MultiSpinner
@@ -144,10 +151,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:elevation="2dp"
+                android:layout_marginBottom="5dp"
                 android:background="@drawable/corner_input"
                 >
 
-                <com.example.budka.utils.MultiSpinner
+                <Spinner
                     android:id="@+id/petSizeSp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -182,6 +191,9 @@
                 android:layout_height="wrap_content"
                 android:completionHint="Select a country"
                 android:completionThreshold="1"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/corner_input"
+                android:elevation="2dp"
                 android:dropDownAnchor="@id/text_view_countries"
                 android:hint="Выберите страну"
                 android:popupBackground="@color/white" />
@@ -210,9 +222,40 @@
                 android:layout_height="wrap_content"
                 android:completionHint="Select a country"
                 android:completionThreshold="1"
+                android:background="@drawable/corner_input"
+                android:layout_marginBottom="5dp"
+                android:elevation="2dp"
                 android:dropDownAnchor="@id/text_view_countries"
                 android:hint="Выберите город"
                 android:popupBackground="@color/white" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mapBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cityBlock">
+
+            <TextView
+                android:id="@+id/mapTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
+                android:text="Обозначьте место оказания услуги (будет показана примерная область в радиусе 1км)"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:id="@+id/mapIv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@drawable/almaty_yandex_map"
+                android:layout_marginBottom="5dp"
+                android:elevation="2dp"
+     />
         </LinearLayout>
 
         <Button
@@ -225,6 +268,6 @@
             android:text="Далее"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cityBlock"/>
+            app:layout_constraintTop_toBottomOf="@id/mapBlock"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

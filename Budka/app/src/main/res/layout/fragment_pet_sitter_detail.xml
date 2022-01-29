@@ -339,7 +339,7 @@
             <LinearLayout
                 android:id="@+id/location"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="500dp"
                 android:orientation="vertical"
                 android:background="@drawable/shadow_effect"
                 android:elevation="8dp"
@@ -348,6 +348,7 @@
                 app:layout_constraintTop_toBottomOf="@id/otherService">
 
                 <TextView
+                    android:id="@+id/locationText"
                     android:layout_width="300dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
@@ -363,7 +364,11 @@
                     android:textSize="19sp"
                     android:layout_marginBottom="30dp"
                     android:fontFamily="@font/avenir_ltstd_roman"
-                    tools:text="@string/location" />
+                    android:text="@string/location" />
+                <WebView
+                    android:id="@+id/mapSnapshot"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,17 +12,18 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.budka.data.api.ApiService
-import com.example.budka.data.model.Pet
-import com.example.budka.data.model.PetResponse
-import com.example.budka.data.model.ServiceResponse
-import com.example.budka.data.model.Services
+import com.example.budka.data.model.*
 import kotlinx.coroutines.*
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.HttpException
 import retrofit2.Response
 import timber.log.Timber
 
 abstract class BaseServicesDataStore (@PublishedApi internal val service: ApiService) {
     abstract fun getUserServices(user_id: Int): LiveData<List<Services>>
+    abstract fun createService(images :List<MultipartBody.Part>, partMap :Map<String, RequestBody>, properties :List<Properties>): LiveData<CreateServiceModel>
+
 
     inline fun fetchData(crossinline call: (ApiService) -> Deferred<Response<ServiceResponse>>): LiveData<List<Services>> {
         val result = MutableLiveData<List<Services>>()
@@ -48,6 +49,33 @@ abstract class BaseServicesDataStore (@PublishedApi internal val service: ApiSer
                 catch (e: Exception){
                     Log.d("look", e.toString())
 
+                }
+            }
+        }
+        return result
+
+    }
+
+    inline fun postService(crossinline call: (ApiService) -> Deferred<Response<CreateServiceModel>>): LiveData<CreateServiceModel> {
+        val result = MutableLiveData<CreateServiceModel>()
+        CoroutineScope(Dispatchers.IO).launch {
+            val request = call(service)
+            withContext(Dispatchers.Main){
+
+                try {
+                    val response = request.await()
+                    if (response.isSuccessful) {
+                        result.value = response.body()
+                    } else {
+                        Timber.d("Error occurred with code ${response.code()}")
+                    }
+                } catch (e: HttpException){
+                    Timber.d("Error: ${e.message()}")
+                } catch (e: Throwable){
+                    Timber.d("Error: ${e.message}")
+                }
+                catch (e: Exception){
+                    Timber.d("Error: ${e.message}")
                 }
             }
         }

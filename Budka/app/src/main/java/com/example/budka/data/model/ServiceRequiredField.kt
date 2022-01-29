@@ -13,10 +13,10 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class ServiceRequiredField(
-    val serviceType: String,
+    val serviceType: Int,
     val summary: String,
-    val petTypes: List<String>,
-    val petSize: List<String>,
+    val petTypes: String,
+    val petSize: String,
     val country: String,
     val city: String
 

@@ -9,6 +9,7 @@
 package com.example.budka.data.model
 
 
+
 data class ServiceDetail(
     val service_id: Int,
     val description: String?,
@@ -22,3 +23,18 @@ data class Properties(
     val label: String?,
     val text: String?
 )
+
+data class CreateServiceModel(
+    val serviceType: Int,
+    val price: Int,
+    val currencyCode: String,
+    val pricePerTime: String,
+    val longitude: Double,
+    val latitude: Double,
+    val description: String?,
+    val acceptablePets: String?,
+    val acceptableSize: Int?,
+    val additionalProperties: List<Properties>?,
+)
+
+

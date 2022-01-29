@@ -10,6 +10,7 @@ package com.example.budka.view
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
@@ -58,6 +59,7 @@ class MainPageFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        activity?.window?.statusBarColor = resources.getColor(R.color.mainColor)
         Picasso.get().load(R.drawable.banner).fit().centerCrop().placeholder(R.drawable.banner).into(viewBinding.bannerIv)
         if(savedInstanceState==null){
         petSittersListViewModel.fetchPetSittersList("petSitting")
