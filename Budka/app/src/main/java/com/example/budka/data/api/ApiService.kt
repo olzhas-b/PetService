@@ -28,12 +28,11 @@ interface ApiService {
     fun getPetSitters(@Query("serviceType") serviceType: String): Deferred<Response<List<ServiceProvider>>>
 
     @Multipart
-    @POST(API +"service")
+    @POST(API +"service/new")
     @JvmSuppressWildcards
     fun createService(
         @Part images :List<MultipartBody.Part>,
-        @PartMap() partMap: Map<String, RequestBody>,
-        @Part("additionalProperties") properties: List<Properties>,
+        @Part("body") body: CreateServiceModel,
     ): Deferred<Response<CreateServiceModel>>
 
     @GET(API +"serviceProviders/{serviceId}")

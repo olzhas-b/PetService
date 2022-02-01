@@ -183,9 +183,10 @@ class CreateServiceOptionalFragment : Fragment(), UploadNewImageListener, EditTe
         if(hasStoragePermission()) {
             if (isFirstElement) {
                 openFileExplorer()
-            } else {
-                requestStoragePermission()
             }
+        }
+        else {
+            requestStoragePermission()
         }
     }
 
@@ -241,31 +242,44 @@ class CreateServiceOptionalFragment : Fragment(), UploadNewImageListener, EditTe
                 "больше 40кг"->50
                 else -> null
             }
-        val serviceType = createPartFromString(requiredField.serviceType.toString())
-        val price = createPartFromString("3000")
-        val currencyCode = createPartFromString("KZT")
-        val pricePerTime = createPartFromString("hour")
-        val longitude = createPartFromString("12.54")
-        val latitude = createPartFromString("12.42")
-        val description = createPartFromString(requiredField.summary)
-        val acceptableSize = createPartFromString(petSize.toString())
-        val acceptablePets = createPartFromString(requiredField.petTypes)
-        val map: HashMap<String, RequestBody> = HashMap()
+
+        val createServiceModel = CreateServiceModel(
+            serviceType = requiredField.serviceType,
+            price = 3000,
+            currencyCode = "KZT",
+            pricePerTime = "hour",
+            longitude = 32.32,
+            latitude = 44.44,
+            description = requiredField.summary,
+            acceptablePets = requiredField.petTypes,
+            acceptableSize = petSize,
+            additionalProperties = sendPropertiesList
+        )
+//        val serviceType = createPartFromString(requiredField.serviceType.toString())
+//        val price = createPartFromString("3000")
+//        val currencyCode = createPartFromString("KZT")
+//        val pricePerTime = createPartFromString("hour")
+//        val longitude = createPartFromString("12.54")
+//        val latitude = createPartFromString("12.42")
+//        val description = createPartFromString(requiredField.summary)
+//        val acceptableSize = createPartFromString(petSize.toString())
+//        val acceptablePets = createPartFromString(requiredField.petTypes)
+//        val map: HashMap<String, RequestBody> = HashMap()
 //        val propertiesMap: HashMap<String, RequestBody> = HashMap()
 //        for((key, value) in sendPropertiesMap){
 //            value?.let{
 //                propertiesMap.put(key, createPartFromString(value))
 //            }
 //        }
-        map["serviceType"] = serviceType
-        map["price"] = price
-        map["currencyCode"] = currencyCode
-        map["pricePerTime"] = pricePerTime
-        map["longitude"] = longitude
-        map["latitude"] = latitude
-        map["description"] = description
-        map["acceptableSize"] = acceptableSize
-        map["acceptablePets"] = acceptablePets
+//        map["serviceType"] = serviceType
+//        map["price"] = price
+//        map["currencyCode"] = currencyCode
+//        map["pricePerTime"] = pricePerTime
+//        map["longitude"] = longitude
+//        map["latitude"] = latitude
+//        map["description"] = description
+//        map["acceptableSize"] = acceptableSize
+//        map["acceptablePets"] = acceptablePets
 
 
         for(image in imageList){
@@ -273,7 +287,7 @@ class CreateServiceOptionalFragment : Fragment(), UploadNewImageListener, EditTe
                 imagesToService.add(prepareFilePart("images", it))
             }
         }
-        servicesViewModel.createService(imagesToService, map, sendPropertiesList)
+        servicesViewModel.createService(imagesToService, createServiceModel)
     }
 
     private fun prepareFilePart(partName: String, fileUri: Uri): MultipartBody.Part{

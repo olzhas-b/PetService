@@ -22,7 +22,7 @@ import timber.log.Timber
 
 abstract class BaseServicesDataStore (@PublishedApi internal val service: ApiService) {
     abstract fun getUserServices(user_id: Int): LiveData<List<Services>>
-    abstract fun createService(images :List<MultipartBody.Part>, partMap :Map<String, RequestBody>, properties :List<Properties>): LiveData<CreateServiceModel>
+    abstract fun createService(images :List<MultipartBody.Part>, body: CreateServiceModel): LiveData<CreateServiceModel>
 
 
     inline fun fetchData(crossinline call: (ApiService) -> Deferred<Response<ServiceResponse>>): LiveData<List<Services>> {

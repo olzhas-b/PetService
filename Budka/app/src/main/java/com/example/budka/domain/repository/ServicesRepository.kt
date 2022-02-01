@@ -19,7 +19,6 @@ import okhttp3.RequestBody
 interface ServicesRepository {
     fun getUserServices(user_id:Int): LiveData<List<Services>>
     fun createService(images: List<MultipartBody.Part>,
-                      partMap: Map<String, RequestBody>,
-                      properties: List<Properties>
+                      body: CreateServiceModel
     ): LiveData<CreateServiceModel>
 }

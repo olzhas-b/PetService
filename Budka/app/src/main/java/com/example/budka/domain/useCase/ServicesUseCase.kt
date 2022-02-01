@@ -24,9 +24,8 @@ class ServicesUseCase (private val servicesRepository: ServicesRepository){
     }
 
     fun createService(images: List<MultipartBody.Part>,
-                      partMap: Map<String, RequestBody>,
-                      properties: List<Properties>
+                      body: CreateServiceModel
     ): LiveData<CreateServiceModel>{
-        return servicesRepository.createService(images, partMap, properties)
+        return servicesRepository.createService(images, body)
     }
 }

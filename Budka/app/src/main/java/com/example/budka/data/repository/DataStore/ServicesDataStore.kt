@@ -30,12 +30,10 @@ class ServicesDataStore(apiService: ApiService): ServicesRepository, BaseService
 
     override fun createService(
         images: List<MultipartBody.Part>,
-        partMap: Map<String, RequestBody>,
-        properties: List<Properties>,
+        body: CreateServiceModel
     ): LiveData<CreateServiceModel> {
         return postService {
-            Log.d("image", images.toString())
 
-            service.createService( images, partMap, properties) }
+            service.createService( images, body) }
     }
 }
