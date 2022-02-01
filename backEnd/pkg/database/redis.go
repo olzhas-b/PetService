@@ -2,12 +2,14 @@ package database
 
 import (
 	"github.com/go-redis/redis"
+	"github.com/olzhas-b/PetService/backEnd/pkg/config"
 	"log"
 )
 
 func InitRedis() (*redis.Client, error) {
+	conf := config.Get().Redis
 	client := redis.NewClient(&redis.Options{
-		Addr: "redis-db:6379",
+		Addr: conf.Addr,
 		DB:   2,
 	})
 

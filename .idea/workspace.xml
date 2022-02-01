@@ -8,8 +8,8 @@
       <change afterPath="$PROJECT_DIR$/../hello_world_crud/Dockerfile" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../hello_world_crud/docker-compose.yml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../hello_world_crud/server.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backEnd/db/data_init.sql" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/db/data_init.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +56,7 @@
     <property name="go.modules.go.list.on.any.changes.was.set" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
     <property name="go.watchers.conflict.with.on.save.actions.check.performed" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/backEnd" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">

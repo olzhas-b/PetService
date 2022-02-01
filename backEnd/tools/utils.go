@@ -21,9 +21,17 @@ func GetToken(ctx *fiber.Ctx) (token string) {
 }
 
 func GetUserIdByCtx(ctx *fiber.Ctx) (ID int64) {
-	return StrToInt64(ctx.Get(consts.UserID, "0"))
+	userId, ok := ctx.Locals(consts.UserID).(string)
+	if !ok {
+		return 0
+	}
+	return StrToInt64(userId)
 }
 
 func GetUserTypeByCtx(ctx *fiber.Ctx) (userType models.UserType) {
-	return models.UserType(StrToInt64(ctx.Get(consts.UserType, "0")))
+	userTypeStr, ok := ctx.Locals(consts.UserType).(string)
+	if !ok {
+		return 0
+	}
+	return models.UserType(StrToInt64(userTypeStr))
 }

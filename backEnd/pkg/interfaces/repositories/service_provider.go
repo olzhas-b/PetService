@@ -7,6 +7,6 @@ import (
 )
 
 type IServiceProviderRepository interface {
-	GetAllServices(ctx context.Context, filter filter.ServiceProviderFilter) (sProviders []models.Service, err error)
+	GetAllServices(ctx context.Context, filter filter.ServiceProviderFilter) (listService models.ListService, err error)
 	CreateService(ctx context.Context, service models.Service) (result models.Service, err error)
 }

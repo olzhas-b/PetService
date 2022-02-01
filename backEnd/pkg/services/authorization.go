@@ -4,8 +4,8 @@ import (
 	"fmt"
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/go-redis/redis"
-	config2 "github.com/olzhas-b/PetService/backEnd/config"
 	"github.com/olzhas-b/PetService/backEnd/consts"
+	config2 "github.com/olzhas-b/PetService/backEnd/pkg/config"
 	"github.com/olzhas-b/PetService/backEnd/pkg/models"
 	"github.com/olzhas-b/PetService/backEnd/pkg/repositories"
 	"time"
@@ -42,7 +42,7 @@ func (s *AuthorizationService) CheckToken(token string, isAccess bool) (err erro
 }
 
 func (s *AuthorizationService) ParseToken(token string, isAccess bool) (tokenClaim models.TokenClaim, err error) {
-	config := config2.Get().TokenConfig
+	config := config2.Get().Token
 	JwtToken, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("failed to extract token's metadata, unexpected signing method: %v", token.Header["alg"])

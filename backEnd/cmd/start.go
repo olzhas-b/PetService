@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"github.com/olzhas-b/PetService/backEnd/config"
 	"github.com/olzhas-b/PetService/backEnd/modules/logger"
+	"github.com/olzhas-b/PetService/backEnd/pkg/config"
 	"github.com/olzhas-b/PetService/backEnd/pkg/database"
 	"github.com/olzhas-b/PetService/backEnd/pkg/repositories"
 	"github.com/olzhas-b/PetService/backEnd/pkg/services"
@@ -17,7 +17,9 @@ var startCmd = &cobra.Command{
 	Use:   "start",
 	Short: "start server",
 	Run: func(cmd *cobra.Command, args []string) {
-		time.Sleep(time.Second * 30)
+		time.Sleep(time.Minute)
+
+		config.InitConfig()
 		db, err := database.InitPostgres()
 		if err != nil {
 			log.Fatalf("failed connection with postgres err: %v", err)

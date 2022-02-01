@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/olzhas-b/PetService/backEnd/consts"
-	"github.com/olzhas-b/PetService/backEnd/pkg/models"
 	"github.com/olzhas-b/PetService/backEnd/pkg/transport/restful/common"
 	"github.com/olzhas-b/PetService/backEnd/tools"
 )
@@ -21,14 +20,12 @@ func (h *Handler) CtlGetImage(ctx *fiber.Ctx) error {
 }
 
 func (h *Handler) CtlCreateImage(ctx *fiber.Ctx) error {
-	var image models.ImageToSave
 	form, err := ctx.MultipartForm()
 	if err != nil {
 		return common.GenShortResponse(ctx, consts.FileUploadErr, "", err.Error())
 	}
 	files := form.File["files"]
-	image.Files = files
-	err = h.services.IImageService.ServiceSaveImage(image)
+	err = h.services.IImageService.ServiceSaveImage(files)
 	if err != nil {
 		return common.GenShortResponse(ctx, consts.FileUploadErr, err.Error(), err.Error())
 	}
@@ -40,6 +37,10 @@ func (h *Handler) CtlUpdateImage(ctx *fiber.Ctx) error {
 }
 
 func (h *Handler) CtlDeleteImage(ctx *fiber.Ctx) error {
+	id := tools.GetUserIdByCtx(ctx)
+	if id == 0 {
+		return fmt.Errorf("userID equal to zero")
+	}
 	return nil
 }
 

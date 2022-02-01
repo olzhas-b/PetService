@@ -1,12 +1,15 @@
 package handler
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/olzhas-b/PetService/backEnd/consts"
 	"github.com/olzhas-b/PetService/backEnd/pkg/models"
 	filter2 "github.com/olzhas-b/PetService/backEnd/pkg/models/filter"
 	"github.com/olzhas-b/PetService/backEnd/pkg/transport/restful/common"
+	"github.com/olzhas-b/PetService/backEnd/tools"
+	"mime/multipart"
 )
 
 func (h *Handler) CtlGetAllServiceProvider(ctx *fiber.Ctx) error {
@@ -16,23 +19,36 @@ func (h *Handler) CtlGetAllServiceProvider(ctx *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	return common.GenShortResponse(ctx, consts.Success, result, "")
+	return common.GenShortResponse(ctx, consts.Success, result.ConvertListToDTO(), "")
 }
 
 func (h *Handler) CtlCreateService(ctx *fiber.Ctx) error {
-	id := 9
+	id := tools.GetUserIdByCtx(ctx)
+	userType := tools.GetUserTypeByCtx(ctx)
+	if id == 0 || userType == 1 {
+		return fmt.Errorf("userID equal to 0")
+	}
+	var files []*multipart.FileHeader
 	var service models.Service
-	if err := ctx.BodyParser(&service); err != nil {
+	form, err := ctx.MultipartForm()
+	body := form.Value["body"]
+	if len(body) == 0 {
+		return fmt.Errorf("not enough data to create")
+	}
+	if err := json.Unmarshal([]byte(body[0]), &service); err != nil {
 		response := models.ResponseError{
-			Description:          "wtf",
-			MessageFromDeveloper: fmt.Errorf("Coulnd't parse body with error: %v", err).Error(),
+			Description:          "не смогли запарсить данные",
+			MessageFromDeveloper: fmt.Errorf("coulnd't parse body with error: %v", err).Error(),
 		}
 		return common.GenShortResponse(ctx, consts.DBDeleteErr, response, "")
 	}
-	service.UserID = int64(id)
-	result, err := h.services.IServiceProviderService.ServiceCreateService(ctx.Context(), service)
+	if form.File != nil {
+		files = form.File["images"]
+	}
+	service.UserID = id
+	result, err := h.services.IServiceProviderService.ServiceCreateService(ctx.Context(), service, files)
 	if err != nil {
 		return fmt.Errorf("Handler.CtlCreateService: %w", err)
 	}
-	return common.GenShortResponse(ctx, consts.Success, result, "")
+	return common.GenShortResponse(ctx, consts.Success, result.ID, "")
 }

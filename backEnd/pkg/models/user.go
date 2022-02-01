@@ -6,10 +6,10 @@ type UserType int64
 
 type User struct {
 	ID            int64     `json:"id"`
-	Login         string    `gorm:"login" json:"login"`
-	Username      string    `gorm:"username" json:"username"`
+	Login         string    `gorm:"login,omitempty" json:"login"`
+	Username      string    `gorm:"username,omitempty" json:"username"`
 	Phone         string    `gorm:"phone" json:"phone"`
-	Password      string    `gorm:"password" json:"password"`
+	Password      string    `gorm:"password,omitempty" json:"password"`
 	FirstName     string    `gorm:"first_name" json:"firstName"`
 	LastName      string    `gorm:"last_name" json:"lastName"`
 	FullName      string    `gorm:"full_name" json:"fullName"`
@@ -37,5 +37,20 @@ func (u *User) FillDefaultValue() {
 }
 
 func (u *User) ConvertToDto() (result map[string]interface{}) {
+	result = make(map[string]interface{})
+	result["id"] = u.ID
+	result["username"] = u.Username
+	result["phone"] = u.Phone
+	result["firstName"] = u.FirstName
+	result["lastName"] = u.LastName
+	result["fullName"] = u.FullName
+	result["city"] = u.City
+	result["country"] = u.Country
+	result["location"] = u.Location
+	result["averageRating"] = u.AverageRating
+	result["created"] = u.Created
+	result["countRating"] = u.CountRating
+	result["updated"] = u.Updated
+	result["status"] = u.Status
 	return
 }

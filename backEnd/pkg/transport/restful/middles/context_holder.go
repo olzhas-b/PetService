@@ -18,10 +18,9 @@ func SetContextHolder(service *services.Services) fiber.Handler {
 		claims, err := service.IAuthorizationService.ParseToken(token, true)
 
 		if err == nil {
-			c.Set(consts.UserType, strconv.FormatInt(claims.UserType, 10))
-			c.Set(consts.UserID, strconv.FormatInt(claims.ID, 10))
+			c.Locals(consts.UserType, strconv.FormatInt(claims.UserType, 10))
+			c.Locals(consts.UserID, strconv.FormatInt(claims.ID, 10))
 		}
-
 		return c.Next()
 	}
 }

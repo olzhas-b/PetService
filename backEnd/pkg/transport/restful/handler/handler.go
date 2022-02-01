@@ -53,14 +53,14 @@ func (h *Handler) AddRoutes(srv *fiber.App) {
 	service := v1.Group("/service")
 	{
 		service.Get("", h.CtlGetAllServiceProvider)
-		service.Post("", h.CtlCreateService)
 		service.Get("/:id/detail", h.CtlGetServiceDetail)
+		service.Post("/new", middles.AuthorizationMiddleWare(h.services), h.CtlCreateService)
 	}
 
 	image := v1.Group("/image")
 	{
 		image.Get("/:fileName", h.CtlGetImage)
 		image.Post("/new", h.CtlCreateImage)
-		image.Post("/edit", h.CtlUpdateImage)
+		image.Delete("/:fileName", middles.AuthorizationMiddleWare(h.services), h.CtlDeleteImage)
 	}
 }
