@@ -26,12 +26,17 @@ class PetSittersListHorizontalViewHolder  constructor(
 
     @SuppressLint("SetTextI18n")
     fun setUp(petSitterData: ServiceProvider){
-        nearestPetSitterItemBinding.nearestPetSitterNameTv.text = petSitterData.first_name
-        nearestPetSitterItemBinding.nearestPetSitterLocation.text = petSitterData.city + ',' + petSitterData.country
-        nearestPetSitterItemBinding.nearestPerSitterRatingTv.text = petSitterData.average_rating.toString()
+        var image: String? = null
+        nearestPetSitterItemBinding.nearestPetSitterNameTv.text = petSitterData.user?.fullName
+        nearestPetSitterItemBinding.nearestPetSitterLocation.text = petSitterData.user?.country + ',' + petSitterData.user?.city
+        nearestPetSitterItemBinding.nearestPerSitterRatingTv.text = petSitterData.user?.averageRating.toString()
         nearestPetSitterItemBinding.nearestPetSitterPriceTv.setUpPriceMask(petSitterData.price.toString(),petSitterData.currencyCode ,petSitterData.pricePerTime)
-        Picasso.get().load(petSitterData.avatar).fit().centerCrop().placeholder(R.drawable.akimbek).into(nearestPetSitterItemBinding.nearestPerSitterIv
-        )
+        if(!petSitterData.images.isNullOrEmpty()){
+            image = petSitterData.images[0]
+        }
+        Picasso.get().load(image).fit().centerCrop().placeholder(R.drawable.akimbek).into(nearestPetSitterItemBinding.nearestPerSitterIv)
+
+
 
     }
 }

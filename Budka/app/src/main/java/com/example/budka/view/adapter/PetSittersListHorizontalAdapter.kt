@@ -8,6 +8,7 @@
 
 package com.example.budka.view.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -43,6 +44,7 @@ class PetSittersListHorizontalAdapter internal constructor(
 
     fun updatePetSittersList(petSitterList: List<ServiceProvider>){
         this.petSitterList = petSitterList
+        Log.d("myList", petSitterList.toString())
         notifyDataSetChanged()
     }
 

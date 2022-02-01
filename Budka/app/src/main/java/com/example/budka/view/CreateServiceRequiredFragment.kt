@@ -63,9 +63,9 @@ class CreateServiceRequiredFragment : Fragment(), MapsFragment.SendLocationInter
 
     private fun setListeners(){
         viewBinding.mapIv.setOnClickListener {
-            val fragment = MapsFragment(true, this)
-            activity?.supportFragmentManager?.beginTransaction()?.add(R.id.createServiceRequiredFragment, fragment)?.addToBackStack("requiredFm")?.commit()
-//            it.findNavController().navigate(CreateServiceRequiredFragmentDirections.actionCreateServiceRequiredFragmentToMapsFragment(true))
+//            val fragment = MapsFragment(true, this)
+//            activity?.supportFragmentManager?.beginTransaction()?.add(R.id.createServiceRequiredFragment, fragment)?.addToBackStack("requiredFm")?.commit()
+            it.findNavController().navigate(CreateServiceRequiredFragmentDirections.actionCreateServiceRequiredFragmentToMapsFragment(true))
 
         }
         viewBinding.optionalNavigateBtn.setOnClickListener {

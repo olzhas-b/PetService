@@ -37,10 +37,7 @@ import com.yandex.mapkit.mapview.MapView
 import com.yandex.runtime.ui_view.ViewProvider
 import org.koin.ext.getOrCreateScope
 
-class MapsFragment(
-    var setLocation: Boolean? = false,
-    var setLocationInterface: SendLocationInterface?= null
-) : Fragment() {
+class MapsFragment : Fragment() {
     private var _viewBinding: FragmentMapsBinding? = null
     private val viewBinding get() = _viewBinding!!
     private lateinit var mapView: MapView
@@ -61,7 +58,7 @@ class MapsFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         mapView = viewBinding.yandexMap
-        if(setLocation == true){
+        if(arg.setLocation){
             viewBinding.setLocationBlock.visibility = View.VISIBLE
             setProvidableServiceLocation()
         }
@@ -120,7 +117,7 @@ class MapsFragment(
             @SuppressLint("LogNotTimber")
             override fun onMapObjectDrag(p0: MapObject, p1: Point) {
                 viewBinding.setLocationBtn.setOnClickListener {
-                    setLocationInterface?.sendLocation(p1.longitude, p1.latitude)
+//                    setLocationInterface?.sendLocation(p1.longitude, p1.latitude)
                 }
             }
 

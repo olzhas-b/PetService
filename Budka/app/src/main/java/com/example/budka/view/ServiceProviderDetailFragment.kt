@@ -70,7 +70,7 @@ class ServiceProviderDetailFragment: Fragment() {
         viewBinding.mapSnapshot.settings.javaScriptEnabled = true
         val htmlData = "<html><head><style Type=\"text/css\"> img { position: absolute; width: 300px; height: 300px; left: 50%; top: 50%; margin-left: -150px; margin-top: -150px; }</style> </head> <body> <img src=\"https://static-maps.yandex.ru/1.x/?lang=ru&ll=76.944609,43.227016&pt=76.944609,43.227016,pm2rdm&size=450,450&z=16&l=map\"> </body> </html>"
         viewBinding.mapSnapshot.loadData(htmlData, "text/html", "UTF-8")
-        serviceDetailViewModel.fetchServiceDetail(serviceProvider.service_id)
+        serviceDetailViewModel.fetchServiceDetail(serviceProvider.id)
         petListViewModel.fetchUserPetsList(serviceProvider.id)
         servicesViewModel.fetchUserServicesList(serviceProvider.id)
 
@@ -88,12 +88,11 @@ class ServiceProviderDetailFragment: Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun setObservers(){
-        Picasso.get().load(serviceProvider.avatar).fit().centerCrop().placeholder(R.drawable.img_aktos).into(viewBinding.albumIv)
-        Picasso.get().load(serviceProvider.avatar).fit().centerCrop().placeholder(R.drawable.img_aktos).into(viewBinding.userAvatar)
-        viewBinding.petSitterNameTv.text = serviceProvider.first_name + " " + serviceProvider.last_name
-        viewBinding.addressTv.text = serviceProvider.city +", " + serviceProvider.country
+        Picasso.get().load(serviceProvider.images?.get(0)).fit().centerCrop().placeholder(R.drawable.img_aktos).into(viewBinding.albumIv)
+        Picasso.get().load(serviceProvider.images?.get(0)).fit().centerCrop().placeholder(R.drawable.img_aktos).into(viewBinding.userAvatar)
+        viewBinding.petSitterNameTv.text = serviceProvider.user?.fullName
+        viewBinding.addressTv.text = serviceProvider.user?.country +", " + serviceProvider.user?.city
         serviceDetailViewModel.getServiceDetail().observe(viewLifecycleOwner, {
-            Log.d("details", it.toString())
             setServiceDetail(it)
 
         })

@@ -9,24 +9,10 @@
 package com.example.budka.data.model
 
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
+import kotlinx.android.parcel.RawValue
 
-data class User(
-    val id: Int,
-    val username: String,
-    val first_name: String,
-    val last_name: String,
-    val phone: String,
-    val city: String,
-    val country: String,
-    val location: String,
-    val bio: String,
-    val count_rating: Int,
-    val average_rating: Double,
-    val avatar: String,
-    val services: Services?
-
-)
 
 data class PetOwner(
     val id: Int,
@@ -44,21 +30,25 @@ data class ServiceProvidersList(
 )
 
 @Parcelize
+
 data class ServiceProvider(
+    @SerializedName("id")
     val id: Int,
-    val username: String,
-    val first_name: String,
-    val last_name: String,
-    val city: String,
-    val country: String,
-    val location: String?,
-    val avatar: String,
-    val average_rating: Double,
-    val service_id: Int,
-    val serviceType: String,
-    val price: Int,
+    @SerializedName("serviceType")
+    val serviceType: Int?,
+    @SerializedName("price")
+    val price: Int?,
+    @SerializedName("currencyCode")
     val currencyCode: String?,
-    val pricePerTime: String?
+    @SerializedName("pricePerTime")
+    val pricePerTime: String?,
+    @SerializedName("status")
+    val status: Int?,
+    @SerializedName("user")
+    val user: @RawValue
+    User?,
+    @SerializedName("images")
+    val images: List<String>?
 ): Parcelable
 
 
@@ -89,5 +79,30 @@ data class Services(
     val pricePerTime: String?,
 )
 
-
+data class User(
+    @SerializedName("id")
+    val id: Int,
+    @SerializedName("username")
+    val username: String,
+    @SerializedName("firstName")
+    val firstName: String,
+    @SerializedName("lastName")
+    val lastName: String,
+    @SerializedName("fullName")
+    val fullName: String,
+    @SerializedName("phone")
+    val phone: String,
+    @SerializedName("city")
+    val city: String,
+    @SerializedName("country")
+    val country: String,
+    @SerializedName("location")
+    val location: String,
+    @SerializedName("description")
+    val description: String,
+    @SerializedName("countRating")
+    val countRating: Int,
+    @SerializedName("averageRating")
+    val averageRating: Int
+)
 

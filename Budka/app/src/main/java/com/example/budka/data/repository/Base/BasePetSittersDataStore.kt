@@ -20,7 +20,7 @@ import timber.log.Timber
 abstract class BasePetSittersDataStore(@PublishedApi internal val service: ApiService) {
     abstract fun getPetSitters(serviceType: String): LiveData<List<ServiceProvider>>
 
-    inline fun fetchData(crossinline call: (ApiService) -> Deferred<Response<ServiceProvidersList>>): LiveData<List<ServiceProvider>> {
+    inline fun fetchData(crossinline call: (ApiService) -> Deferred<Response<List<ServiceProvider>>>): LiveData<List<ServiceProvider>> {
         val result = MutableLiveData<List<ServiceProvider>>()
         CoroutineScope(Dispatchers.IO).launch {
             val request = call(service)
@@ -28,7 +28,7 @@ abstract class BasePetSittersDataStore(@PublishedApi internal val service: ApiSe
                 try {
                     val response = request.await()
                     if (response.isSuccessful) {
-                        result.value = response.body()?.users
+                        result.value = response.body()
                     } else {
                         Timber.d("Error occurred with code ${response.code()}")
                     }

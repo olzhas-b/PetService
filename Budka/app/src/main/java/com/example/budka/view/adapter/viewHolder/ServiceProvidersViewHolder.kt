@@ -25,10 +25,15 @@ class ServiceProvidersViewHolder constructor(
 
     @SuppressLint("SetTextI18n")
     fun setUp(serviceProviderData: ServiceProvider){
-        itemPetSitterBinding.petSitterRb.rating = serviceProviderData.average_rating.toFloat()
-        Picasso.get().load(serviceProviderData.avatar).fit().centerCrop().into(itemPetSitterBinding.perSitterIv)
-        itemPetSitterBinding.petSitterNameTv.text = serviceProviderData.first_name +' '+ serviceProviderData.last_name
-        itemPetSitterBinding.petSitterLocationTv.text = serviceProviderData.location
+        var image: String? = null
+        itemPetSitterBinding.petSitterRb.rating = serviceProviderData.user?.averageRating?.toFloat()?:0.0.toFloat()
+        if(!serviceProviderData.images.isNullOrEmpty()){
+            image = serviceProviderData.images[0]
+        }
+
+        Picasso.get().load(image).fit().centerCrop().into(itemPetSitterBinding.perSitterIv)
+        itemPetSitterBinding.petSitterNameTv.text = serviceProviderData.user?.fullName
+        itemPetSitterBinding.petSitterLocationTv.text = serviceProviderData.user?.country + ' ' + serviceProviderData.user?.city
         itemPetSitterBinding.petSitterPriceTv.setUpPriceMask(serviceProviderData.price.toString(),serviceProviderData.currencyCode ,serviceProviderData.pricePerTime)
         itemView.setOnClickListener {
             itemView.findNavController().navigate(ServiceProvidersListFragmentDirections.actionServiceProvidersFragmentToServiceProviderDetailFragment(serviceProviderData))
