@@ -1,13 +1,12 @@
 package services
 
 import (
-	"bytes"
 	"context"
 	"fmt"
 	"github.com/olzhas-b/PetService/backEnd/pkg/models"
 	"github.com/olzhas-b/PetService/backEnd/pkg/models/filter"
 	repo "github.com/olzhas-b/PetService/backEnd/pkg/repositories"
-	"io"
+	"github.com/olzhas-b/PetService/backEnd/tools"
 	"mime/multipart"
 	"time"
 )
@@ -31,26 +30,8 @@ func (s *ServiceProvider) ServiceCreateService(ctx context.Context, service mode
 		newImage := models.Image{
 			Name:        file.Filename,
 			ContentType: file.Header.Get("Content-Type"),
+			Content:     tools.ReadProperly(file),
 		}
-		func() {
-			file, err := file.Open()
-			if err != nil {
-				return
-			}
-			// handle close error to prevent resources leak
-			defer func() {
-				closeErr := file.Close()
-				if err == nil && closeErr != nil {
-					err = closeErr
-				}
-			}()
-			buf := bytes.NewBuffer(nil)
-			if _, err = io.Copy(buf, file); err != nil {
-				return
-			}
-			newImage.Content = buf.Bytes()
-		}()
-
 		service.Images = append(service.Images, newImage)
 	}
 	result, err = s.repo.IServiceProviderRepository.CreateService(ctx, service)

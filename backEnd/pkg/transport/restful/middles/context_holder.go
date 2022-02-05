@@ -4,13 +4,13 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/olzhas-b/PetService/backEnd/consts"
 	"github.com/olzhas-b/PetService/backEnd/pkg/services"
-	"github.com/olzhas-b/PetService/backEnd/tools"
+	"github.com/olzhas-b/PetService/backEnd/tools/utils"
 	"strconv"
 )
 
 func SetContextHolder(service *services.Services) fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		token := tools.GetToken(c)
+		token := utils.GetToken(c)
 		if len(token) < 10 {
 			return c.Next()
 		}

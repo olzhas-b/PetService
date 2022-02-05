@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"github.com/joho/godotenv"
+	"github.com/olzhas-b/PetService/authService/tools"
 	"log"
 	"time"
 )
@@ -13,6 +14,7 @@ type Config struct {
 	Database DatabaseConfig
 	Token    TokenConfig
 	HTTP     HTTPConfig
+	TimeOut  bool
 }
 
 type HTTPConfig struct {
@@ -52,7 +54,7 @@ type TokenConfig struct {
 }
 
 var (
-	GlobalConfig = Config{}
+	globalConfig = Config{}
 )
 
 func InitConfig() {
@@ -60,7 +62,7 @@ func InitConfig() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	GlobalConfig = Config{
+	globalConfig = Config{
 		Token: TokenConfig{
 			AccessSecret:  "asdflsadaqjwe123DEavlkjl12312312",
 			RefreshSecret: "fadsf0ivoi@vlka0sd123,vk234/adsf;1!1231$$$#123",
@@ -76,9 +78,10 @@ func InitConfig() {
 			Addr:     envs["REDIS-ADDR"],
 			Password: envs["REDIS-PASSWORD"],
 		},
+		TimeOut: tools.StrToBool(envs["TIME-OUT"]),
 	}
 }
 
 func Get() *Config {
-	return &GlobalConfig
+	return &globalConfig
 }

@@ -13,9 +13,12 @@ import (
 )
 
 func main() {
-	time.Sleep(time.Minute)
-
 	config.InitConfig()
+
+	if config.Get().TimeOut {
+		time.Sleep(time.Second * 30)
+	}
+
 	db, err := database.InitPostgres()
 	if err != nil {
 		log.Fatalf("postgres connection was failed: %v", err)

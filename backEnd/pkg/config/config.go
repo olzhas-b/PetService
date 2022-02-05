@@ -3,6 +3,8 @@ package config
 import (
 	"fmt"
 	"github.com/joho/godotenv"
+	"github.com/olzhas-b/PetService/backEnd/tools"
+
 	"log"
 	"time"
 )
@@ -13,6 +15,7 @@ type Config struct {
 	Database DatabaseConfig
 	Token    TokenConfig
 	HTTP     HTTPConfig
+	TimeOut  bool
 }
 
 type HTTPConfig struct {
@@ -60,7 +63,9 @@ func InitConfig() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	GlobalConfig = Config{
+
 		Token: TokenConfig{
 			AccessSecret:  "asdflsadaqjwe123DEavlkjl12312312",
 			RefreshSecret: "fadsf0ivoi@vlka0sd123,vk234/adsf;1!1231$$$#123",
@@ -68,14 +73,15 @@ func InitConfig() {
 			RefreshTtl:    time.Hour * 1000000,
 		},
 		HTTP: HTTPConfig{
-			Name: "0.0.0.0",
-			Port: "8080",
-			Http: "http",
+			Name: envs["HTTP-NAME"],
+			Port: envs["HTTP-PORT"],
+			Http: envs["HTTP-TYPE"],
 		},
 		Redis: RedisConfig{
 			Addr:     envs["REDIS-ADDR"],
 			Password: envs["REDIS-PASSWORD"],
 		},
+		TimeOut: tools.StrToBool(envs["TIME-OUT"]),
 	}
 }
 

@@ -103,19 +103,20 @@ CREATE TABLE "service_image" (
                                  "service_id" BIGINT not null
 );
 
+CREATE TABLE "rating" (
+                          "id" BIGSERIAL PRIMARY KEY,
+                          "user_id" BIGINT,
+                          "estimator_id" BIGINT,
+                          "created" timestamp(6),
+                          score numeric(1) not null default 5
+);
+
 CREATE TABLE "image" (
                          "id" BIGSERIAL PRIMARY KEY,
                          "name" varchar(40),
                          "content" bytea,
                          "content_type" varchar(40),
                          "status" numeric(3) default 0 not null
-);
-
-CREATE TABLE "rating" (
-                          "id" BIGSERIAL PRIMARY KEY,
-                          "user_id" BIGINT,
-                          "estimator_id" BIGINT,
-                          "created" timestamp(6)
 );
 
 CREATE TABLE "review" (

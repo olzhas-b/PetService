@@ -41,6 +41,7 @@ func (s *ServiceProviderRepository) GetAllServices(ctx context.Context, filter f
 				"username",
 				"phone",
 				"city",
+				"country",
 				"location",
 				"description",
 				"average_rating",

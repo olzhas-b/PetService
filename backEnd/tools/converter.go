@@ -10,3 +10,10 @@ func StrToInt64(sNum string) int64 {
 func IntToStr(num int) string {
 	return strconv.Itoa(num)
 }
+
+func StrToBool(str string) bool {
+	if str == "true" || str == "True" || str == "TRUE" {
+		return true
+	}
+	return false
+}

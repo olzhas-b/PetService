@@ -1,9 +1,10 @@
-package tools
+package utils
 
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/olzhas-b/PetService/backEnd/consts"
 	"github.com/olzhas-b/PetService/backEnd/pkg/models"
+	"github.com/olzhas-b/PetService/backEnd/tools"
 	"strings"
 )
 
@@ -20,12 +21,12 @@ func GetToken(ctx *fiber.Ctx) (token string) {
 	return
 }
 
-func GetUserIdByCtx(ctx *fiber.Ctx) (ID int64) {
+func GetCurrentUser(ctx *fiber.Ctx) (ID int64) {
 	userId, ok := ctx.Locals(consts.UserID).(string)
 	if !ok {
 		return 0
 	}
-	return StrToInt64(userId)
+	return tools.StrToInt64(userId)
 }
 
 func GetUserTypeByCtx(ctx *fiber.Ctx) (userType models.UserType) {
@@ -33,5 +34,5 @@ func GetUserTypeByCtx(ctx *fiber.Ctx) (userType models.UserType) {
 	if !ok {
 		return 0
 	}
-	return models.UserType(StrToInt64(userTypeStr))
+	return models.UserType(tools.StrToInt64(userTypeStr))
 }

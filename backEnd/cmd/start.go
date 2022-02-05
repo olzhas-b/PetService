@@ -17,9 +17,11 @@ var startCmd = &cobra.Command{
 	Use:   "start",
 	Short: "start server",
 	Run: func(cmd *cobra.Command, args []string) {
-		time.Sleep(time.Minute)
-
 		config.InitConfig()
+		if config.Get().TimeOut {
+			time.Sleep(time.Second * 30)
+		}
+
 		db, err := database.InitPostgres()
 		if err != nil {
 			log.Fatalf("failed connection with postgres err: %v", err)

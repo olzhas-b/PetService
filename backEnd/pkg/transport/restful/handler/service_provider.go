@@ -8,7 +8,7 @@ import (
 	"github.com/olzhas-b/PetService/backEnd/pkg/models"
 	filter2 "github.com/olzhas-b/PetService/backEnd/pkg/models/filter"
 	"github.com/olzhas-b/PetService/backEnd/pkg/transport/restful/common"
-	"github.com/olzhas-b/PetService/backEnd/tools"
+	"github.com/olzhas-b/PetService/backEnd/tools/utils"
 	"mime/multipart"
 )
 
@@ -23,8 +23,8 @@ func (h *Handler) CtlGetAllServiceProvider(ctx *fiber.Ctx) error {
 }
 
 func (h *Handler) CtlCreateService(ctx *fiber.Ctx) error {
-	id := tools.GetUserIdByCtx(ctx)
-	userType := tools.GetUserTypeByCtx(ctx)
+	id := utils.GetCurrentUser(ctx)
+	userType := utils.GetUserTypeByCtx(ctx)
 	if id == 0 || userType == 1 {
 		return fmt.Errorf("userID equal to 0")
 	}
@@ -36,11 +36,7 @@ func (h *Handler) CtlCreateService(ctx *fiber.Ctx) error {
 		return fmt.Errorf("not enough data to create")
 	}
 	if err := json.Unmarshal([]byte(body[0]), &service); err != nil {
-		response := models.ResponseError{
-			Description:          "не смогли запарсить данные",
-			MessageFromDeveloper: fmt.Errorf("coulnd't parse body with error: %v", err).Error(),
-		}
-		return common.GenShortResponse(ctx, consts.DBDeleteErr, response, "")
+		return common.GenShortResponse(ctx, consts.DBDeleteErr, "не смогли запарсить", "")
 	}
 	if form.File != nil {
 		files = form.File["images"]

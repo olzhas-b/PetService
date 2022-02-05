@@ -6,6 +6,7 @@ import (
 	"github.com/olzhas-b/PetService/backEnd/consts"
 	"github.com/olzhas-b/PetService/backEnd/pkg/transport/restful/common"
 	"github.com/olzhas-b/PetService/backEnd/tools"
+	"github.com/olzhas-b/PetService/backEnd/tools/utils"
 )
 
 func (h *Handler) CtlGetImage(ctx *fiber.Ctx) error {
@@ -24,7 +25,7 @@ func (h *Handler) CtlCreateImage(ctx *fiber.Ctx) error {
 	if err != nil {
 		return common.GenShortResponse(ctx, consts.FileUploadErr, "", err.Error())
 	}
-	files := form.File["files"]
+	files := form.File["images"]
 	err = h.services.IImageService.ServiceSaveImage(files)
 	if err != nil {
 		return common.GenShortResponse(ctx, consts.FileUploadErr, err.Error(), err.Error())
@@ -37,7 +38,7 @@ func (h *Handler) CtlUpdateImage(ctx *fiber.Ctx) error {
 }
 
 func (h *Handler) CtlDeleteImage(ctx *fiber.Ctx) error {
-	id := tools.GetUserIdByCtx(ctx)
+	id := utils.GetCurrentUser(ctx)
 	if id == 0 {
 		return fmt.Errorf("userID equal to zero")
 	}

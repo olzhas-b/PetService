@@ -40,13 +40,13 @@ func (h *Handler) AddRoutes(srv *fiber.App) {
 
 	v1 := srv.Group("/api/v1", middles.SetContextHolder(h.services))
 
-	user := v1.Group("/user", middles.AuthorizationMiddleWare(h.services))
+	user := v1.Group("/user")
 	{
-
-		user.Post("/sign-up", h.CtlCreateUser) // create
-		user.Post("/sign-out", nil)
-		user.Get("", h.CtlGetAllUsers)
-		user.Post("/edit", nil) // TODO update
+		user.Post("/estimate/:userID", middles.AuthorizationMiddleWare(h.services), h.CtlEstimateUser)
+		//user.Post("/sign-up", h.CtlCreateUser) // create
+		//user.Post("/sign-out", nil)
+		//user.Get("", h.CtlGetAllUsers)
+		//user.Post("/edit", nil) // TODO update
 		//user.Get("/:id", h.CtlGetUser)
 	}
 
@@ -62,5 +62,14 @@ func (h *Handler) AddRoutes(srv *fiber.App) {
 		image.Get("/:fileName", h.CtlGetImage)
 		image.Post("/new", h.CtlCreateImage)
 		image.Delete("/:fileName", middles.AuthorizationMiddleWare(h.services), h.CtlDeleteImage)
+	}
+
+	pet := user.Group("/pet")
+	{
+		user.Get("/:id/pet", h.CtlGetPet)
+
+		pet.Post("/new", middles.AuthorizationMiddleWare(h.services), h.CtlCreatePet)
+		pet.Delete("/:id/delete", middles.AuthorizationMiddleWare(h.services), h.CtlDeletePet)
+		pet.Put("/:id/edit", middles.AuthorizationMiddleWare(h.services), h.CtlUpdatePet)
 	}
 }
