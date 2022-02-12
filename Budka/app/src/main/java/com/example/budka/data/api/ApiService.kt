@@ -35,7 +35,7 @@ interface ApiService {
         @Part("body") body: CreateServiceModel,
     ): Deferred<Response<CreateServiceModel>>
 
-    @GET(API +"serviceProviders/{serviceId}")
+    @GET(API +"service/{serviceId}/detail")
     fun getServiceDetail(@Path("serviceId") serviceId: Int): Deferred<Response<ServiceDetail>>
 
     @GET(API +"services")

@@ -11,10 +11,14 @@ package com.example.budka.utils;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class MultiSpinner extends androidx.appcompat.widget.AppCompatSpinner implements
@@ -24,6 +28,8 @@ public class MultiSpinner extends androidx.appcompat.widget.AppCompatSpinner imp
     private boolean[] selected;
     private String defaultText;
     private MultiSpinnerListener listener;
+    private String myText;
+    public String spinnerText;
 
     public MultiSpinner(Context context) {
         super(context);
@@ -39,10 +45,7 @@ public class MultiSpinner extends androidx.appcompat.widget.AppCompatSpinner imp
 
     @Override
     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-        if (isChecked)
-            selected[which] = true;
-        else
-            selected[which] = false;
+        selected[which] = isChecked;
     }
 
     @Override
@@ -51,18 +54,18 @@ public class MultiSpinner extends androidx.appcompat.widget.AppCompatSpinner imp
         StringBuffer spinnerBuffer = new StringBuffer();
         boolean someUnselected = false;
         for (int i = 0; i < items.size(); i++) {
-            if (selected[i] == true) {
+            if (selected[i]) {
                 spinnerBuffer.append(items.get(i));
-                spinnerBuffer.append(", ");
+                spinnerBuffer.append(",");
             } else {
                 someUnselected = true;
             }
         }
-        String spinnerText;
+
         if (someUnselected) {
             spinnerText = spinnerBuffer.toString();
             if (spinnerText.length() > 2)
-                spinnerText = spinnerText.substring(0, spinnerText.length() - 2);
+                spinnerText = spinnerText.substring(0, spinnerText.length() - 1);
         } else {
             spinnerText = defaultText;
         }
@@ -91,16 +94,19 @@ public class MultiSpinner extends androidx.appcompat.widget.AppCompatSpinner imp
         return true;
     }
 
-    public void setItems(List<String> items, String allText,
+    public void setItems(List<String> items, String allText,boolean [] selected,
                          MultiSpinnerListener listener) {
+
         this.items = items;
-        this.defaultText = allText;
         this.listener = listener;
 
-        // all selected by default
-        selected = new boolean[items.size()];
-        for (int i = 0; i < selected.length; i++)
-            selected[i] = false;
+        if(selected==null){
+            // all selected by default
+            this.selected = new boolean[items.size()];
+            Arrays.fill(this.selected, false);
+        }else {
+            this.selected = selected;
+        }
 
         // all text on the spinner
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
@@ -110,5 +116,55 @@ public class MultiSpinner extends androidx.appcompat.widget.AppCompatSpinner imp
 
     public interface MultiSpinnerListener {
         public void onItemsSelected(boolean[] selected);
+    }
+
+    @Override
+    public Parcelable onSaveInstanceState() {
+        final SavedState ss = new SavedState(super.onSaveInstanceState());
+        myText = spinnerText;
+        ss.stateToSave = myText;
+        ss.selectedState = selected;
+        return ss;
+    }
+
+    @Override
+    public void onRestoreInstanceState(Parcelable state) {
+        SavedState ss = (SavedState) state;
+        Log.d("creation", "restore");
+
+        super.onRestoreInstanceState(ss.getSuperState());
+        this.myText = ss.stateToSave;
+        setItems(this.items, myText,ss.selectedState, this.listener);
+    }
+
+    static class SavedState extends BaseSavedState {
+        String stateToSave;
+        boolean[] selectedState;
+
+        SavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        private SavedState(Parcel in) {
+            super(in);
+            this.stateToSave = in.readString();
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+            out.writeString(this.stateToSave);
+        }
+
+        //required field that makes Parcelables from a Parcel
+        public static final Parcelable.Creator<SavedState> CREATOR =
+                new Parcelable.Creator<SavedState>() {
+                    public SavedState createFromParcel(Parcel in) {
+                        return new SavedState(in);
+                    }
+                    public SavedState[] newArray(int size) {
+                        return new SavedState[size];
+                    }
+                };
     }
 }

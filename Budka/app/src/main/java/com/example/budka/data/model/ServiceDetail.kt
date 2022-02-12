@@ -13,9 +13,11 @@ package com.example.budka.data.model
 data class ServiceDetail(
     val service_id: Int,
     val description: String?,
-    val acceptablePets: List<String>?,
-    val acceptableSize: List<String>?,
+    val acceptablePets: String,
+    val acceptableSize: Int,
     val additionalProperties: List<Properties>?,
+    val longitude: Double,
+    val latitude: Double,
 //    val user: PetSitterDetail?
 )
 

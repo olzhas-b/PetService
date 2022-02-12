@@ -22,10 +22,8 @@ import androidx.navigation.findNavController
 import com.example.budka.R
 import com.example.budka.data.model.*
 import com.example.budka.databinding.CreateServiceRequiredFragmentBinding
-import com.example.budka.utils.MultiSpinner
 import com.example.budka.viewModel.CountriesListViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
-import kotlin.reflect.typeOf
 
 class CreateServiceRequiredFragment : Fragment(), MapsFragment.SendLocationInterface {
     private var _viewBinding: CreateServiceRequiredFragmentBinding? = null
@@ -40,7 +38,6 @@ class CreateServiceRequiredFragment : Fragment(), MapsFragment.SendLocationInter
     ): View {
         _viewBinding = CreateServiceRequiredFragmentBinding.inflate(inflater, container, false)
         return viewBinding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -127,11 +124,10 @@ class CreateServiceRequiredFragment : Fragment(), MapsFragment.SendLocationInter
 
     private fun setPetTypes(){
         val petTypeList = mutableListOf<String>()
-        for (pet in PetType.values()){
+        for (pet in PetType.values()) {
             petTypeList.add(pet.value)
         }
-        viewBinding.petTypeSp.setItems(petTypeList, "Выбрать") {
-        }
+        viewBinding.petTypeSp.setItems(petTypeList, "Выбрать",null) {}
 
     }
 
@@ -164,6 +160,4 @@ class CreateServiceRequiredFragment : Fragment(), MapsFragment.SendLocationInter
     override fun sendLocation(longitude: Double, latitude: Double) {
         Log.d("hejj", longitude.toString())
     }
-
-
 }

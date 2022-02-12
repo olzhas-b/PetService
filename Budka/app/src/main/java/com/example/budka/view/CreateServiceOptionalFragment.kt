@@ -26,6 +26,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.budka.data.model.CreateServiceModel
+import com.example.budka.data.model.CurrencyModel
 import com.example.budka.data.model.Properties
 import com.example.budka.data.model.UploadImage
 import com.example.budka.databinding.CreateServiceOptionalFragmentBinding
@@ -41,6 +42,7 @@ import okhttp3.RequestBody
 import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.io.File
+import java.util.*
 
 class CreateServiceOptionalFragment : Fragment(), UploadNewImageListener, EditTextChangeListener {
     val REQUEST_CODE = 200
@@ -243,10 +245,21 @@ class CreateServiceOptionalFragment : Fragment(), UploadNewImageListener, EditTe
                 else -> null
             }
 
+        val localCurrency = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Currency.getInstance(resources.configuration.locales[0]).toString()
+        } else {
+            "KZT"
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Log.d("myCurrency", Currency.getInstance(resources.configuration.locales[0]).toString())
+        }
+
+
         val createServiceModel = CreateServiceModel(
             serviceType = requiredField.serviceType,
             price = 3000,
-            currencyCode = "KZT",
+            currencyCode = localCurrency,
             pricePerTime = "hour",
             longitude = 32.32,
             latitude = 44.44,

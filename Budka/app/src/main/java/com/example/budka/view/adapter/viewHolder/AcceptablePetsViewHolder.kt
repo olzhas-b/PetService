@@ -10,6 +10,7 @@ package com.example.budka.view.adapter.viewHolder
 
 import android.annotation.SuppressLint
 import android.util.Log
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.example.budka.R
 import com.example.budka.data.model.ServiceProvider
@@ -27,39 +28,37 @@ class AcceptablePetsViewHolder  constructor(
         Log.d("myType", petType.toString())
 
         when(petType) {
-            "dog" ->     {
-                itemPetTypeBinding.petNameTv.text = "Собаки"
+            "Собаки" ->     {
                 itemPetTypeBinding.petTypeIv.setImageResource(R.drawable.ic_dog)
             }
-            "cat" ->     {
-                itemPetTypeBinding.petNameTv.text = "Кошки"
+            "Кошки" ->     {
                 itemPetTypeBinding.petTypeIv.setImageResource(R.drawable.ic_cat)
             }
-            "fish" ->     {
-                itemPetTypeBinding.petNameTv.text = "Рыбы"
+            "Рыбы" ->     {
                 itemPetTypeBinding.petTypeIv.setImageResource(R.drawable.ic_fish)
             }
-            "bird" ->     {
-                itemPetTypeBinding.petNameTv.text = "Птицы"
+            "Птицы" ->     {
                 itemPetTypeBinding.petTypeIv.setImageResource(R.drawable.ic_bird)
             }
-            "horse" ->     {
-                itemPetTypeBinding.petNameTv.text = "Лошади"
+            "Лошади" ->     {
                 itemPetTypeBinding.petTypeIv.setImageResource(R.drawable.ic_horse)
             }
-            "livestock" ->     {
-                itemPetTypeBinding.petNameTv.text = "Домашний скот"
+            "Домашний скот" ->     {
                 itemPetTypeBinding.petTypeIv.setImageResource(R.drawable.ic_livestock)
             }
-            "reptile" ->     {
-                itemPetTypeBinding.petNameTv.text = "Рептилии"
+            "Рептилии" ->     {
                 itemPetTypeBinding.petTypeIv.setImageResource(R.drawable.ic_reptile)
             }
-            "smallanimal" ->     {
-                itemPetTypeBinding.petNameTv.text = "Мелкие питомцы"
+            "Мелкие питомцы" ->     {
                 itemPetTypeBinding.petTypeIv.setImageResource(R.drawable.ic_smallanimal)
             }
+            else -> {
+                itemPetTypeBinding.petTypeIv.visibility = View.GONE
+                itemPetTypeBinding.petNameTv.visibility = View.GONE
+            }
         }
+        itemPetTypeBinding.petNameTv.text = petType.toString()
+
 
     }
 }

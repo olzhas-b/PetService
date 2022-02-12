@@ -23,6 +23,7 @@ val viewModelModule = module {
     viewModel {ServiceDetailViewModel(get())}
     viewModel {ServicesViewModel(get())}
     viewModel { CountriesListViewModel(get())}
+    viewModel { createServiceViewModel() }
 }
 
 val SignInViewModeModule = module{

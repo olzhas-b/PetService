@@ -9,9 +9,7 @@
 package com.example.budka.view
 
 import android.annotation.SuppressLint
-import android.os.Bundle
-import android.os.Handler
-import android.os.Message
+import android.os.*
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -49,8 +47,10 @@ class ServiceProviderDetailFragment: Fragment() {
     private lateinit var acceptablePetSizesAdapter: AcceptablePetSizesAdapter
     private lateinit var otherPropertiesAdapter: OtherPropertiesAdapter
     private lateinit var userPetsAdapter: UserPetsAdapter
+    private lateinit var albumViewPagerAdapter: AlbumViewPagerAdapter
     private lateinit var userServicesAdapter: UserServicesAdapter
     private lateinit var webView:WebView
+    private  var petSize: List<String> = listOf("superSmall", "small", "medium", "big", "superBig")
 
 
     override fun onCreateView(
@@ -67,12 +67,15 @@ class ServiceProviderDetailFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         serviceProvider = arg.user
-        viewBinding.mapSnapshot.settings.javaScriptEnabled = true
-        val htmlData = "<html><head><style Type=\"text/css\"> img { position: absolute; width: 300px; height: 300px; left: 50%; top: 50%; margin-left: -150px; margin-top: -150px; }</style> </head> <body> <img src=\"https://static-maps.yandex.ru/1.x/?lang=ru&ll=76.944609,43.227016&pt=76.944609,43.227016,pm2rdm&size=450,450&z=16&l=map\"> </body> </html>"
-        viewBinding.mapSnapshot.loadData(htmlData, "text/html", "UTF-8")
         serviceDetailViewModel.fetchServiceDetail(serviceProvider.id)
         petListViewModel.fetchUserPetsList(serviceProvider.id)
         servicesViewModel.fetchUserServicesList(serviceProvider.id)
+
+
+
+        viewBinding.mapSnapshot.settings.javaScriptEnabled = true
+        val htmlData = "<html><head><style Type=\"text/css\"> img { position: absolute; width: 300px; height: 300px; left: 50%; top: 50%; margin-left: -150px; margin-top: -150px; }</style> </head> <body> <img src=\"https://static-maps.yandex.ru/1.x/?lang=ru&ll=76.944609,43.227016&pt=76.944609,43.227016,pm2rdm&size=450,450&z=16&l=map\"> </body> </html>"
+        viewBinding.mapSnapshot.loadData(htmlData, "text/html", "UTF-8")
 
         viewBinding.mapSnapshot.setOnTouchListener(View.OnTouchListener(){
             view, motionEvent ->
@@ -88,8 +91,12 @@ class ServiceProviderDetailFragment: Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun setObservers(){
-        Picasso.get().load(serviceProvider.images?.get(0)).fit().centerCrop().placeholder(R.drawable.img_aktos).into(viewBinding.albumIv)
-        Picasso.get().load(serviceProvider.images?.get(0)).fit().centerCrop().placeholder(R.drawable.img_aktos).into(viewBinding.userAvatar)
+        if(!serviceProvider.images.isNullOrEmpty()){
+
+            Picasso.get().load(serviceProvider.images?.get(0)).fit().centerCrop().placeholder(R.drawable.img_aktos).into(viewBinding.userAvatar)
+        }
+        serviceProvider.images?.let { albumViewPagerAdapter.updateImageList(it) }
+
         viewBinding.petSitterNameTv.text = serviceProvider.user?.fullName
         viewBinding.addressTv.text = serviceProvider.user?.country +", " + serviceProvider.user?.city
         serviceDetailViewModel.getServiceDetail().observe(viewLifecycleOwner, {
@@ -109,8 +116,15 @@ class ServiceProviderDetailFragment: Fragment() {
 
     private fun setServiceDetail(serviceDetail: ServiceDetail){
         viewBinding.serviceDescriptionTv.text = serviceDetail.description
-        serviceDetail.acceptablePets?.let { acceptablePetTypesAdapter.updatePetTypeList(it) }
-        serviceDetail.acceptableSize?.let { acceptablePetSizesAdapter.updatePetSizeList(it) }
+        when(serviceDetail.acceptableSize){
+            5-> acceptablePetSizesAdapter.updatePetSizeList(petSize.subList(0,0))
+            10-> acceptablePetSizesAdapter.updatePetSizeList(petSize.subList(0,1))
+            20-> acceptablePetSizesAdapter.updatePetSizeList(petSize.subList(0,2))
+            30-> acceptablePetSizesAdapter.updatePetSizeList(petSize.subList(0,3))
+            40-> acceptablePetSizesAdapter.updatePetSizeList(petSize.subList(0,4))
+            50-> acceptablePetSizesAdapter.updatePetSizeList(petSize)
+        }
+        serviceDetail.acceptablePets.let { acceptablePetTypesAdapter.updatePetTypeList(it.split(',')) }
         serviceDetail.additionalProperties?.let { otherPropertiesAdapter.updatePropertiesList(it) }
     }
 
@@ -120,6 +134,8 @@ class ServiceProviderDetailFragment: Fragment() {
         otherPropertiesAdapter = OtherPropertiesAdapter()
         userPetsAdapter = UserPetsAdapter()
         userServicesAdapter = UserServicesAdapter()
+        albumViewPagerAdapter = AlbumViewPagerAdapter()
+        viewBinding.albumVp.adapter = albumViewPagerAdapter
 
         val petTypeLayoutManager = GridLayoutManager(activity, 2 )
         acceptablePetTypesRv.layoutManager = petTypeLayoutManager

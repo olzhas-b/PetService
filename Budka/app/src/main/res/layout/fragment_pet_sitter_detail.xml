@@ -74,8 +74,8 @@
         android:layout_width="match_parent"
         android:layout_alignParentTop="true"
         android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/albumIv"
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/albumVp"
             android:layout_width="match_parent"
             android:layout_height="230dp"
             app:layout_constraintStart_toStartOf="parent"
