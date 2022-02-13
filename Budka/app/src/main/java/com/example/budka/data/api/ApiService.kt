@@ -24,6 +24,14 @@ interface ApiService {
     @GET(API +"user/{userId}/pet")
     fun getUserPets(@Path("userId") userId: Int): Deferred<Response<List<Pet>>>
 
+    @Multipart
+    @POST(API +"user/pet/new")
+    @JvmSuppressWildcards
+    fun createPet(
+        @Part image :MultipartBody.Part,
+        @Part("body")  body: PetCreate,
+    ): Deferred<Response<Pet>>
+
     @GET(API +"service")
     fun getPetSitters(@Query("serviceType") serviceType: String): Deferred<Response<List<ServiceProvider>>>
 

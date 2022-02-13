@@ -47,7 +47,10 @@ class ProfileFragment: Fragment() {
 
     private fun setListeners(){
         viewBinding.myServicesLayout.setOnClickListener {
-            it.findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToMyServices())
+            it.findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToMyServices("service"))
+        }
+        viewBinding.myPetsLayout.setOnClickListener{
+            it.findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToMyServices("pets"))
         }
         viewBinding.infoLayout.setOnClickListener {
             sessionManager.deleteSession()

@@ -9,8 +9,12 @@
 package com.example.budka.domain.useCase
 
 import androidx.lifecycle.LiveData
+import com.example.budka.data.model.CreateServiceModel
 import com.example.budka.data.model.Pet
+import com.example.budka.data.model.PetCreate
+import com.example.budka.data.model.PetResponse
 import com.example.budka.domain.repository.PetsListRepository
+import okhttp3.MultipartBody
 
 class PetsListUseCase(val petsListRepository: PetsListRepository){
     fun getPetsList(): LiveData<List<Pet>>{
@@ -19,5 +23,12 @@ class PetsListUseCase(val petsListRepository: PetsListRepository){
 
     fun getUserPets(user_id: Int): LiveData<List<Pet>>{
         return petsListRepository.getUserPets(user_id)
+    }
+
+    fun createPet(
+        image: MultipartBody.Part,
+        body: PetCreate
+    ) : LiveData<Pet>{
+        return petsListRepository.createPet(image, body)
     }
 }

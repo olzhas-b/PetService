@@ -102,6 +102,14 @@
         <action
             android:id="@+id/action_myServices_to_createServiceRequiredFragment"
             app:destination="@id/createServiceRequiredFragment" />
+
+        <argument
+            android:name="toPage"
+            app:argType="string"
+            />
+        <action
+            android:id="@+id/action_myServices_to_createPetFragment"
+            app:destination="@id/createPetFragment" />
     </fragment>
     <fragment
         android:id="@+id/createServiceRequiredFragment"
@@ -165,5 +173,9 @@
             android:defaultValue="0.0"
             />
     </fragment>
+    <fragment
+        android:id="@+id/createPetFragment"
+        android:name="com.example.budka.view.CreatePetFragment"
+        android:label="CreatePetFragment" />
 
 </navigation>

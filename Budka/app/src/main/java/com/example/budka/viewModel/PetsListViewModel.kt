@@ -10,8 +10,11 @@ package com.example.budka.viewModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.budka.data.model.CreateServiceModel
 import com.example.budka.data.model.Pet
+import com.example.budka.data.model.PetCreate
 import com.example.budka.domain.useCase.PetsListUseCase
+import okhttp3.MultipartBody
 
 class PetsListViewModel(private val petsListUseCase: PetsListUseCase): BaseViewModel() {
     private var petsList = MutableLiveData<List<Pet>>()
@@ -33,6 +36,12 @@ class PetsListViewModel(private val petsListUseCase: PetsListUseCase): BaseViewM
 
     fun getUserPetsList(): LiveData<List<Pet>>{
         return userPetsList
+    }
+
+    fun createPet(image: MultipartBody.Part,
+                      body: PetCreate
+    ): LiveData<Pet>{
+        return petsListUseCase.createPet(image, body)
     }
 
 }

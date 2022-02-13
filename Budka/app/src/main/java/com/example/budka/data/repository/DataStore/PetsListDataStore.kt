@@ -10,9 +10,12 @@ package com.example.budka.data.repository.DataStore
 
 import androidx.lifecycle.LiveData
 import com.example.budka.data.api.ApiService
+import com.example.budka.data.model.CreateServiceModel
 import com.example.budka.data.model.Pet
+import com.example.budka.data.model.PetCreate
 import com.example.budka.data.repository.Base.BasePetsDataStore
 import com.example.budka.domain.repository.PetsListRepository
+import okhttp3.MultipartBody
 
 class PetsListDataStore(apiService: ApiService): PetsListRepository, BasePetsDataStore(apiService) {
 
@@ -22,5 +25,11 @@ class PetsListDataStore(apiService: ApiService): PetsListRepository, BasePetsDat
 
     override fun getUserPets(user_id: Int): LiveData<List<Pet>> {
         return fetchData { service.getUserPets(user_id) }
+    }
+
+    override fun createPet(image: MultipartBody.Part,
+                        body: PetCreate
+    ): LiveData<Pet> {
+        return getPetResponse { service.createPet(image, body) }
     }
 }

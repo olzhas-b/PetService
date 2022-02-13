@@ -8,12 +8,30 @@
 
 package com.example.budka.data.model
 
+import com.google.gson.annotations.SerializedName
+
 data class Pet(
+    @SerializedName("name")
     val name: String,
-    val type: Int,
+    @SerializedName("type")
+    val type: String,
+    @SerializedName("breed")
     val breed: String,
+    @SerializedName("weight")
     val weight: Int,
+    @SerializedName("image")
     val image: String,
+)
+
+data class PetCreate(
+    @SerializedName("name")
+    val name: String,
+    @SerializedName("type")
+    val type: String,
+    @SerializedName("breed")
+    val breed: String,
+    @SerializedName("weight")
+    val weight: Int?
 )
 
 data class PetResponse(
