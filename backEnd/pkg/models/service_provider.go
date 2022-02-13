@@ -19,6 +19,7 @@ type Service struct {
 	AcceptablePets string     `json:"acceptablePets" gorm:"acceptable_pets"`
 	LastActivity   *time.Time `json:"lastActivity" gorm:"last_activity"`
 	IsDeleted      *bool      `json:"isDeleted" gorm:"is_deleted"`
+	IsFavorite     bool       `json:"isFavorite" gorm:"is_favorite"`
 
 	User                 User                   `json:"user" gorm:"user"`
 	Images               []Image                `json:"images" gorm:"many2many:service_image;"`
@@ -38,6 +39,7 @@ func (s Service) ConvertToDTO() (result map[string]interface{}) {
 	result["currencyCode"] = s.CurrencyCode
 	result["pricePerTime"] = s.PricePerTime
 	result["lastActivity"] = s.LastActivity
+	result["isFavorite"] = s.IsFavorite
 	//result["description"] = s.Description
 	//result["acceptablePets"] = s.AcceptablePets
 	//result["latitude"] = s.Latitude

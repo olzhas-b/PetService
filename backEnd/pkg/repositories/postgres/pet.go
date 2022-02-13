@@ -94,3 +94,8 @@ func (repo *PetRepository) GetPetByID(ctx context.Context, id int64) (pet models
 
 	return
 }
+
+func (repo *PetRepository) GetAllPets(ctx context.Context) (pets models.PetList, err error) {
+	err = repo.DB.Model(models.Pet{}).Find(&pets).Error
+	return
+}

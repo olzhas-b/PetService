@@ -11,4 +11,5 @@ type IPetService interface {
 	ServiceCreatePet(ctx context.Context, pet models.Pet, files *multipart.FileHeader, userID int64) (result models.Pet, err error)
 	ServiceUpdatePet(ctx context.Context, pet models.Pet, files *multipart.FileHeader, userID int64) (result models.Pet, err error)
 	ServiceDeletePet(ctx context.Context, userID int64, petID int64) (err error)
+	ServiceGetAllPets(ctx context.Context) (pets models.PetList, err error)
 }

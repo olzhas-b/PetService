@@ -67,3 +67,7 @@ func (srv *PetService) ServiceDeletePet(ctx context.Context, userID int64, petID
 	}
 	return
 }
+
+func (srv *PetService) ServiceGetAllPets(ctx context.Context) (pets models.PetList, err error) {
+	return srv.repo.IPetRepository.GetAllPets(ctx)
+}

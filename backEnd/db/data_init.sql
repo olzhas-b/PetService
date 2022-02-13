@@ -7,6 +7,5 @@ VALUES (1, 0, 0, 3000, 'KZT', 'час');
 insert into "image" (name)
 values ('olz');
 
-
 insert into "additional_properties" ("service_id", "label", "text")
 values (1, 'information', 'this is important info');

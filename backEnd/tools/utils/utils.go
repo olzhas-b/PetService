@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"context"
 	"github.com/gofiber/fiber/v2"
 	"github.com/olzhas-b/PetService/backEnd/consts"
 	"github.com/olzhas-b/PetService/backEnd/pkg/models"
@@ -8,20 +9,19 @@ import (
 	"strings"
 )
 
-func GetToken(ctx *fiber.Ctx) (token string) {
+func GetToken(ctx *fiber.Ctx) string {
 	header := ctx.Get("Authorization")
 	if header == "" {
-		return
+		return ""
 	}
 	parsedHeader := strings.Split(header, " ")
 	if len(parsedHeader) != 2 || parsedHeader[0] != "Bearer" {
-		return
+		return ""
 	}
-	token = parsedHeader[1]
-	return
+	return parsedHeader[1]
 }
 
-func GetCurrentUser(ctx *fiber.Ctx) (ID int64) {
+func GetCurrentUser(ctx *fiber.Ctx) int64 {
 	userId, ok := ctx.Locals(consts.UserID).(string)
 	if !ok {
 		return 0
@@ -29,8 +29,24 @@ func GetCurrentUser(ctx *fiber.Ctx) (ID int64) {
 	return tools.StrToInt64(userId)
 }
 
-func GetUserTypeByCtx(ctx *fiber.Ctx) (userType models.UserType) {
+func GetCurrentUserID(ctx context.Context) int64 {
+	userID, ok := ctx.Value("userID").(string)
+	if !ok {
+		return 0
+	}
+	return tools.StrToInt64(userID)
+}
+
+func GetUserTypeByCtx(ctx *fiber.Ctx) models.UserType {
 	userTypeStr, ok := ctx.Locals(consts.UserType).(string)
+	if !ok {
+		return 0
+	}
+	return models.UserType(tools.StrToInt64(userTypeStr))
+}
+
+func GetCurrentUserTypeByCtx(ctx context.Context) models.UserType {
+	userTypeStr, ok := ctx.Value(consts.UserType).(string)
 	if !ok {
 		return 0
 	}

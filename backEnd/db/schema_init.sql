@@ -40,7 +40,7 @@ alter table city add CONSTRAINT fk_country
 -- others table
 CREATE TABLE "user" (
                         "id" BIGSERIAL PRIMARY KEY,
-                        "login" varchar(40) not null unique,
+                        "image_id" bigint,
                         "username" varchar(40) not null unique,
                         "phone" varchar(40) not null unique,
                         "password" varchar(50) not null,
@@ -138,9 +138,16 @@ CREATE TABLE "additional_properties" (
                      "text" varchar(400)
 );
 
+create table favorite_user_service (
+                                       user_id bigint not null,
+                                       service_id bigint not null,
+                                       constraint unique_ck_fav
+                                           unique (user_id, service_id)
+);
+
+
 
 ALTER TABLE "service_image" ADD FOREIGN KEY ("service_id") REFERENCES "service" ("id");
-
 ALTER TABLE "service_image" ADD FOREIGN KEY ("image_id") REFERENCES "image" ("id");
 
 ALTER TABLE "service" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
@@ -148,17 +155,48 @@ ALTER TABLE "service" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 -- ALTER TABLE "service_detail" ADD FOREIGN KEY ("id") REFERENCES "service" ("id");
 
 ALTER TABLE "pet" ADD FOREIGN KEY ("image_id") REFERENCES "image" ("id");
-
 ALTER TABLE "pet" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
 ALTER TABLE "rating" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
-
 ALTER TABLE "rating" ADD FOREIGN KEY ("estimator_id") REFERENCES "user" ("id");
 
 ALTER TABLE "review" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
-
 ALTER TABLE "review" ADD FOREIGN KEY ("reviewer_id") REFERENCES "user" ("id");
-
 ALTER TABLE "review" ADD FOREIGN KEY ("service_id") REFERENCES "service" ("id");
 
 ALTER TABLE "additional_properties" ADD FOREIGN KEY ("service_id") REFERENCES "service" ("id");
+
+ALTER TABLE "user" ADD FOREIGN KEY ("image_id") REFERENCES "image" ("id");
+
+alter table favorite_user_service add CONSTRAINT fk_user  FOREIGN KEY(user_id) REFERENCES "user"(id);
+alter table favorite_user_service add CONSTRAINT fk_service  FOREIGN KEY(service_id) REFERENCES service(id);
+
+
+
+
+
+-- trigger section
+create trigger calculate_rating
+    after insert
+    on rating
+    for each row
+EXECUTE function calculate_rating_function();
+
+CREATE or REPLACE FUNCTION calculate_rating_function() returns TRIGGER
+    LANGUAGE plpgsql
+AS $$
+declare
+    avg_rating numeric(10, 5);
+    counter numeric(10, 5);
+    new_rating numeric(10, 5);
+BEGIN
+
+    avg_rating = (select average_rating from "user" where id = new.user_id);
+    counter = (select count_rating from "user" where id = new.user_id);
+    new_rating = ((avg_rating * counter) + new.score) / (counter + 1);
+    update "user"
+    set average_rating = new_rating, count_rating = count_rating + 1
+    where id = new.user_id;
+    return null;
+END
+$$;

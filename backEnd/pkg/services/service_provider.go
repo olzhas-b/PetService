@@ -7,6 +7,7 @@ import (
 	"github.com/olzhas-b/PetService/backEnd/pkg/models/filter"
 	repo "github.com/olzhas-b/PetService/backEnd/pkg/repositories"
 	"github.com/olzhas-b/PetService/backEnd/tools"
+	"github.com/olzhas-b/PetService/backEnd/tools/utils"
 	"mime/multipart"
 	"time"
 )
@@ -20,7 +21,27 @@ func NewServiceProvider(repo *repo.Repositories) *ServiceProvider {
 }
 
 func (s *ServiceProvider) ServiceGetAllServices(ctx context.Context, filter filter.ServiceProviderFilter) (listService models.ListService, err error) {
-	return s.repo.IServiceProviderRepository.GetAllServices(ctx, filter)
+	var favoriteList []int64
+	userID := utils.GetCurrentUserID(ctx)
+	listService, err = s.repo.IServiceProviderRepository.GetAllServices(ctx, userID, filter)
+	if err != nil {
+		return
+	}
+
+	if userID != 0 {
+		favoriteList, err = s.repo.IFavoriteRepository.GetFavoriteList(ctx, userID)
+		if err != nil {
+			return
+		}
+	}
+
+	checkFavorite := tools.SliceToMapInt64(favoriteList)
+	for i := range listService {
+		if checkFavorite[listService[i].ID] {
+			listService[i].IsFavorite = true
+		}
+	}
+	return
 }
 
 func (s *ServiceProvider) ServiceCreateService(ctx context.Context, service models.Service, files []*multipart.FileHeader) (result models.Service, err error) {
@@ -39,4 +60,9 @@ func (s *ServiceProvider) ServiceCreateService(ctx context.Context, service mode
 		return models.Service{}, fmt.Errorf("ServiceProvider.ServiceCreateService got error: %w", err)
 	}
 	return
+}
+
+func (s *ServiceProvider) ServiceGetFavoriteServices(ctx context.Context) (models.ListService, error) {
+	userID := utils.GetCurrentUserID(ctx)
+	return s.repo.GetFavoriteServices(ctx, userID)
 }

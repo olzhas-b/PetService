@@ -8,7 +8,19 @@
       <change afterPath="$PROJECT_DIR$/../hello_world_crud/Dockerfile" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../hello_world_crud/docker-compose.yml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../hello_world_crud/server.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/6f821b3d-12f1-4e0a-9706-242b6c8a775d.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/6f821b3d-12f1-4e0a-9706-242b6c8a775d.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/authService/.env" beforeDir="false" afterPath="$PROJECT_DIR$/authService/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backEnd/.env" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backEnd/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/.idea/sqldialects.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backEnd/db/changes.sql" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/db/changes.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backEnd/db/schema_init.sql" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/db/schema_init.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backEnd/pkg/models/filter/service_provider.go" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/pkg/models/filter/service_provider.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backEnd/pkg/models/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/pkg/models/user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backEnd/pkg/repositories/postgres/service_provider.go" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/pkg/repositories/postgres/service_provider.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backEnd/pkg/repositories/repositories.go" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/pkg/repositories/repositories.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backEnd/pkg/services/services.go" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/pkg/services/services.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backEnd/pkg/transport/restful/handler/handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/pkg/transport/restful/handler/handler.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backEnd/tools/converter.go" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/tools/converter.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,6 +46,15 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/backEnd/db/data_init.sql" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/backEnd/cmd/root.go" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/backEnd/db/schema_init.sql" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/backEnd/pkg/database/redis.go" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/backEnd/main.go" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/backEnd/pkg/transport/restful/handler/service_provider.go" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/docker-compose.yml" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -55,15 +76,15 @@
     <property name="go.modules.go.list.on.any.changes.was.set" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
     <property name="go.watchers.conflict.with.on.save.actions.check.performed" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/backEnd" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/backEnd/pkg/transport/restful/handler" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/AuthService" />
       <recent name="$PROJECT_DIR$/AuthService/pkg/models" />
       <recent name="$PROJECT_DIR$/AuthService/pkg" />
-      <recent name="$PROJECT_DIR$/AuthService/pkg/database" />
     </key>
   </component>
   <component name="RunManager">
