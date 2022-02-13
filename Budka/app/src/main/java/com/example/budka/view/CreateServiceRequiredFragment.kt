@@ -19,16 +19,20 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.budka.R
 import com.example.budka.data.model.*
 import com.example.budka.databinding.CreateServiceRequiredFragmentBinding
 import com.example.budka.viewModel.CountriesListViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class CreateServiceRequiredFragment : Fragment(), MapsFragment.SendLocationInterface {
+class CreateServiceRequiredFragment : Fragment(), SendLocationInterface {
     private var _viewBinding: CreateServiceRequiredFragmentBinding? = null
     private val viewBinding get() = _viewBinding!!
     private val countriesListViewModel: CountriesListViewModel by viewModel()
+    val args: CreateServiceRequiredFragmentArgs by navArgs()
+    private var latitude: Double = 0.0
+    private var longitude: Double = 0.0
 
 
     override fun onCreateView(
@@ -60,9 +64,9 @@ class CreateServiceRequiredFragment : Fragment(), MapsFragment.SendLocationInter
 
     private fun setListeners(){
         viewBinding.mapIv.setOnClickListener {
-//            val fragment = MapsFragment(true, this)
-//            activity?.supportFragmentManager?.beginTransaction()?.add(R.id.createServiceRequiredFragment, fragment)?.addToBackStack("requiredFm")?.commit()
-            it.findNavController().navigate(CreateServiceRequiredFragmentDirections.actionCreateServiceRequiredFragmentToMapsFragment(true))
+            val fragment = MapsFragment(true, sendLocationInterface = this)
+            parentFragmentManager.beginTransaction().add(R.id.fragment, fragment).addToBackStack("requiredFm").commit()
+//            it.findNavController().navigate(CreateServiceRequiredFragmentDirections.actionCreateServiceRequiredFragmentToMapsFragment(true))
 
         }
         viewBinding.optionalNavigateBtn.setOnClickListener {
@@ -76,7 +80,7 @@ class CreateServiceRequiredFragment : Fragment(), MapsFragment.SendLocationInter
             val petSize = viewBinding.petSizeSp.selectedItem.toString()
             val country = viewBinding.countriesEdV.text.toString()
             val city = viewBinding.cityEdV.text.toString()
-            val requireFields = ServiceRequiredField(serviceType, summary, petType, petSize, country, city)
+            val requireFields = ServiceRequiredField(serviceType, summary, petType, petSize, country, city, this.longitude, this.latitude)
             it.findNavController().navigate(CreateServiceRequiredFragmentDirections.actionCreateServiceRequiredFragmentToCreateServiceOptionalFragment(requireFields))
         }
     }
@@ -158,6 +162,8 @@ class CreateServiceRequiredFragment : Fragment(), MapsFragment.SendLocationInter
     }
 
     override fun sendLocation(longitude: Double, latitude: Double) {
-        Log.d("hejj", longitude.toString())
+        this.longitude = longitude
+        this.latitude = latitude
     }
+
 }

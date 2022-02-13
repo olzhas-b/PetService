@@ -23,7 +23,7 @@ class UserPetsHorizontalViewHolder (
     @SuppressLint("SetTextI18n")
     fun setUp(petsData: Pet){
         itemPetBinding.petNameTv.text = petsData.name
-        Picasso.get().load(petsData.avatar).fit().centerCrop().placeholder(R.drawable.img_aktos).into(itemPetBinding.petsAvatarIv)
+        Picasso.get().load(petsData.image).fit().centerCrop().placeholder(R.drawable.img_aktos).into(itemPetBinding.petsAvatarIv)
 
     }
 }

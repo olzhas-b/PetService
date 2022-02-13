@@ -9,25 +9,17 @@
 package com.example.budka.view
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.location.Geocoder
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
-import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.navArgs
 import com.example.budka.R
 import com.example.budka.databinding.FragmentMapsBinding
-import com.example.budka.utils.Constants.Companion.YANDEX_MAPS_API_KEY
-import com.example.budka.view.adapter.viewHolder.UploadNewImageListener
-
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Circle
@@ -35,9 +27,12 @@ import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.*
 import com.yandex.mapkit.mapview.MapView
 import com.yandex.runtime.ui_view.ViewProvider
-import org.koin.ext.getOrCreateScope
+import kotlinx.android.synthetic.main.activity_main.*
 
-class MapsFragment : Fragment() {
+class MapsFragment constructor(
+    val setLocation: Boolean = false,
+    var sendLocationInterface: SendLocationInterface ?= null
+): Fragment() {
     private var _viewBinding: FragmentMapsBinding? = null
     private val viewBinding get() = _viewBinding!!
     private lateinit var mapView: MapView
@@ -58,12 +53,12 @@ class MapsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         mapView = viewBinding.yandexMap
-        if(arg.setLocation){
+        if(setLocation){
             viewBinding.setLocationBlock.visibility = View.VISIBLE
             setProvidableServiceLocation()
         }
         else{
-            loadServiceProviderLocation(43.227028, 76.944611)
+            loadServiceProviderLocation(arg.latitude.toDouble(), arg.longitude.toDouble())
 
         }
         super.onViewCreated(view, savedInstanceState)
@@ -76,7 +71,7 @@ class MapsFragment : Fragment() {
             null
         )
 
-        val locationCircle = Circle(Point(43.227028, 76.944611),
+        val locationCircle = Circle(Point( latitude, longitude),
             1000F)
         mapView.map.mapObjects.addCircle(locationCircle, ResourcesCompat
             .getColor(resources,
@@ -117,7 +112,13 @@ class MapsFragment : Fragment() {
             @SuppressLint("LogNotTimber")
             override fun onMapObjectDrag(p0: MapObject, p1: Point) {
                 viewBinding.setLocationBtn.setOnClickListener {
-//                    setLocationInterface?.sendLocation(p1.longitude, p1.latitude)
+                    sendLocationInterface?.sendLocation(longitude = p1.longitude, latitude = p1.latitude)
+                    parentFragmentManager.beginTransaction().remove(this@MapsFragment).commit()
+//                    parentFragmentManager.popBackStackImmediate()
+//                    fragmentManager?.popBackStackImmediate()
+//                    activity?.onBackPressed()
+//                    findNavController().navigate(
+//                        MapsFragmentDirections.actionMapsFragmentToCreateServiceRequiredFragment(p1.longitude.toFloat(), p1.latitude.toFloat()))
                 }
             }
 
@@ -140,7 +141,9 @@ class MapsFragment : Fragment() {
         mapView.onStart()
     }
 
-    interface SendLocationInterface {
-        fun sendLocation(longitude: Double, latitude: Double)
-    }
+
+}
+
+interface SendLocationInterface {
+    fun sendLocation(longitude: Double, latitude: Double)
 }

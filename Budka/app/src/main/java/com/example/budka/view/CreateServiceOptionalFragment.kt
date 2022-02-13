@@ -26,7 +26,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.budka.data.model.CreateServiceModel
-import com.example.budka.data.model.CurrencyModel
 import com.example.budka.data.model.Properties
 import com.example.budka.data.model.UploadImage
 import com.example.budka.databinding.CreateServiceOptionalFragmentBinding
@@ -41,7 +40,6 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
-import java.io.File
 import java.util.*
 
 class CreateServiceOptionalFragment : Fragment(), UploadNewImageListener, EditTextChangeListener {
@@ -54,7 +52,7 @@ class CreateServiceOptionalFragment : Fragment(), UploadNewImageListener, EditTe
     private var imageList = mutableListOf<UploadImage>()
     private var imagesToService = mutableListOf<MultipartBody.Part>()
     private var propertiesList = mutableListOf<Properties>()
-//    val sendPropertiesMap = mutableMapOf<String, String?>()
+    val sendPropertiesMap = mutableMapOf<String, String?>()
     val sendPropertiesList = mutableListOf<Properties>()
     var ss = ""
     val arg: CreateServiceOptionalFragmentArgs by navArgs()
@@ -193,8 +191,8 @@ class CreateServiceOptionalFragment : Fragment(), UploadNewImageListener, EditTe
     }
 
     override fun changeText(property: Properties) {
-        sendPropertiesList.add(property)
-//        sendPropertiesMap[property.label!!] = property.text
+//        sendPropertiesList.add(property)
+        sendPropertiesMap[property.label!!] = property.text
     }
 
     override fun onRequestPermissionsResult(
@@ -212,7 +210,7 @@ class CreateServiceOptionalFragment : Fragment(), UploadNewImageListener, EditTe
                 else {
                     val showRational =
                         ActivityCompat.shouldShowRequestPermissionRationale(
-                            activity!!,
+                            requireActivity(),
                             Manifest.permission.READ_EXTERNAL_STORAGE
                         )
 
@@ -220,7 +218,7 @@ class CreateServiceOptionalFragment : Fragment(), UploadNewImageListener, EditTe
                         Timber.d("Storage permission denied")
                     }
                     else {
-                        Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:${activity!!.packageName}")).apply {
+                        Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:${requireActivity().packageName}")).apply {
                             addCategory(Intent.CATEGORY_DEFAULT)
                             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         }.also { intent ->
@@ -261,12 +259,12 @@ class CreateServiceOptionalFragment : Fragment(), UploadNewImageListener, EditTe
             price = 3000,
             currencyCode = localCurrency,
             pricePerTime = "hour",
-            longitude = 32.32,
-            latitude = 44.44,
+            longitude = requiredField.longitude.toDouble(),
+            latitude = requiredField.latitude.toDouble(),
             description = requiredField.summary,
             acceptablePets = requiredField.petTypes,
             acceptableSize = petSize,
-            additionalProperties = sendPropertiesList
+            additionalProperties = sendPropertiesMap.toList().map { Properties(it.first, it.second) }
         )
 //        val serviceType = createPartFromString(requiredField.serviceType.toString())
 //        val price = createPartFromString("3000")
@@ -316,12 +314,12 @@ class CreateServiceOptionalFragment : Fragment(), UploadNewImageListener, EditTe
     private fun requestStoragePermission() {
         if (!hasStoragePermission()) {
             val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
-            ActivityCompat.requestPermissions(activity!!, permissions, REQUEST_STORAGE_PERMISSION)
+            ActivityCompat.requestPermissions(requireActivity(), permissions, REQUEST_STORAGE_PERMISSION)
         }
     }
 
     private fun hasStoragePermission() = ContextCompat.checkSelfPermission(
-        context!!,
+        requireContext(),
         Manifest.permission.READ_EXTERNAL_STORAGE
     ) == PERMISSION_GRANTED
 

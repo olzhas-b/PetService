@@ -19,10 +19,10 @@ const val API = "api/v1/"
 
 interface ApiService {
     @GET(API + "pets")
-    fun getPets(): Deferred<Response<PetResponse>>
+    fun getPets(): Deferred<Response<List<Pet>>>
 
-    @GET(API +"pets")
-    fun getUserPets(@Query("userId") userId: Int): Deferred<Response<PetResponse>>
+    @GET(API +"user/{userId}/pet")
+    fun getUserPets(@Path("userId") userId: Int): Deferred<Response<List<Pet>>>
 
     @GET(API +"service")
     fun getPetSitters(@Query("serviceType") serviceType: String): Deferred<Response<List<ServiceProvider>>>
@@ -41,8 +41,8 @@ interface ApiService {
     @GET(API +"services")
     fun getUserServices(@Query("userId") userId: Int): Deferred<Response<ServiceResponse>>
 
-    @GET
-    fun getCountries(@Url url: String): Deferred<Response<Countries>>
+    @GET(API + "countries")
+    fun getCountries(): Deferred<Response<Countries>>
 
     @POST
     fun validateWithLogin(

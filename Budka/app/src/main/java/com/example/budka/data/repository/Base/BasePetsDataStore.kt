@@ -21,7 +21,7 @@ abstract class BasePetsDataStore(@PublishedApi internal val service: ApiService)
     abstract fun getAllPets(): LiveData<List<Pet>>
     abstract fun getUserPets(user_id: Int): LiveData<List<Pet>>
 
-    inline fun fetchData(crossinline call: (ApiService) -> Deferred<Response<PetResponse>>): LiveData<List<Pet>> {
+    inline fun fetchData(crossinline call: (ApiService) -> Deferred<Response<List<Pet>>>): LiveData<List<Pet>> {
         val result = MutableLiveData<List<Pet>>()
         CoroutineScope(Dispatchers.IO).launch {
             val request = call(service)
@@ -29,7 +29,7 @@ abstract class BasePetsDataStore(@PublishedApi internal val service: ApiService)
                 try {
                     val response = request.await()
                     if (response.isSuccessful) {
-                        result.value = response.body()?.pets
+                        result.value = response.body()
                     } else {
                         Timber.d("Error occurred with code ${response.code()}")
                     }

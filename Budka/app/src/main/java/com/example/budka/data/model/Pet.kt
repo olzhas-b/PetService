@@ -13,8 +13,7 @@ data class Pet(
     val type: Int,
     val breed: String,
     val weight: Int,
-    val avatar: String,
-    val user: PetOwner?
+    val image: String,
 )
 
 data class PetResponse(

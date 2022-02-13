@@ -18,6 +18,10 @@ data class ServiceRequiredField(
     val petTypes: String,
     val petSize: String,
     val country: String,
-    val city: String
+    val city: String,
+    val longitude: Double,
+    val latitude: Double
 
 ): Parcelable
+
+

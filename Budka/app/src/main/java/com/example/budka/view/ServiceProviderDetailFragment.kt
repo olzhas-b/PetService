@@ -10,12 +10,10 @@ package com.example.budka.view
 
 import android.annotation.SuppressLint
 import android.os.*
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebSettings
 import android.webkit.WebView
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
@@ -23,6 +21,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.budka.R
+import com.example.budka.data.model.LongLat
 import com.example.budka.data.model.ServiceDetail
 import com.example.budka.data.model.ServiceProvider
 import com.example.budka.databinding.FragmentPetSitterDetailBinding
@@ -36,7 +35,6 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 
 class ServiceProviderDetailFragment: Fragment() {
-    private lateinit var serviceDetail: ServiceDetail
     private lateinit var serviceProvider: ServiceProvider
     private val serviceDetailViewModel: ServiceDetailViewModel by viewModel()
     private val petListViewModel: PetsListViewModel by viewModel()
@@ -63,31 +61,16 @@ class ServiceProviderDetailFragment: Fragment() {
 
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         serviceProvider = arg.user
         serviceDetailViewModel.fetchServiceDetail(serviceProvider.id)
-        petListViewModel.fetchUserPetsList(serviceProvider.id)
+        serviceProvider.user?.let { petListViewModel.fetchUserPetsList(it.id) }
         servicesViewModel.fetchUserServicesList(serviceProvider.id)
-
-
-
-        viewBinding.mapSnapshot.settings.javaScriptEnabled = true
-        val htmlData = "<html><head><style Type=\"text/css\"> img { position: absolute; width: 300px; height: 300px; left: 50%; top: 50%; margin-left: -150px; margin-top: -150px; }</style> </head> <body> <img src=\"https://static-maps.yandex.ru/1.x/?lang=ru&ll=76.944609,43.227016&pt=76.944609,43.227016,pm2rdm&size=450,450&z=16&l=map\"> </body> </html>"
-        viewBinding.mapSnapshot.loadData(htmlData, "text/html", "UTF-8")
-
-        viewBinding.mapSnapshot.setOnTouchListener(View.OnTouchListener(){
-            view, motionEvent ->
-            when(motionEvent.action){
-                MotionEvent.ACTION_DOWN->  view.findNavController().navigate(ServiceProviderDetailFragmentDirections.actionServiceProviderDetailFragmentToMapsFragment(false))
-
-            }
-            return@OnTouchListener true
-        })
         setUpAdapter()
         setObservers()
     }
+
 
     @SuppressLint("SetTextI18n")
     private fun setObservers(){
@@ -114,6 +97,7 @@ class ServiceProviderDetailFragment: Fragment() {
 
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setServiceDetail(serviceDetail: ServiceDetail){
         viewBinding.serviceDescriptionTv.text = serviceDetail.description
         when(serviceDetail.acceptableSize){
@@ -126,6 +110,19 @@ class ServiceProviderDetailFragment: Fragment() {
         }
         serviceDetail.acceptablePets.let { acceptablePetTypesAdapter.updatePetTypeList(it.split(',')) }
         serviceDetail.additionalProperties?.let { otherPropertiesAdapter.updatePropertiesList(it) }
+
+        viewBinding.mapSnapshot.settings.javaScriptEnabled = true
+        val htmlData = "<html><head><style Type=\"text/css\"> img { position: absolute; width: 300px; height: 300px; left: 50%; top: 50%; margin-left: -150px; margin-top: -150px; }</style> </head> <body> <img src=\"https://static-maps.yandex.ru/1.x/?lang=ru&ll=${serviceDetail.longitude},${serviceDetail.latitude}&pt=${serviceDetail.longitude},${serviceDetail.latitude},pm2rdm&size=450,450&z=16&l=map\"> </body> </html>"
+        viewBinding.mapSnapshot.loadData(htmlData, "text/html", "UTF-8")
+
+        viewBinding.mapSnapshot.setOnTouchListener(View.OnTouchListener(){
+                view, motionEvent ->
+            when(motionEvent.action){
+                MotionEvent.ACTION_DOWN->  view.findNavController().navigate(ServiceProviderDetailFragmentDirections.actionServiceProviderDetailFragmentToMapsFragment(setLocation = false, longitude = serviceDetail.longitude.toFloat(), latitude = serviceDetail.latitude.toFloat() ))
+
+            }
+            return@OnTouchListener true
+        })
     }
 
     private fun setUpAdapter(){

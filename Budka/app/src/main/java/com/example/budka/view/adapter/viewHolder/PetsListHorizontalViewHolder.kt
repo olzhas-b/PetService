@@ -23,7 +23,7 @@ class PetsListHorizontalViewHolder constructor(
     @SuppressLint("SetTextI18n")
     fun setUp(petsData: Pet){
         itemPetBinding.mainPagePetNameTv.text = petsData.name
-        itemPetBinding.mainPagePetOwnerNameTv.text = petsData.user?.first_name+" "+ petsData.user?.last_name
+//        itemPetBinding.mainPagePetOwnerNameTv.text = petsData.user?.first_name+" "+ petsData.user?.last_name
         Picasso.get().load("http://192.168.43.145:8080/api/v1/image/2.png").fit().centerCrop().placeholder(R.drawable.img_aktos).into(itemPetBinding.mainPagePetsIv)
 
     }
