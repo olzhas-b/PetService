@@ -15,4 +15,8 @@ import com.example.budka.data.model.User
 
 interface PetSittersListRepository {
     fun getPetSitters(serviceType: String): LiveData<List<ServiceProvider>>
+    fun putLike(serviceId: Int): LiveData<String>
+    fun deleteLike(serviceId: Int): LiveData<String>
+    fun getFavoriteServices(): LiveData<List<ServiceProvider>>
+
 }

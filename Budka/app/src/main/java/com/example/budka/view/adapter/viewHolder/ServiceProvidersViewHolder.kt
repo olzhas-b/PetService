@@ -12,6 +12,7 @@ import android.annotation.SuppressLint
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.budka.R
+import com.example.budka.data.model.Properties
 import com.example.budka.data.model.ServiceProvider
 import com.example.budka.data.model.User
 import com.example.budka.databinding.ItemPetSitterBinding
@@ -20,7 +21,10 @@ import com.example.budka.view.ServiceProvidersListFragmentDirections
 import com.squareup.picasso.Picasso
 
 class ServiceProvidersViewHolder constructor(
-    val itemPetSitterBinding: ItemPetSitterBinding
+    val itemPetSitterBinding: ItemPetSitterBinding,
+    var favListener: FavListener ?= null,
+    var navigationListener: NavigationListener ?= null
+
 ): RecyclerView.ViewHolder(itemPetSitterBinding.root) {
 
     @SuppressLint("SetTextI18n")
@@ -36,9 +40,34 @@ class ServiceProvidersViewHolder constructor(
         itemPetSitterBinding.petSitterLocationTv.text = serviceProviderData.user?.country + ' ' + serviceProviderData.user?.city
         itemPetSitterBinding.petSitterPriceTv.setUpPriceMask(serviceProviderData.price.toString(),serviceProviderData.currencyCode ,serviceProviderData.pricePerTime)
         itemView.setOnClickListener {
-            itemView.findNavController().navigate(ServiceProvidersListFragmentDirections.actionServiceProvidersFragmentToServiceProviderDetailFragment(serviceProviderData))
+            navigationListener?.navigate(serviceProviderData)
+        }
+        if(serviceProviderData.isFavorite == true){
+            itemPetSitterBinding.bookmarkIv.setImageResource(R.drawable.ic_filled_bookmark)
+        } else{
+            itemPetSitterBinding.bookmarkIv.setImageResource(R.drawable.ic_bookmark)
+        }
+
+        itemPetSitterBinding.bookmarkIv.setOnClickListener {
+            if(serviceProviderData.isFavorite == true){
+                favListener?.changeFavourite(false, serviceProviderData.id)
+                itemPetSitterBinding.bookmarkIv.setImageResource(R.drawable.ic_bookmark)
+
+            } else{
+                favListener?.changeFavourite(true, serviceProviderData.id)
+                itemPetSitterBinding.bookmarkIv.setImageResource(R.drawable.ic_filled_bookmark)
+
+            }
         }
 
 
     }
+}
+
+interface FavListener {
+    fun changeFavourite(isFavourite: Boolean, serviceId: Int)
+}
+
+interface NavigationListener {
+    fun navigate(serviceProviderData: ServiceProvider)
 }

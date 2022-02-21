@@ -8,6 +8,8 @@
 
 package com.example.budka.data.model
 
+import com.google.gson.annotations.SerializedName
+
 data class Countries (
     var error: Boolean,
     var msg: String,
@@ -15,6 +17,8 @@ data class Countries (
     )
 
 data class CountryData(
+    @SerializedName("country")
     var country: String,
+    @SerializedName("cities")
     var cities: List<String>
 )

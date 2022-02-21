@@ -18,7 +18,8 @@ import com.example.budka.domain.useCase.PetSittersListUseCase
 import com.example.budka.domain.useCase.PetsListUseCase
 
 class PetSittersListViewModel (private val petSittersListUseCase: PetSittersListUseCase): BaseViewModel() {
-    private var petSittersList = MutableLiveData<List<ServiceProvider>>()
+    var petSittersList = MutableLiveData<List<ServiceProvider>>()
+    private var favoriteServicesList = MutableLiveData<List<ServiceProvider>>()
 
 
     fun fetchPetSittersList(serviceType: String) {
@@ -27,5 +28,21 @@ class PetSittersListViewModel (private val petSittersListUseCase: PetSittersList
 
     fun getPetSittersList(): LiveData<List<ServiceProvider>> {
         return petSittersList
+    }
+
+    fun fetchFavoriteServices() {
+        favoriteServicesList = petSittersListUseCase.getFavoriteServices() as MutableLiveData<List<ServiceProvider>>
+    }
+
+    fun getFavoriteServices(): LiveData<List<ServiceProvider>> {
+        return favoriteServicesList
+    }
+
+    fun putLike(serviceId: Int) {
+        petSittersListUseCase.putLike(serviceId)
+    }
+
+    fun deleteLike(serviceId: Int) {
+        petSittersListUseCase.deleteLike(serviceId)
     }
 }

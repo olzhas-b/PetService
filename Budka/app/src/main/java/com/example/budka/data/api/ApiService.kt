@@ -18,7 +18,7 @@ import retrofit2.http.*
 const val API = "api/v1/"
 
 interface ApiService {
-    @GET(API + "pets")
+    @GET(API + "user/pet/all")
     fun getPets(): Deferred<Response<List<Pet>>>
 
     @GET(API +"user/{userId}/pet")
@@ -50,7 +50,16 @@ interface ApiService {
     fun getUserServices(@Query("userId") userId: Int): Deferred<Response<ServiceResponse>>
 
     @GET(API + "countries")
-    fun getCountries(): Deferred<Response<Countries>>
+    fun getCountries(): Deferred<Response<List<CountryData>>>
+
+    @POST(API +"service/favorite/{serviceId}/add")
+    fun putLike(@Path("serviceId") serviceId: Int): Deferred<Response<String>>
+
+    @DELETE(API +"service/favorite/{serviceId}/remove")
+    fun deleteLike(@Path("serviceId") serviceId: Int): Deferred<Response<String>>
+
+    @GET(API +"service/favorite")
+    fun getFavoriteServices(): Deferred<Response<List<ServiceProvider>>>
 
     @POST
     fun validateWithLogin(

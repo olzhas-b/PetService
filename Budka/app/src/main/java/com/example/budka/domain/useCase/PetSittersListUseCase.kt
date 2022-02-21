@@ -19,4 +19,16 @@ class PetSittersListUseCase (val petSittersListRepository: PetSittersListReposit
     fun getPetSittersList(serviceType: String): LiveData<List<ServiceProvider>> {
         return petSittersListRepository.getPetSitters(serviceType)
     }
+
+    fun putLike(serviceId: Int){
+        petSittersListRepository.putLike(serviceId)
+    }
+
+    fun deleteLike(serviceId: Int){
+        petSittersListRepository.deleteLike(serviceId)
+    }
+
+    fun getFavoriteServices(): LiveData<List<ServiceProvider>> {
+        return petSittersListRepository.getFavoriteServices()
+    }
 }

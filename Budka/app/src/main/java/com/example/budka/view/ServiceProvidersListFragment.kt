@@ -22,11 +22,15 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.budka.data.model.ServiceProvider
 import com.example.budka.databinding.FragmentPetSittersPageBinding
 import com.example.budka.utils.Constants
 import com.example.budka.view.adapter.ServiceProvidersAdapter
+import com.example.budka.view.adapter.viewHolder.FavListener
+import com.example.budka.view.adapter.viewHolder.NavigationListener
 import com.example.budka.viewModel.PetSittersListViewModel
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.OnCompleteListener
@@ -37,7 +41,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import java.util.*
 
 
-class ServiceProvidersListFragment: Fragment() {
+class ServiceProvidersListFragment: Fragment(), FavListener, NavigationListener {
     val arg: ServiceProvidersListFragmentArgs by navArgs()
     private lateinit var viewBinding: FragmentPetSittersPageBinding
     private lateinit var serviceProvidersAdapter: ServiceProvidersAdapter
@@ -73,7 +77,7 @@ class ServiceProvidersListFragment: Fragment() {
     }
 
     private fun setupAdapter(){
-        serviceProvidersAdapter = ServiceProvidersAdapter()
+        serviceProvidersAdapter = ServiceProvidersAdapter(favListener  = this, navigationListener = this)
         val layoutManager = LinearLayoutManager(activity,LinearLayoutManager.VERTICAL, false)
         service_providers_rv.layoutManager = layoutManager
         service_providers_rv.adapter = serviceProvidersAdapter
@@ -160,6 +164,24 @@ class ServiceProvidersListFragment: Fragment() {
             val cityName = address.get(0).locality
             val countryName = address.get(0).countryName
             return "$cityName, $countryName"
+
+    }
+
+    override fun changeFavourite(isFavourite: Boolean, serviceId: Int) {
+        if(isFavourite){
+            petSittersListViewModel.putLike(serviceId)
+            petSittersListViewModel.petSittersList.value?.filter { it.id == serviceId }?.firstOrNull()?.isFavorite = true
+
+        }
+        else{
+            petSittersListViewModel.deleteLike(serviceId)
+            petSittersListViewModel.petSittersList.value?.filter { it.id == serviceId }?.firstOrNull()?.isFavorite = false
+
+        }
+    }
+
+    override fun navigate(serviceProviderData: ServiceProvider) {
+        findNavController().navigate(ServiceProvidersListFragmentDirections.actionServiceProvidersFragmentToServiceProviderDetailFragment(serviceProviderData))
 
     }
 

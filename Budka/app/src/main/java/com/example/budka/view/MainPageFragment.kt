@@ -29,6 +29,7 @@ import com.example.budka.databinding.MainPageFragmentBinding
 import com.example.budka.utils.Constants
 import com.example.budka.view.adapter.PetSittersListHorizontalAdapter
 import com.example.budka.view.adapter.PetsListHorizontalAdapter
+import com.example.budka.view.adapter.viewHolder.FavListener
 import com.example.budka.viewModel.PetSittersListViewModel
 import com.example.budka.viewModel.PetsListViewModel
 import com.google.android.gms.location.FusedLocationProviderClient

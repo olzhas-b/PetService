@@ -55,6 +55,9 @@
         <action
             android:id="@+id/action_service_provider_detail_fragment_to_mapsFragment"
             app:destination="@id/mapsFragment" />
+        <action
+            android:id="@+id/action_service_provider_detail_fragment_to_favoriteServicesFragment"
+            app:destination="@id/favoriteServicesFragment" />
 
     </fragment>
 
@@ -177,5 +180,13 @@
         android:id="@+id/createPetFragment"
         android:name="com.example.budka.view.CreatePetFragment"
         android:label="CreatePetFragment" />
+    <fragment
+        android:id="@+id/favoriteServicesFragment"
+        android:name="com.example.budka.view.FavoriteServicesFragment"
+        android:label="FavoriteServicesFragment" >
+        <action
+            android:id="@+id/action_favoriteServicesFragment_to_service_provider_detail_fragment"
+            app:destination="@id/service_provider_detail_fragment" />
+    </fragment>
 
 </navigation>

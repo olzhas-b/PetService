@@ -48,7 +48,9 @@ data class ServiceProvider(
     val user: @RawValue
     User?,
     @SerializedName("images")
-    val images: List<String>?
+    val images: List<String>?,
+    @SerializedName("isFavorite")
+    var isFavorite: Boolean?
 ): Parcelable
 
 

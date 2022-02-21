@@ -18,6 +18,6 @@ import com.example.budka.domain.repository.LoginRepository
 
 class LoginDataStore (apiService: ApiService, context: Context): LoginRepository, BaseLoginDataStore(apiService, context) {
     override fun validateWithLogin(data: LoginData): LiveData<LoginResponse> {
-        return authenticate {service.validateWithLogin("http://192.168.43.226:8081/api/v1/user/sign-in", data.signIn) }
+        return authenticate {service.validateWithLogin("http://192.168.1.102:8081/api/v1/user/sign-in", data.signIn) }
     }
 }
