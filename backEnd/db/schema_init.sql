@@ -2,7 +2,8 @@
 CREATE TABLE country (
                          country_id serial primary key ,
                          city_id integer NOT NULL default 0,
-                         name varchar(128) NOT NULL default ''
+                         name varchar(128) NOT NULL default '',
+                         region_id integer NOT NULL default  0
 );
 
 CREATE TABLE region (
@@ -148,7 +149,7 @@ create table favorite_user_service (
 
 
 ALTER TABLE "service_image" ADD FOREIGN KEY ("service_id") REFERENCES "service" ("id");
-ALTER TABLE "service_image" ADD FOREIGN KEY ("image_id") REFERENCES "image" ("id");
+ALTER TABLE "service_image" ADD FOREIGN KEY ("image_id") REFERENCES "image" ("id") on delete cascade;
 
 ALTER TABLE "service" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"io"
 	"mime/multipart"
+	"time"
 )
 
 func ReadProperly(fileHeader *multipart.FileHeader) []byte {
@@ -26,4 +27,9 @@ func ReadProperly(fileHeader *multipart.FileHeader) []byte {
 		return []byte{}
 	}
 	return buf.Bytes()
+}
+
+func GetCurrentTimePtr() *time.Time {
+	timeNow := time.Now()
+	return &timeNow
 }

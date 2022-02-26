@@ -33,14 +33,19 @@ func (repo *UserRepository) GetAllUsers(filter *filter.User) (users []models.Use
 }
 
 func (repo *UserRepository) UpdateUser(ctx context.Context, user models.User, selectedColumns []string) (models.User, error) {
-	err := repo.DB.Model(models.User{}).
+	err := repo.DB.Debug().Table("\"user\"").
 		Omit(selectedColumns...).
-		Where("id = ?", user.ID).
 		Save(&user).
 		Error
 
 	return user, err
 }
+
+//err := repo.DB.Debug().Table("service").
+//Omit("is_deleted", "last_activity", "status", "is_favorite").
+//Save(&service).
+//Error
+//return service, err
 
 func (repo *UserRepository) CreateUser(user models.User, selectedColumns []string) (models.User, error) {
 	err := repo.DB.Model(models.User{}).
@@ -65,4 +70,19 @@ func (repo *UserRepository) GetImageIdByUserID(userID int64) (ID int64) {
 		Where("id = ?", userID).
 		Take(&ID)
 	return ID
+}
+
+func (repo *UserRepository) DeleteUserImageByUserID(ctx context.Context, userID int64) (err error) {
+	return repo.DB.Exec(`
+			DO
+			$$DECLARE
+			    user_image_id BIGINT;
+			BEGIN
+			    SELECT image_id INTO user_image_id FROM "user" WHERE id = ?;
+			
+			    UPDATE "user" SET image_id = NULL WHERE id = ?;
+
+			    DELETE FROM image WHERE id = user_image_id;
+			END$$;
+		`, userID, userID).Error
 }

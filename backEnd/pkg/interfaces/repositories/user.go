@@ -13,4 +13,5 @@ type IUserRepository interface {
 	CreateUser(user models.User, selectedColumns []string) (models.User, error)
 	GetUserByParams(id int64, login, phone string) (models.User, error)
 	GetImageIdByUserID(userID int64) (ID int64)
+	DeleteUserImageByUserID(ctx context.Context, userID int64) (err error)
 }

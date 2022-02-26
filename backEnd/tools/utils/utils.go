@@ -6,6 +6,8 @@ import (
 	"github.com/olzhas-b/PetService/backEnd/consts"
 	"github.com/olzhas-b/PetService/backEnd/pkg/models"
 	"github.com/olzhas-b/PetService/backEnd/tools"
+	"io/ioutil"
+	"os"
 	"strings"
 )
 
@@ -51,4 +53,16 @@ func GetCurrentUserTypeByCtx(ctx context.Context) models.UserType {
 		return 0
 	}
 	return models.UserType(tools.StrToInt64(userTypeStr))
+}
+
+func GetLocalImage(path string) (image models.Image) {
+	file, err := os.Open(path)
+	if err != nil {
+		return
+	}
+	defer file.Close()
+	bs, _ := ioutil.ReadAll(file)
+	return models.Image{
+		Content: bs,
+	}
 }

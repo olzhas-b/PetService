@@ -73,5 +73,5 @@ func (h *Handler) CtlUpdateUser(ctx *fiber.Ctx) error {
 		return common.GenShortResponse(ctx, consts.DBUpdateErr, err.Error(), "")
 	}
 
-	return common.GenShortResponse(ctx, consts.Success, updateUser, "")
+	return common.GenShortResponse(ctx, consts.Success, updateUser.ConvertToDto(), "")
 }

@@ -32,7 +32,7 @@ func (repo *PetRepository) GetPetsByUserID(ctx context.Context, id int64) (pets 
 	return
 }
 
-func (repo *PetRepository) CreatePet(ctx context.Context, pet models.Pet) (result models.Pet, err error) {
+func (repo *PetRepository) CreateOrUpdatePet(ctx context.Context, pet models.Pet) (result models.Pet, err error) {
 	defer func() {
 		if err != nil {
 
@@ -41,7 +41,7 @@ func (repo *PetRepository) CreatePet(ctx context.Context, pet models.Pet) (resul
 
 	err = repo.DB.
 		Omit("status").
-		Create(&pet).
+		Save(&pet).
 		Error
 
 	return pet, err
@@ -98,4 +98,13 @@ func (repo *PetRepository) GetPetByID(ctx context.Context, id int64) (pet models
 func (repo *PetRepository) GetAllPets(ctx context.Context) (pets models.PetList, err error) {
 	err = repo.DB.Model(models.Pet{}).Find(&pets).Error
 	return
+}
+
+func (repo *PetRepository) GetPetImageID(ctx context.Context, ID int64) (imageID int64) {
+	repo.DB.Table("pet").
+		Select("image.id").
+		Joins("INNER JOIN image on pet.image_id = image.id").
+		Where("pet.id = ?", ID).
+		Take(&imageID)
+	return imageID
 }

@@ -45,15 +45,15 @@ func (h *Handler) CtlUpdatePet(ctx *fiber.Ctx) error {
 	return common.GenShortResponse(ctx, consts.Success, result.ConvertToDTO(), "")
 }
 
-func (h *Handler) CtlCreatePet(ctx *fiber.Ctx) error {
-	userID := utils.GetCurrentUser(ctx)
+func (h *Handler) CtlCreateOrUpdatePet(ctx *fiber.Ctx) error {
+	requestType := ctx.Params("id")
 
 	pet, image, err := custom_parser.PetParser(ctx)
 	if err != nil {
 		return common.GenShortResponse(ctx, consts.BindingJsonErr, err.Error(), err.Error())
 	}
 
-	result, err := h.services.IPetService.ServiceCreatePet(ctx.Context(), pet, image, userID)
+	result, err := h.services.IPetService.ServiceCreateOrUpdatePet(ctx.Context(), pet, image, requestType)
 	if err != nil {
 		return common.GenShortResponse(ctx, consts.DBInsertErr, err.Error(), err.Error())
 	}

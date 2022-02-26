@@ -63,7 +63,7 @@ func (u *User) ConvertToDto() (result map[string]interface{}) {
 }
 
 func (u *User) GetOmitColumns() []string {
-	omit := []string{"average_rating", "count_rating", "status", "created", "password", "username"}
+	omit := []string{"average_rating", "count_rating", "status", "created", "password", "username", "login", "phone"}
 	if u.Image == nil {
 		omit = append(omit, "image_id")
 	}

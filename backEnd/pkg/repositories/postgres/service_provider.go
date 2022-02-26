@@ -16,7 +16,7 @@ func NewServiceServiceProviderRepository(DB *gorm.DB) *ServiceProviderRepository
 	return &ServiceProviderRepository{DB: DB}
 }
 
-func (repo *ServiceProviderRepository) GetAllServices(ctx context.Context, userID int64, filter filter.ServiceProviderFilter) (listService models.ListService, err error) {
+func (repo *ServiceProviderRepository) GetAllServices(ctx context.Context, userID int64, filter filter.ServiceProviderFilter) (listService models.ListService, total int64, err error) {
 
 	db := repo.DB.Debug().Table("service").
 		Select([]string{
@@ -74,6 +74,8 @@ func (repo *ServiceProviderRepository) GetAllServices(ctx context.Context, userI
 		db = db.Where("UPPER(\"user\".city) = UPPER(?)", filter.City)
 	}
 
+	db.Count(&total)
+
 	db = db.
 		Preload("User", func(db *gorm.DB) *gorm.DB {
 			return db.Omit("login", "password")
@@ -85,14 +87,23 @@ func (repo *ServiceProviderRepository) GetAllServices(ctx context.Context, userI
 			return db.Omit("content")
 		})
 
+	db = db.Offset(filter.Page * filter.Size)
+
+	if filter.Sort != "" && filter.Order != "" {
+		db = db.Order(filter.Sort + " " + filter.Order)
+	}
+
+	if filter.Size > 0 {
+		db = db.Limit(filter.Size)
+	}
 	err = db.Find(&listService).Error
 	return
 }
 
 func (repo *ServiceProviderRepository) CreateService(ctx context.Context, service models.Service) (models.Service, error) {
-	err := repo.DB.Table("service").
+	err := repo.DB.Debug().Table("service").
 		Omit("is_deleted", "last_activity", "status", "is_favorite").
-		Create(&service).
+		Save(&service).
 		Error
 	return service, err
 }
@@ -120,4 +131,8 @@ func (repo *ServiceProviderRepository) GetFavoriteServices(ctx context.Context, 
 			return db.Omit("content")
 		}).Find(&listService).Error
 	return
+}
+
+func (repo *ServiceProviderRepository) DeleteImagesByServiceID(ctx context.Context, serviceID int64) (err error) {
+	return repo.DB.Exec(`DELETE FROM image WHERE id in (select image_id from service_image where service_id = ?)`, serviceID).Error
 }

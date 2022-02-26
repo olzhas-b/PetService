@@ -54,14 +54,14 @@ func (h *Handler) AddRoutes(srv *fiber.App) {
 	{
 		profile.Get("/:id", h.CtlGetUser)
 		profile.Get("", h.CtlGetCurrentUser)
-		profile.Put("/edit", h.CtlUpdateUser)
+		profile.Put("/edit", middles.AuthorizationMiddleWare(h.services), h.CtlUpdateUser)
 	}
 
 	service := v1.Group("/service")
 	{
 		service.Get("", h.CtlGetAllServiceProvider)
 		service.Get("/:id/detail", h.CtlGetServiceDetail)
-		service.Post("/new", middles.AuthorizationMiddleWare(h.services), h.CtlCreateService)
+		service.Post("/:id", middles.AuthorizationMiddleWare(h.services), h.CtlCreateService)
 	}
 
 	favorite := service.Group("/favorite")
@@ -83,9 +83,9 @@ func (h *Handler) AddRoutes(srv *fiber.App) {
 		user.Get("/:id/pet", h.CtlGetPet)
 
 		pet.Get("/all", h.CtlGetAllPets)
-		pet.Post("/new", middles.AuthorizationMiddleWare(h.services), h.CtlCreatePet)
+		pet.Post("/:id", middles.AuthorizationMiddleWare(h.services), h.CtlCreateOrUpdatePet)
 		pet.Delete("/:id/delete", middles.AuthorizationMiddleWare(h.services), h.CtlDeletePet)
-		pet.Put("/:id/edit", middles.AuthorizationMiddleWare(h.services), h.CtlUpdatePet)
+		//pet.Put("/:id/edit", middles.AuthorizationMiddleWare(h.services), h.CtlUpdatePet)
 	}
 
 	countries := v1.Group("/countries")

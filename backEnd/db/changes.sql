@@ -47,3 +47,13 @@ create table favorite_user_service (
 );
 alter table favorite_user_service add CONSTRAINT fk_user  FOREIGN KEY(user_id) REFERENCES "user"(id);
 alter table favorite_user_service add CONSTRAINT fk_service  FOREIGN KEY(service_id) REFERENCES service(id);
+
+
+
+-- 26.02.2020
+
+alter table service_image drop constraint service_image_image_id_fkey,
+    add constraint service_image_image_id_fkey foreign key (image_id)
+    references image(id)
+    on delete cascade ;
+

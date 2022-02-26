@@ -4,9 +4,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/olzhas-b/PetService/backEnd/consts"
 	"github.com/olzhas-b/PetService/backEnd/pkg/models"
 	"github.com/olzhas-b/PetService/backEnd/pkg/repositories"
 	"github.com/olzhas-b/PetService/backEnd/tools"
+	"github.com/olzhas-b/PetService/backEnd/tools/utils"
 	"mime/multipart"
 )
 
@@ -22,18 +24,27 @@ func (srv *PetService) ServiceGetPetsByUserID(ctx context.Context, id int64) (pe
 	return srv.repo.IPetRepository.GetPetsByUserID(ctx, id)
 }
 
-func (srv *PetService) ServiceCreatePet(ctx context.Context, pet models.Pet, file *multipart.FileHeader, userID int64) (result models.Pet, err error) {
-	pet.UserID = userID
-
+func (srv *PetService) ServiceCreateOrUpdatePet(ctx context.Context, pet models.Pet, file *multipart.FileHeader, requestType string) (result models.Pet, err error) {
+	if requestType == consts.New {
+		pet.ID = 0
+	} else {
+		pet.ID = tools.StrToInt64(requestType)
+	}
+	var image models.Image
+	pet.UserID = utils.GetCurrentUserID(ctx)
 	if file != nil {
-		pet.Image = &models.Image{
+		image = models.Image{
+			ID:          srv.repo.IPetRepository.GetPetImageID(ctx, pet.ID),
 			Name:        file.Filename,
 			ContentType: file.Header.Get("Content-Type"),
 			Content:     tools.ReadProperly(file),
 		}
+	} else {
+		image.ID = srv.repo.IPetRepository.GetPetImageID(ctx, pet.ID)
 	}
+	pet.Image = &image
 
-	return srv.repo.IPetRepository.CreatePet(ctx, pet)
+	return srv.repo.IPetRepository.CreateOrUpdatePet(ctx, pet)
 }
 
 func (srv *PetService) ServiceUpdatePet(ctx context.Context, pet models.Pet, file *multipart.FileHeader, userID int64) (result models.Pet, err error) {

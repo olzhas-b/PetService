@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	validator "github.com/go-playground/validator/v10"
+	"github.com/olzhas-b/PetService/backEnd/consts"
 	"github.com/olzhas-b/PetService/backEnd/pkg/models"
 	"github.com/olzhas-b/PetService/backEnd/pkg/models/filter"
 	"github.com/olzhas-b/PetService/backEnd/pkg/repositories"
@@ -55,20 +56,23 @@ func (s *UserService) ServiceCreateUser(user models.User) (result models.User, e
 	return
 }
 
-func (s *UserService) ServiceGetAllUsers(f *filter.User) (result []models.User, err error) {
-	result, err = s.repo.GetAllUsers(f)
+func (srv *UserService) ServiceGetAllUsers(f *filter.User) (result []models.User, err error) {
+	result, err = srv.repo.GetAllUsers(f)
 	if err != nil {
 		return result, fmt.Errorf("ServiceGetAllUsers : %w", err)
 	}
 	return
 }
 
-func (s *UserService) ServiceUpdateUser(ctx context.Context, user models.User, file *multipart.FileHeader) (result models.User, err error) {
+func (srv *UserService) ServiceUpdateUser(ctx context.Context, user models.User, file *multipart.FileHeader) (result models.User, err error) {
 	user.ID = utils.GetCurrentUserID(ctx)
 	user.Updated = time.Now()
-	imageID := s.repo.IUserRepository.GetImageIdByUserID(user.ID)
-	if imageID != 0 {
-		user.ImageID = &imageID
+	//imageID := s.repo.IUserRepository.GetImageIdByUserID(user.ID)
+	//if imageID != 0 {
+	//	user.ImageID = &imageID
+	//}
+	if err = srv.repo.IUserRepository.DeleteUserImageByUserID(ctx, user.ID); err != nil {
+		return
 	}
 	if file != nil {
 		user.Image = &models.Image{
@@ -76,8 +80,11 @@ func (s *UserService) ServiceUpdateUser(ctx context.Context, user models.User, f
 			ContentType: file.Header.Get("Content-Type"),
 			Content:     tools.ReadProperly(file),
 		}
+	} else {
+		image := utils.GetLocalImage(consts.ProfileAvatarPath)
+		user.Image = &image
 	}
 
 	omitColumns := user.GetOmitColumns()
-	return s.repo.IUserRepository.UpdateUser(ctx, user, omitColumns)
+	return srv.repo.IUserRepository.UpdateUser(ctx, user, omitColumns)
 }
