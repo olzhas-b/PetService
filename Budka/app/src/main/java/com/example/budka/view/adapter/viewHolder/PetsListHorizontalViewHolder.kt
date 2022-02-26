@@ -14,6 +14,7 @@ import com.example.budka.R
 import com.example.budka.data.model.Pet
 import com.example.budka.databinding.ItemNearestPetsBinding
 import com.example.budka.databinding.ItemPetBinding
+import com.example.budka.databinding.ItemPetProfileBinding
 import com.squareup.picasso.Picasso
 
 class PetsListHorizontalViewHolder constructor(
@@ -26,6 +27,20 @@ class PetsListHorizontalViewHolder constructor(
 //        itemPetBinding.mainPagePetOwnerNameTv.text = petsData.user?.first_name+" "+ petsData.user?.last_name
         Picasso.get().load("http://192.168.43.145:8080/api/v1/image/2.png").fit().centerCrop().placeholder(R.drawable.img_aktos).into(itemPetBinding.mainPagePetsIv)
 
+    }
+
+
+}
+
+class PetsListVerticalViewHolder constructor(
+    val itemPetBinding: ItemPetProfileBinding
+): RecyclerView.ViewHolder(itemPetBinding.root) {
+
+    @SuppressLint("SetTextI18n")
+    fun setUp(petsData: Pet){
+        itemPetBinding.petNameTv.text= petsData.name
+//        itemPetBinding.mainPagePetOwnerNameTv.text = petsData.user?.first_name+" "+ petsData.user?.last_name
+        Picasso.get().load("http://192.168.43.145:8080/api/v1/image/2.png").fit().centerCrop().placeholder(R.drawable.img_aktos).into(itemPetBinding.petsAvatarIv)
     }
 
 

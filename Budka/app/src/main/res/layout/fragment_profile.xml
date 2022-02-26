@@ -66,7 +66,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="15sp"
             android:fontFamily="sans-serif-light"
-            android:text = "ashkeyevli"
+            tools:text = "ashkeyevli"
             android:textColor="@color/white"
             app:layout_constraintTop_toBottomOf="@id/imgUser"
             app:layout_constraintStart_toStartOf="@id/imgUser"
@@ -82,13 +82,22 @@
             android:layout_centerHorizontal="true"
             android:fontFamily="sans-serif"
             tools:text="new york, usa"
-            android:text="ashkeyevli@gmail.com"
             android:textAllCaps="true"
             app:layout_constraintStart_toStartOf="@id/tv_name"
             app:layout_constraintTop_toBottomOf="@id/tv_name"
             app:layout_constraintEnd_toEndOf="@id/tv_name"
             android:textColor="@color/address"
             android:textSize="14sp" />
+        <RatingBar
+            android:id="@+id/userRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:theme="@style/MyRatingBar"
+            app:layout_constraintTop_toBottomOf="@id/tv_address"
+            app:layout_constraintStart_toStartOf="@id/tv_address"
+            app:layout_constraintEnd_toEndOf="@id/tv_address"
+            style="?android:attr/ratingBarStyleIndicator"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

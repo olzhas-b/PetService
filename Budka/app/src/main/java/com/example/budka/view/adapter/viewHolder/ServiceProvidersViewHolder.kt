@@ -12,9 +12,7 @@ import android.annotation.SuppressLint
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.budka.R
-import com.example.budka.data.model.Properties
-import com.example.budka.data.model.ServiceProvider
-import com.example.budka.data.model.User
+import com.example.budka.data.model.*
 import com.example.budka.databinding.ItemPetSitterBinding
 import com.example.budka.utils.setUpPriceMask
 import com.example.budka.view.ServiceProvidersListFragmentDirections
@@ -23,7 +21,8 @@ import com.squareup.picasso.Picasso
 class ServiceProvidersViewHolder constructor(
     val itemPetSitterBinding: ItemPetSitterBinding,
     var favListener: FavListener ?= null,
-    var navigationListener: NavigationListener ?= null
+    var navigationListener: NavigationListener ?= null,
+    var isMyServicesPage: Boolean = false
 
 ): RecyclerView.ViewHolder(itemPetSitterBinding.root) {
 
@@ -36,7 +35,12 @@ class ServiceProvidersViewHolder constructor(
         }
 
         Picasso.get().load(image).fit().centerCrop().into(itemPetSitterBinding.perSitterIv)
-        itemPetSitterBinding.petSitterNameTv.text = serviceProviderData.user?.fullName
+        if(isMyServicesPage && serviceProviderData.serviceType!=null){
+            itemPetSitterBinding.petSitterNameTv.text = ServiceType.values()[serviceProviderData.serviceType].value
+        } else {
+            itemPetSitterBinding.petSitterNameTv.text = serviceProviderData.user?.fullName
+
+        }
         itemPetSitterBinding.petSitterLocationTv.text = serviceProviderData.user?.country + ' ' + serviceProviderData.user?.city
         itemPetSitterBinding.petSitterPriceTv.setUpPriceMask(serviceProviderData.price.toString(),serviceProviderData.currencyCode ,serviceProviderData.pricePerTime)
         itemView.setOnClickListener {
@@ -59,7 +63,6 @@ class ServiceProvidersViewHolder constructor(
 
             }
         }
-
 
     }
 }

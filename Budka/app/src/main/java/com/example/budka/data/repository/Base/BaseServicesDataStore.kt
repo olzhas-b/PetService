@@ -21,12 +21,12 @@ import retrofit2.Response
 import timber.log.Timber
 
 abstract class BaseServicesDataStore (@PublishedApi internal val service: ApiService) {
-    abstract fun getUserServices(user_id: Int): LiveData<List<Services>>
+    abstract fun getUserServices(user_id: Int): LiveData<List<ServiceProvider>>
     abstract fun createService(images :List<MultipartBody.Part>, body: CreateServiceModel): LiveData<CreateServiceModel>
 
 
-    inline fun fetchData(crossinline call: (ApiService) -> Deferred<Response<ServiceResponse>>): LiveData<List<Services>> {
-        val result = MutableLiveData<List<Services>>()
+    inline fun fetchData(crossinline call: (ApiService) -> Deferred<Response<List<ServiceProvider>>>): LiveData<List<ServiceProvider>> {
+        val result = MutableLiveData<List<ServiceProvider>>()
         CoroutineScope(Dispatchers.IO).launch {
             val request = call(service)
             withContext(Dispatchers.Main){
@@ -36,7 +36,7 @@ abstract class BaseServicesDataStore (@PublishedApi internal val service: ApiSer
                     val response = request.await()
                     if (response.isSuccessful) {
                         Log.d("look", "wewe")
-                        result.value = response.body()?.services
+                        result.value = response.body()
                     } else {
                         Log.d("look", "sds")
                         Timber.d("Error occurred with code ${response.code()}")

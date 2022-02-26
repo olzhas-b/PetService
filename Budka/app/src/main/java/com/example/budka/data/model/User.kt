@@ -12,6 +12,7 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.parcel.RawValue
+import java.io.Serializable
 
 
 data class PetOwner(
@@ -81,6 +82,8 @@ data class Services(
     val pricePerTime: String?,
 )
 
+
+@Parcelize
 data class User(
     @SerializedName("id")
     val id: Int,
@@ -95,9 +98,9 @@ data class User(
     @SerializedName("phone")
     val phone: String,
     @SerializedName("city")
-    val city: String,
+    val city: String?,
     @SerializedName("country")
-    val country: String,
+    val country: String?,
     @SerializedName("location")
     val location: String,
     @SerializedName("description")
@@ -105,6 +108,24 @@ data class User(
     @SerializedName("countRating")
     val countRating: Int,
     @SerializedName("averageRating")
-    val averageRating: Int
-)
+    val averageRating: Float,
+    @SerializedName("image")
+    val avatar: String
+): Parcelable
+
+@Parcelize
+data class UserUpdate(
+    @SerializedName("firstName")
+    val firstName: String,
+    @SerializedName("lastName")
+    val lastName: String,
+    @SerializedName("fullName")
+    val fullName: String,
+    @SerializedName("city")
+    val city: String?,
+    @SerializedName("country")
+    val country: String?,
+    @SerializedName("description")
+    val description: String,
+): Parcelable
 

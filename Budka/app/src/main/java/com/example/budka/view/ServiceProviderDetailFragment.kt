@@ -65,8 +65,10 @@ class ServiceProviderDetailFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         serviceProvider = arg.user
         serviceDetailViewModel.fetchServiceDetail(serviceProvider.id)
-        serviceProvider.user?.let { petListViewModel.fetchUserPetsList(it.id) }
-        servicesViewModel.fetchUserServicesList(serviceProvider.id)
+        serviceProvider.user?.let {
+            petListViewModel.fetchUserPetsList(it.id)
+        servicesViewModel.fetchUserServicesList(it.id)
+        }
         setUpAdapter()
         setObservers()
     }
@@ -129,7 +131,7 @@ class ServiceProviderDetailFragment: Fragment() {
         acceptablePetSizesAdapter = AcceptablePetSizesAdapter()
         acceptablePetTypesAdapter = AcceptablePetTypesAdapter()
         otherPropertiesAdapter = OtherPropertiesAdapter()
-        userPetsAdapter = UserPetsAdapter()
+        userPetsAdapter = UserPetsAdapter(1)
         userServicesAdapter = UserServicesAdapter()
         albumViewPagerAdapter = AlbumViewPagerAdapter()
         viewBinding.albumVp.adapter = albumViewPagerAdapter
@@ -162,7 +164,7 @@ class ServiceProviderDetailFragment: Fragment() {
         userPetsRv.setItemViewCacheSize(20)
         userPetsRv.isNestedScrollingEnabled =  false
 
-        val userServicesLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false )
+        val userServicesLayoutManager = GridLayoutManager(activity, 2 )
         userServicesRv.layoutManager = userServicesLayoutManager
         userServicesRv.adapter = userServicesAdapter
         userServicesRv.setHasFixedSize(true)

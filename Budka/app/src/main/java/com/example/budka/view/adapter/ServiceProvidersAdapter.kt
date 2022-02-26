@@ -21,7 +21,8 @@ import com.example.budka.view.adapter.viewHolder.ServiceProvidersViewHolder
 
 class ServiceProvidersAdapter internal constructor(
     var favListener: FavListener?= null,
-    var navigationListener: NavigationListener?= null
+    var navigationListener: NavigationListener?= null,
+    var isMyServicesPage: Boolean = false
 
 ): RecyclerView.Adapter<ServiceProvidersViewHolder>(){
     var employeesList: List<ServiceProvider> = emptyList()
@@ -29,7 +30,7 @@ class ServiceProvidersAdapter internal constructor(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ServiceProvidersViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val itemBinding = ItemPetSitterBinding.inflate(inflater, parent, false)
-        return  ServiceProvidersViewHolder(itemBinding, favListener, navigationListener)
+        return  ServiceProvidersViewHolder(itemBinding, favListener, navigationListener, isMyServicesPage)
     }
 
     override fun onBindViewHolder(holder: ServiceProvidersViewHolder, position: Int) {

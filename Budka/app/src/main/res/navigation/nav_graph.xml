@@ -93,6 +93,9 @@
         <action
             android:id="@+id/action_profileFragment_to_myServices"
             app:destination="@id/myServices" />
+        <action
+            android:id="@+id/action_profileFragment_to_changeProfileFragment"
+            app:destination="@id/changeProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/myServices"
@@ -110,9 +113,16 @@
             android:name="toPage"
             app:argType="string"
             />
+        <argument
+            android:name="userId"
+            app:argType="integer"
+            />
         <action
             android:id="@+id/action_myServices_to_createPetFragment"
             app:destination="@id/createPetFragment" />
+        <action
+            android:id="@+id/action_myServices_to_service_provider_detail_fragment"
+            app:destination="@id/service_provider_detail_fragment" />
     </fragment>
     <fragment
         android:id="@+id/createServiceRequiredFragment"
@@ -179,7 +189,11 @@
     <fragment
         android:id="@+id/createPetFragment"
         android:name="com.example.budka.view.CreatePetFragment"
-        android:label="CreatePetFragment" />
+        android:label="CreatePetFragment" >
+        <action
+            android:id="@+id/action_createPetFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
     <fragment
         android:id="@+id/favoriteServicesFragment"
         android:name="com.example.budka.view.FavoriteServicesFragment"
@@ -187,6 +201,17 @@
         <action
             android:id="@+id/action_favoriteServicesFragment_to_service_provider_detail_fragment"
             app:destination="@id/service_provider_detail_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/changeProfileFragment"
+        android:name="com.example.budka.view.ChangeProfileFragment"
+        android:label="ChangeProfileFragment" >
+        <action
+            android:id="@+id/action_changeProfileFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <argument
+            android:name="profile"
+            app:argType="com.example.budka.data.model.User"/>
     </fragment>
 
 </navigation>

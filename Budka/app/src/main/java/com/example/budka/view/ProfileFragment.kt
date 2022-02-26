@@ -8,6 +8,7 @@
 
 package com.example.budka.view
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,12 +17,19 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.example.budka.data.model.SessionManager
+import com.example.budka.data.model.User
 import com.example.budka.databinding.FragmentProfileBinding
+import com.example.budka.viewModel.ProfileViewModel
+import com.squareup.picasso.Picasso
+import org.koin.android.viewmodel.ext.android.viewModel
+
 
 class ProfileFragment: Fragment() {
     private var _viewBinding: FragmentProfileBinding? = null
     private val viewBinding get() = _viewBinding!!
     private lateinit var sessionManager: SessionManager
+    private val profileViewModel: ProfileViewModel by viewModel()
+    private lateinit var user: User
 
 
     override fun onCreateView(
@@ -37,6 +45,9 @@ class ProfileFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if(savedInstanceState==null)
+            profileViewModel.fetchProfile()
+        setObservers()
         setListeners()
     }
 
@@ -45,12 +56,25 @@ class ProfileFragment: Fragment() {
         _viewBinding = null
     }
 
+    @SuppressLint("SetTextI18n")
+    private fun setObservers(){
+        profileViewModel.getProfile().observe(viewLifecycleOwner, {
+            profile -> profile.apply {
+            user = profile
+            Picasso.get().load(avatar).into(viewBinding.userAvatar)
+            viewBinding.tvName.text = fullName
+            viewBinding.tvAddress.text = city+ ", " + country
+            viewBinding.userRating.rating = averageRating
+        }
+        })
+    }
+
     private fun setListeners(){
         viewBinding.myServicesLayout.setOnClickListener {
-            it.findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToMyServices("service"))
+            it.findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToMyServices("service", user.id ))
         }
         viewBinding.myPetsLayout.setOnClickListener{
-            it.findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToMyServices("pets"))
+            it.findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToMyServices("pets", user.id))
         }
         viewBinding.infoLayout.setOnClickListener {
             sessionManager.deleteSession()
@@ -59,6 +83,9 @@ class ProfileFragment: Fragment() {
             startActivity(intent)
             activity?.finish()
 
+        }
+        viewBinding.accountLayout.setOnClickListener {
+            it.findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToChangeProfileFragment(user))
         }
     }
 }

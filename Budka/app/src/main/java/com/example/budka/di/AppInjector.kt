@@ -24,6 +24,7 @@ val viewModelModule = module {
     viewModel {ServicesViewModel(get())}
     viewModel { CountriesListViewModel(get())}
     viewModel { createServiceViewModel() }
+    viewModel {ProfileViewModel(get())}
 }
 
 val SignInViewModeModule = module{
@@ -36,6 +37,7 @@ val useCaseModule = module {
     single { ServiceDetailUseCase(get<ServiceDetailDataStore>()) }
     single { ServicesUseCase(get<ServicesDataStore>()) }
     single { CountryListUseCase(get<CountriesDataStore>()) }
+    single { ProfileUseCase(get<MyPageDataStore>())}
 }
 
 val SignInUseCaseModule = module{
@@ -48,6 +50,7 @@ val repositoryModule = module{
     single{ServiceDetailDataStore(get())}
     single{ServicesDataStore(get())}
     single { CountriesDataStore(get()) }
+    single { MyPageDataStore(get())}
 }
 
 val SignInRepositoryModule = module {

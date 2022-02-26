@@ -18,11 +18,23 @@ import retrofit2.http.*
 const val API = "api/v1/"
 
 interface ApiService {
+
+    @GET(API + "profile")
+    fun getProfileByToken(): Deferred<Response<User>>
+
     @GET(API + "user/pet/all")
     fun getPets(): Deferred<Response<List<Pet>>>
 
     @GET(API +"user/{userId}/pet")
     fun getUserPets(@Path("userId") userId: Int): Deferred<Response<List<Pet>>>
+
+    @Multipart
+    @PUT(API +"profile/edit")
+    @JvmSuppressWildcards
+    fun updateProfile(
+        @Part image :MultipartBody.Part,
+        @Part("body")  body: UserUpdate,
+    ): Deferred<Response<User>>
 
     @Multipart
     @POST(API +"user/pet/new")
@@ -46,8 +58,8 @@ interface ApiService {
     @GET(API +"service/{serviceId}/detail")
     fun getServiceDetail(@Path("serviceId") serviceId: Int): Deferred<Response<ServiceDetail>>
 
-    @GET(API +"services")
-    fun getUserServices(@Query("userId") userId: Int): Deferred<Response<ServiceResponse>>
+    @GET(API +"service")
+    fun getUserServices(@Query("userId") userId: Int): Deferred<Response<List<ServiceProvider>>>
 
     @GET(API + "countries")
     fun getCountries(): Deferred<Response<List<CountryData>>>
