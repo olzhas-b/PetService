@@ -73,16 +73,17 @@ func (repo *UserRepository) GetImageIdByUserID(userID int64) (ID int64) {
 }
 
 func (repo *UserRepository) DeleteUserImageByUserID(ctx context.Context, userID int64) (err error) {
-	return repo.DB.Exec(`
-			DO
-			$$DECLARE
-			    user_image_id BIGINT;
-			BEGIN
-			    SELECT image_id INTO user_image_id FROM "user" WHERE id = ?;
-			
-			    UPDATE "user" SET image_id = NULL WHERE id = ?;
+	return nil
+	query := "DO\n$$DECLARE\n    user_image_id BIGINT;\nBEGIN\n    SELECT image_id INTO user_image_id FROM \"user\" WHERE id = (?);\n\n    UPDATE \"user\" SET image_id = NULL WHERE id = (?);\n\n    DELETE FROM image WHERE id = user_image_id;\nEND$$;"
 
-			    DELETE FROM image WHERE id = user_image_id;
-			END$$;
-		`, userID, userID).Error
+	return repo.DB.Exec(query, userID, userID).Error
+
+	//return repo.DB.Exec(`
+	//		DECLARE
+	//		    user_image_id BIGINT;
+	//		BEGIN
+	//		    SELECT image_id INTO user_image_id FROM "user" WHERE id = (?);
+	//		    UPDATE "user" SET image_id = NULL WHERE id = (?);
+	//		    DELETE FROM image WHERE id = user_image_id;
+	//		END;`, userID, userID).Error
 }
