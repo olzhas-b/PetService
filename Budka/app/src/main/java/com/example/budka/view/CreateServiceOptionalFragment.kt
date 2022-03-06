@@ -22,7 +22,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.budka.data.model.CreateServiceModel
@@ -35,6 +38,7 @@ import com.example.budka.view.adapter.UploadImageAdapter
 import com.example.budka.view.adapter.viewHolder.EditTextChangeListener
 import com.example.budka.view.adapter.viewHolder.UploadNewImageListener
 import com.example.budka.viewModel.ServicesViewModel
+import com.example.budka.viewModel.createServiceViewModel
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -57,6 +61,11 @@ class CreateServiceOptionalFragment : Fragment(), UploadNewImageListener, EditTe
     var ss = ""
     val arg: CreateServiceOptionalFragmentArgs by navArgs()
     private val servicesViewModel: ServicesViewModel by viewModel()
+    private var additionalPropertiesList = MutableLiveData<PropertiesList>()
+    private var imageListLiveData = MutableLiveData<UriList>()
+    private val createSerViewModel: createServiceViewModel by activityViewModels()
+
+
 
 
 
@@ -103,13 +112,63 @@ class CreateServiceOptionalFragment : Fragment(), UploadNewImageListener, EditTe
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         imageList.add(UploadImage(null, true))
-        populateProperty(arg.requiredField.serviceType)
+//        arg.imageList.let {
+//            imageListLiveData.value = it
+//        }
+
+//        arg.propertiesList?.let {
+//           additionalPropertiesList.value = it
+//        } ?:run{
+//            populateProperty(arg.requiredField.serviceType)
+//            addPropertiesAdapter.updatePropertiesList(propertiesList)
+//
+//        }
+
+
+
+
         setupAdapter()
-        uploadImageAdapter.updateImageList(imageList)
+        setObservers()
+        populateProperty(arg.requiredField.serviceType)
         addPropertiesAdapter.updatePropertiesList(propertiesList)
+        uploadImageAdapter.updateImageList(imageList)
+//        uploadImageAdapter.updateImageList(imageList)
         viewBinding.check.setOnClickListener {
             serverData()
         }
+    }
+
+    fun setObservers() {
+        additionalPropertiesList.observe(viewLifecycleOwner, {
+            propertiesList.clear()
+            it.propertiesList?.let { it1 -> propertiesList.addAll(it1) }
+            addPropertiesAdapter.updatePropertiesList(propertiesList)
+
+        })
+
+        imageListLiveData.observe(viewLifecycleOwner, {
+            it.uriList?.let { it1 -> imageList.addAll(it1) }
+            uploadImageAdapter.updateImageList(imageList)
+        })
+
+        createSerViewModel.getImages().observe(viewLifecycleOwner,
+            {
+                it?.let {
+                    imageList.addAll(it)
+                }
+                uploadImageAdapter.updateImageList(imageList)
+            })
+
+        createSerViewModel.getProperties().observe(viewLifecycleOwner,
+            {
+                it?.let {
+                    propertiesList.clear()
+                    propertiesList.addAll(it)
+                }?:run{
+                    populateProperty(arg.requiredField.serviceType)
+                }
+                addPropertiesAdapter.updatePropertiesList(propertiesList)
+            })
     }
 
     override fun onDestroyView() {
@@ -266,32 +325,6 @@ class CreateServiceOptionalFragment : Fragment(), UploadNewImageListener, EditTe
             acceptableSize = petSize,
             additionalProperties = sendPropertiesMap.toList().map { Properties(it.first, it.second) }
         )
-//        val serviceType = createPartFromString(requiredField.serviceType.toString())
-//        val price = createPartFromString("3000")
-//        val currencyCode = createPartFromString("KZT")
-//        val pricePerTime = createPartFromString("hour")
-//        val longitude = createPartFromString("12.54")
-//        val latitude = createPartFromString("12.42")
-//        val description = createPartFromString(requiredField.summary)
-//        val acceptableSize = createPartFromString(petSize.toString())
-//        val acceptablePets = createPartFromString(requiredField.petTypes)
-//        val map: HashMap<String, RequestBody> = HashMap()
-//        val propertiesMap: HashMap<String, RequestBody> = HashMap()
-//        for((key, value) in sendPropertiesMap){
-//            value?.let{
-//                propertiesMap.put(key, createPartFromString(value))
-//            }
-//        }
-//        map["serviceType"] = serviceType
-//        map["price"] = price
-//        map["currencyCode"] = currencyCode
-//        map["pricePerTime"] = pricePerTime
-//        map["longitude"] = longitude
-//        map["latitude"] = latitude
-//        map["description"] = description
-//        map["acceptableSize"] = acceptableSize
-//        map["acceptablePets"] = acceptablePets
-
 
         for(image in imageList){
             image.imageUri?.let {
@@ -307,9 +340,6 @@ class CreateServiceOptionalFragment : Fragment(), UploadNewImageListener, EditTe
         return MultipartBody.Part.createFormData(partName, file.name, requestFile)
     }
 
-    private fun createPartFromString(field : String): RequestBody{
-        return RequestBody.create(MultipartBody.FORM, field)
-    }
 
     private fun requestStoragePermission() {
         if (!hasStoragePermission()) {

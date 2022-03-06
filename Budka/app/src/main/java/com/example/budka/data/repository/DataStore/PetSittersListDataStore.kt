@@ -17,7 +17,7 @@ import com.example.budka.data.repository.Base.BasePetSittersDataStore
 import com.example.budka.domain.repository.PetSittersListRepository
 
 class PetSittersListDataStore(apiService: ApiService) : PetSittersListRepository, BasePetSittersDataStore(apiService) {
-    override fun getPetSitters(serviceType: String): LiveData<List<ServiceProvider>> {
+    override fun getPetSitters(serviceType: Int): LiveData<List<ServiceProvider>> {
         return fetchData { service.getPetSitters(serviceType) }
     }
 
@@ -30,6 +30,6 @@ class PetSittersListDataStore(apiService: ApiService) : PetSittersListRepository
     }
 
     override fun getFavoriteServices(): LiveData<List<ServiceProvider>> {
-        return fetchData { service.getFavoriteServices() }
+        return fetchDataFav { service.getFavoriteServices() }
     }
 }

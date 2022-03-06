@@ -30,8 +30,14 @@ data class ServiceProvidersList(
     val users: List<ServiceProvider>
 )
 
-@Parcelize
+data class ServiceProviderResponse(
+    @SerializedName("rows")
+    val rows: List<ServiceProvider>,
+    @SerializedName("total")
+    val total: Int
+)
 
+@Parcelize
 data class ServiceProvider(
     @SerializedName("id")
     val id: Int,

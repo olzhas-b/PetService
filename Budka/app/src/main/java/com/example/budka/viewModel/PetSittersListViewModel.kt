@@ -22,7 +22,7 @@ class PetSittersListViewModel (private val petSittersListUseCase: PetSittersList
     private var favoriteServicesList = MutableLiveData<List<ServiceProvider>>()
 
 
-    fun fetchPetSittersList(serviceType: String) {
+    fun fetchPetSittersList(serviceType: Int) {
         petSittersList = petSittersListUseCase.getPetSittersList(serviceType) as MutableLiveData<List<ServiceProvider>>
     }
 

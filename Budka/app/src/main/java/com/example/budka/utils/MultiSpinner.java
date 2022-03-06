@@ -130,11 +130,15 @@ public class MultiSpinner extends androidx.appcompat.widget.AppCompatSpinner imp
     @Override
     public void onRestoreInstanceState(Parcelable state) {
         SavedState ss = (SavedState) state;
-        Log.d("creation", "restore");
-
+        if(ss.stateToSave!=null){
+            this.myText = ss.stateToSave;
+        } else{
+            this.myText = "Выбрать";
+        }
         super.onRestoreInstanceState(ss.getSuperState());
-        this.myText = ss.stateToSave;
         setItems(this.items, myText,ss.selectedState, this.listener);
+
+
     }
 
     static class SavedState extends BaseSavedState {

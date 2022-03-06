@@ -8,8 +8,10 @@
 
 package com.example.budka.data.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 
-
+@Parcelize
 data class ServiceDetail(
     val service_id: Int,
     val description: String?,
@@ -19,12 +21,13 @@ data class ServiceDetail(
     val longitude: Double,
     val latitude: Double,
 //    val user: PetSitterDetail?
-)
+): Parcelable
 
+@Parcelize
 data class Properties(
     val label: String?,
     val text: String?
-)
+): Parcelable
 
 data class CreateServiceModel(
     val serviceType: Int,

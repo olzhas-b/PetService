@@ -18,12 +18,35 @@ import retrofit2.Response
 import timber.log.Timber
 
 abstract class BasePetSittersDataStore(@PublishedApi internal val service: ApiService) {
-    abstract fun getPetSitters(serviceType: String): LiveData<List<ServiceProvider>>
+    abstract fun getPetSitters(serviceType: Int): LiveData<List<ServiceProvider>>
     abstract fun putLike(serviceId: Int): LiveData<String>
     abstract fun deleteLike(serviceId: Int): LiveData<String>
     abstract fun getFavoriteServices(): LiveData<List<ServiceProvider>>
 
-    inline fun fetchData(crossinline call: (ApiService) -> Deferred<Response<List<ServiceProvider>>>): LiveData<List<ServiceProvider>> {
+    inline fun fetchData(crossinline call: (ApiService) -> Deferred<Response<ServiceProviderResponse>>): LiveData<List<ServiceProvider>> {
+        val result = MutableLiveData<List<ServiceProvider>>()
+        CoroutineScope(Dispatchers.IO).launch {
+            val request = call(service)
+            withContext(Dispatchers.Main){
+                try {
+                    val response = request.await()
+                    if (response.isSuccessful) {
+                        result.value = response.body()?.rows
+                    } else {
+                        Timber.d("Error occurred with code ${response.code()}")
+                    }
+                } catch (e: HttpException){
+                    Timber.d("Error: ${e.message()}")
+                } catch (e: Throwable){
+                    Timber.d("Error: ${e.message}")
+                }
+            }
+        }
+        return result
+
+    }
+
+    inline fun fetchDataFav(crossinline call: (ApiService) -> Deferred<Response<List<ServiceProvider>>>): LiveData<List<ServiceProvider>> {
         val result = MutableLiveData<List<ServiceProvider>>()
         CoroutineScope(Dispatchers.IO).launch {
             val request = call(service)

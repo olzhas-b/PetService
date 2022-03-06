@@ -25,6 +25,9 @@ class AddPropertiesViewHolder constructor(
     @SuppressLint("SetTextI18n")
     fun setUp(properties: Properties){
         otherPropertiesBinding.labelTv.text = properties.label
+        properties.text?.let{
+            otherPropertiesBinding.propertyEt.setText(it)
+        }
         otherPropertiesBinding.propertyEt.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }

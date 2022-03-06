@@ -45,7 +45,7 @@ interface ApiService {
     ): Deferred<Response<Pet>>
 
     @GET(API +"service")
-    fun getPetSitters(@Query("serviceType") serviceType: String): Deferred<Response<List<ServiceProvider>>>
+    fun getPetSitters(@Query("serviceType") serviceType: Int): Deferred<Response<ServiceProviderResponse>>
 
     @Multipart
     @POST(API +"service/new")
@@ -59,7 +59,7 @@ interface ApiService {
     fun getServiceDetail(@Path("serviceId") serviceId: Int): Deferred<Response<ServiceDetail>>
 
     @GET(API +"service")
-    fun getUserServices(@Query("userId") userId: Int): Deferred<Response<List<ServiceProvider>>>
+    fun getUserServices(@Query("userId") userId: Int): Deferred<Response<ServiceProviderResponse>>
 
     @GET(API + "countries")
     fun getCountries(): Deferred<Response<List<CountryData>>>

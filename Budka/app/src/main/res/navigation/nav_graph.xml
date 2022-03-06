@@ -32,7 +32,7 @@
             app:destination="@id/service_provider_detail_fragment" />
         <argument
             android:name="serviceType"
-            app:argType="string" />
+            app:argType="integer" />
         <action
             android:id="@+id/action_service_providers_fragment_to_pet_sitters_filter_fragment"
             app:destination="@id/service_provider_filter_fragment" />
@@ -147,6 +147,12 @@
             app:argType="float"
             android:defaultValue="0.0"
             />
+        <argument
+            android:name="user"
+            android:defaultValue="@null"
+            app:nullable="true"
+            app:argType="com.example.budka.data.model.ServiceProvider"
+            />
     </fragment>
     <fragment
         android:id="@+id/createServiceOptionalFragment"
@@ -159,7 +165,24 @@
         <argument
             android:name="requiredField"
             app:argType="com.example.budka.data.model.ServiceRequiredField" />
-
+        <argument
+            android:name="service"
+            android:defaultValue="@null"
+            app:nullable="true"
+            app:argType="com.example.budka.data.model.ServiceProvider"
+            />
+        <argument
+            android:name="propertiesList"
+            android:defaultValue="@null"
+            app:nullable="true"
+            app:argType="com.example.budka.view.PropertiesList"
+            />
+        <argument
+            android:name="imageList"
+            android:defaultValue="@null"
+            app:nullable="true"
+            app:argType="com.example.budka.view.UriList"
+            />
     </fragment>
     <fragment
         android:id="@+id/mapsFragment"

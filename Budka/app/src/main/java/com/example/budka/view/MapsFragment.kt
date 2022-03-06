@@ -10,13 +10,12 @@ package com.example.budka.view
 
 import android.annotation.SuppressLint
 import android.location.Geocoder
-import androidx.fragment.app.Fragment
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.example.budka.R
 import com.example.budka.databinding.FragmentMapsBinding
@@ -31,7 +30,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MapsFragment constructor(
     val setLocation: Boolean = false,
-    var sendLocationInterface: SendLocationInterface ?= null
+    var setLocationInterface: SetLocationInterface ?= null
 ): Fragment() {
     private var _viewBinding: FragmentMapsBinding? = null
     private val viewBinding get() = _viewBinding!!
@@ -112,7 +111,7 @@ class MapsFragment constructor(
             @SuppressLint("LogNotTimber")
             override fun onMapObjectDrag(p0: MapObject, p1: Point) {
                 viewBinding.setLocationBtn.setOnClickListener {
-                    sendLocationInterface?.sendLocation(longitude = p1.longitude, latitude = p1.latitude)
+                    setLocationInterface?.sendLocation(longitude = p1.longitude, latitude = p1.latitude)
                     parentFragmentManager.beginTransaction().remove(this@MapsFragment).commit()
 //                    parentFragmentManager.popBackStackImmediate()
 //                    fragmentManager?.popBackStackImmediate()
@@ -144,6 +143,6 @@ class MapsFragment constructor(
 
 }
 
-interface SendLocationInterface {
+interface SetLocationInterface {
     fun sendLocation(longitude: Double, latitude: Double)
 }

@@ -34,17 +34,23 @@ fun TextView.setUpPriceMask(
         formatSymbols.decimalSeparator = '.'
         formatSymbols.groupingSeparator = ' '
         val localeKz = Locale("ru", "kz")
-        val currency = Currency.getInstance(currencyCode?:"KZT")
+        if(currencyCode?.length==3) {
+            val currency = Currency.getInstance(currencyCode ?: "KZT")
 
-        if (pricePerTime != null) {
-            val finalText = "$amount ${currency.getSymbol(localeKz)}/$pricePerTime"
-            val spannable =  SpannableString(finalText)
-            spannable.setSpan(ForegroundColorSpan(resources.getColor(R.color.pricePerAmount)), finalText.length-(pricePerTime.length+1), finalText.length,0 )
-            setText(spannable, TextView.BufferType.SPANNABLE)
-        }
-        else{
-            val finalText = "$amount ${currency.getSymbol(localeKz)}"
-            setText(finalText)
+            if (pricePerTime != null) {
+                val finalText = "$amount ${currency.getSymbol(localeKz)}/$pricePerTime"
+                val spannable = SpannableString(finalText)
+                spannable.setSpan(
+                    ForegroundColorSpan(resources.getColor(R.color.pricePerAmount)),
+                    finalText.length - (pricePerTime.length + 1),
+                    finalText.length,
+                    0
+                )
+                setText(spannable, TextView.BufferType.SPANNABLE)
+            } else {
+                val finalText = "$amount ${currency.getSymbol(localeKz)}"
+                setText(finalText)
+            }
         }}
     catch (e: Exception){
         e.printStackTrace()

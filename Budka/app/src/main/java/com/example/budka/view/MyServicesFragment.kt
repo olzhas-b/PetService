@@ -126,6 +126,6 @@ class MyServicesFragment : Fragment(), NavigationListener {
     }
 
     override fun navigate(serviceProviderData: ServiceProvider) {
-        findNavController().navigate(MyServicesFragmentDirections.actionMyServicesToServiceProviderDetailFragment(serviceProviderData))
+        findNavController().navigate(MyServicesFragmentDirections.actionMyServicesToCreateServiceRequiredFragment(user = serviceProviderData))
     }
 }

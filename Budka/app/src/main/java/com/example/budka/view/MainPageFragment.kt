@@ -63,7 +63,7 @@ class MainPageFragment: Fragment() {
         activity?.window?.statusBarColor = resources.getColor(R.color.mainColor)
         Picasso.get().load(R.drawable.banner).fit().centerCrop().placeholder(R.drawable.banner).into(viewBinding.bannerIv)
         if(savedInstanceState==null){
-        petSittersListViewModel.fetchPetSittersList("petSitting")
+        petSittersListViewModel.fetchPetSittersList(0)
         }
         setupAdapter()
         setObservers()
@@ -105,8 +105,31 @@ class MainPageFragment: Fragment() {
 
     private fun setOnClickListener(){
         petSitterBtn.setOnClickListener {
-            it.findNavController().navigate(MainPageFragmentDirections.actionMainPageFragmentToServiceProvidersFragment("petSitting"))
+            it.findNavController().navigate(MainPageFragmentDirections.actionMainPageFragmentToServiceProvidersFragment(0))
         }
+        viewBinding.apply {
+            petWalking.setOnClickListener {
+                it.findNavController().navigate(MainPageFragmentDirections.actionMainPageFragmentToServiceProvidersFragment(1))
+
+            }
+            vet.setOnClickListener {
+                it.findNavController().navigate(MainPageFragmentDirections.actionMainPageFragmentToServiceProvidersFragment(2))
+
+            }
+            training.setOnClickListener {
+                it.findNavController().navigate(MainPageFragmentDirections.actionMainPageFragmentToServiceProvidersFragment(3))
+
+            }
+            grooming.setOnClickListener {
+                it.findNavController().navigate(MainPageFragmentDirections.actionMainPageFragmentToServiceProvidersFragment(4))
+
+            }
+            hostel.setOnClickListener {
+                it.findNavController().navigate(MainPageFragmentDirections.actionMainPageFragmentToServiceProvidersFragment(5))
+
+            }
+        }
+
 
     }
 

@@ -25,7 +25,7 @@ abstract class BaseServicesDataStore (@PublishedApi internal val service: ApiSer
     abstract fun createService(images :List<MultipartBody.Part>, body: CreateServiceModel): LiveData<CreateServiceModel>
 
 
-    inline fun fetchData(crossinline call: (ApiService) -> Deferred<Response<List<ServiceProvider>>>): LiveData<List<ServiceProvider>> {
+    inline fun fetchData(crossinline call: (ApiService) -> Deferred<Response<ServiceProviderResponse>>): LiveData<List<ServiceProvider>> {
         val result = MutableLiveData<List<ServiceProvider>>()
         CoroutineScope(Dispatchers.IO).launch {
             val request = call(service)
@@ -36,7 +36,7 @@ abstract class BaseServicesDataStore (@PublishedApi internal val service: ApiSer
                     val response = request.await()
                     if (response.isSuccessful) {
                         Log.d("look", "wewe")
-                        result.value = response.body()
+                        result.value = response.body()?.rows
                     } else {
                         Log.d("look", "sds")
                         Timber.d("Error occurred with code ${response.code()}")

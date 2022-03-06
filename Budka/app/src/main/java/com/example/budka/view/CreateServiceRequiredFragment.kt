@@ -8,7 +8,13 @@
 
 package com.example.budka.view
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.media.MediaScannerConnection
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -17,6 +23,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
@@ -24,15 +32,33 @@ import com.example.budka.R
 import com.example.budka.data.model.*
 import com.example.budka.databinding.CreateServiceRequiredFragmentBinding
 import com.example.budka.viewModel.CountriesListViewModel
+import com.example.budka.viewModel.ServiceDetailViewModel
+import com.example.budka.viewModel.createServiceViewModel
+import kotlinx.android.parcel.Parcelize
+import kotlinx.android.parcel.RawValue
+import kotlinx.coroutines.*
 import org.koin.android.viewmodel.ext.android.viewModel
+import timber.log.Timber
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.net.URL
 
-class CreateServiceRequiredFragment : Fragment(), SendLocationInterface {
+
+class CreateServiceRequiredFragment : Fragment(), SetLocationInterface {
     private var _viewBinding: CreateServiceRequiredFragmentBinding? = null
     private val viewBinding get() = _viewBinding!!
     private val countriesListViewModel: CountriesListViewModel by viewModel()
+    private val serviceDetailViewModel: ServiceDetailViewModel by viewModel()
+    private val createSerViewModel: createServiceViewModel by activityViewModels()
     val args: CreateServiceRequiredFragmentArgs by navArgs()
     private var latitude: Double = 0.0
     private var longitude: Double = 0.0
+    private lateinit var serviceDetail: ServiceDetail
+    private var acceptablePetTypes = MutableLiveData<String>()
+    private var acceptablePetSize = MutableLiveData<Int>()
+    private var uriList = mutableListOf<UploadImage>()
+    private  var properties: List<Properties>? = null
 
 
     override fun onCreateView(
@@ -46,6 +72,12 @@ class CreateServiceRequiredFragment : Fragment(), SendLocationInterface {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if(savedInstanceState==null){
+            args.user?.let {
+                savePhotoFromUrl()
+                serviceDetailViewModel.fetchServiceDetail(it.id)
+            }
+        }
         setObservers()
         setAdapters()
         setListeners()
@@ -60,11 +92,24 @@ class CreateServiceRequiredFragment : Fragment(), SendLocationInterface {
         countriesListViewModel.fetchCountryList().observe(viewLifecycleOwner, Observer {
             setCountries(it)
         })
+
+        serviceDetailViewModel.getServiceDetail().observe(viewLifecycleOwner, {
+            viewBinding.apply {
+                it.apply {
+                    summaryEt.setText(description)
+                    acceptablePetTypes.value = acceptablePets
+                    acceptablePetSize.value = acceptableSize
+                    this@CreateServiceRequiredFragment.latitude = latitude
+                    this@CreateServiceRequiredFragment.longitude = longitude
+                    createSerViewModel.propertiesList.value = additionalProperties
+                }
+            }
+        })
     }
 
     private fun setListeners(){
         viewBinding.mapIv.setOnClickListener {
-            val fragment = MapsFragment(true, sendLocationInterface = this)
+            val fragment = MapsFragment(true, setLocationInterface = this)
             parentFragmentManager.beginTransaction().add(R.id.fragment, fragment).addToBackStack("requiredFm").commit()
 //            it.findNavController().navigate(CreateServiceRequiredFragmentDirections.actionCreateServiceRequiredFragmentToMapsFragment(true))
 
@@ -80,15 +125,30 @@ class CreateServiceRequiredFragment : Fragment(), SendLocationInterface {
             val petSize = viewBinding.petSizeSp.selectedItem.toString()
             val country = viewBinding.countriesEdV.text.toString()
             val city = viewBinding.cityEdV.text.toString()
-            val requireFields = ServiceRequiredField(serviceType, summary, petType, petSize, country, city, this.longitude, this.latitude)
-            it.findNavController().navigate(CreateServiceRequiredFragmentDirections.actionCreateServiceRequiredFragmentToCreateServiceOptionalFragment(requireFields))
+            val requireFields = ServiceRequiredField(
+                serviceType,
+                summary,
+                petType,
+                petSize,
+                country,
+                city,
+                this.longitude,
+                this.latitude
+            )
+            createSerViewModel.imageList.value = uriList
+            it.findNavController().navigate(
+                CreateServiceRequiredFragmentDirections.actionCreateServiceRequiredFragmentToCreateServiceOptionalFragment(
+                    requiredField = requireFields, imageList = UriList(uriList), propertiesList = PropertiesList(properties)
+                )
+            )
         }
     }
 
     private fun setAdapters(){
-        setPetTypes()
         setPetSize()
         setServiceType()
+        setPetTypes()
+
     }
 
     private fun setCountries(countries: List<CountryData>){
@@ -124,6 +184,10 @@ class CreateServiceRequiredFragment : Fragment(), SendLocationInterface {
         })
 
         viewBinding.cityEdV.setAdapter(cityAdapter)
+        args.user?.user?.let {
+            viewBinding.countriesEdV.setText(it.country)
+            viewBinding.cityEdV.setText(it.city)
+        }
     }
 
     private fun setPetTypes(){
@@ -131,8 +195,30 @@ class CreateServiceRequiredFragment : Fragment(), SendLocationInterface {
         for (pet in PetType.values()) {
             petTypeList.add(pet.value)
         }
-        viewBinding.petTypeSp.setItems(petTypeList, "Выбрать",null) {}
+        val map = mutableMapOf<String, Boolean>()
+        petTypeList.forEach {
+            map[it] = false
+        }
+        viewBinding.petTypeSp.setItems(petTypeList, "Выбрать", null) {}
 
+
+        acceptablePetTypes.observe(viewLifecycleOwner, {
+        if(it.length > 2 && !it.contains("Выбрать")) {
+                val splittedPetTypes =it.split(",")
+                splittedPetTypes.forEach {
+                    if(map.containsKey(it)){
+                        map[it] = true
+                    }
+                }
+                viewBinding.petTypeSp.setItems(
+                    petTypeList,
+                    it,
+                    map.values.toBooleanArray()
+                ) {}
+            }
+            else
+                viewBinding.petTypeSp.setItems(petTypeList, "Выбрать", null) {}
+        })
     }
 
     private fun setServiceType() {
@@ -145,6 +231,9 @@ class CreateServiceRequiredFragment : Fragment(), SendLocationInterface {
             R.layout.item_pet_type_filter, R.id.text_view_pet_type_item, serviceType
         )
         viewBinding.serviceTypeSp.adapter = serviceAdapter
+        args.user?.let {
+            it.serviceType?.let { it1 -> viewBinding.serviceTypeSp.setSelection(it1) }
+        }
     }
 
     private fun setPetSize() {
@@ -152,6 +241,7 @@ class CreateServiceRequiredFragment : Fragment(), SendLocationInterface {
         petSizeList.add("меньше 5кг")
         petSizeList.add("меньше 10кг")
         petSizeList.add("меньше 20кг")
+        petSizeList.add("меньше 30кг")
         petSizeList.add("меньше 40кг")
         petSizeList.add("больше 40кг")
         val petSizeAdapter = ArrayAdapter<String>(
@@ -159,6 +249,19 @@ class CreateServiceRequiredFragment : Fragment(), SendLocationInterface {
             R.layout.item_pet_type_filter, R.id.text_view_pet_type_item, petSizeList
         )
         viewBinding.petSizeSp.adapter = petSizeAdapter
+        acceptablePetSize.observe(viewLifecycleOwner,{
+            viewBinding.petSizeSp.setSelection(
+                when (it) {
+                    5 -> 0
+                    10 -> 1
+                    20 -> 2
+                    30 -> 3
+                    40 -> 4
+                    50 -> 5
+                    else -> return@observe
+                }
+            )
+        })
     }
 
     override fun sendLocation(longitude: Double, latitude: Double) {
@@ -166,4 +269,63 @@ class CreateServiceRequiredFragment : Fragment(), SendLocationInterface {
         this.latitude = latitude
     }
 
+    fun savePhotoFromUrl(){
+        val job = Job()
+        val scopeForSaving = CoroutineScope(job + Dispatchers.Main)
+        args.user.let { service ->
+            service?.images?.forEach {
+                val url = URL(it)
+                val num = it.substring(it.lastIndexOf('/')+1)
+                scopeForSaving.launch {
+                    saveToStorage(url, service.user?.fullName + num)
+                }
+            }
+        }
+
+    }
+
+    private suspend fun saveToStorage(url: URL, imageName: String) {
+
+                withContext(Dispatchers.IO){
+                    val image = BitmapFactory.decodeStream(url.openConnection().getInputStream())
+                    val path: File =
+                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES + "Budka") //Creates app specific folder
+
+                    path.mkdirs()
+                    val imageFile = File(path, "$imageName.png") // Imagename.png
+
+                    val out = FileOutputStream(imageFile)
+                    try {
+                        image.compress(Bitmap.CompressFormat.PNG, 100, out) // Compress Image
+                        out.flush()
+                        out.close()
+
+                        // Tell the media scanner about the new file so that it is
+                        // immediately available to the user.
+                        MediaScannerConnection.scanFile(
+                            context, arrayOf(imageFile.getAbsolutePath()), null
+                        ) { path, uri ->
+                            uriList.add(UploadImage(uri, false))
+                        }
+                    } catch (e: Exception) {
+                        Timber.d(e.toString())
+                    }
+
+            }
+        }
+
+
+
+
 }
+
+@Parcelize
+data class UriList(
+    val uriList:  @RawValue List<UploadImage>?
+): Parcelable
+
+@Parcelize
+data class PropertiesList(
+
+    val propertiesList:  @RawValue List<Properties>?
+): Parcelable
