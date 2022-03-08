@@ -33,6 +33,18 @@
         <argument
             android:name="serviceType"
             app:argType="integer" />
+        <argument
+            android:name="country"
+            android:defaultValue="@null"
+            app:nullable="true"
+            app:argType="string"
+            />
+        <argument
+            android:name="city"
+            android:defaultValue="@null"
+            app:nullable="true"
+            app:argType="string"
+            />
         <action
             android:id="@+id/action_service_providers_fragment_to_pet_sitters_filter_fragment"
             app:destination="@id/service_provider_filter_fragment" />
@@ -64,7 +76,15 @@
     <fragment
         android:id="@+id/service_provider_filter_fragment"
         android:name="com.example.budka.view.ServiceProviderFilterFragment"
-        android:label="PetSittersFilterFragment" />
+        android:label="PetSittersFilterFragment" >
+
+        <action
+            android:id="@+id/action_service_provider_filter_fragment_to_ServiceProvidersListFragment"
+            app:destination="@id/ServiceProvidersListFragment" />
+        <argument
+            android:name="serviceType"
+            app:argType="integer" />
+    </fragment>
 
     <fragment
         android:id="@+id/createServiceApplicationFragment"
@@ -143,6 +163,11 @@
             android:defaultValue="0.0"
             />
         <argument
+            android:name="operationType"
+            app:argType="string"
+            android:defaultValue="create"
+            />
+        <argument
             android:name="longitude"
             app:argType="float"
             android:defaultValue="0.0"
@@ -172,16 +197,9 @@
             app:argType="com.example.budka.data.model.ServiceProvider"
             />
         <argument
-            android:name="propertiesList"
-            android:defaultValue="@null"
-            app:nullable="true"
-            app:argType="com.example.budka.view.PropertiesList"
-            />
-        <argument
-            android:name="imageList"
-            android:defaultValue="@null"
-            app:nullable="true"
-            app:argType="com.example.budka.view.UriList"
+            android:name="operationType"
+            app:argType="string"
+            android:defaultValue="create"
             />
     </fragment>
     <fragment
@@ -216,6 +234,17 @@
         <action
             android:id="@+id/action_createPetFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <argument
+            android:name="pet"
+            android:defaultValue="@null"
+            app:nullable="true"
+            app:argType="com.example.budka.data.model.Pet"
+            />
+        <argument
+            android:name="operationType"
+            app:argType="string"
+            android:defaultValue="create"
+            />
     </fragment>
     <fragment
         android:id="@+id/favoriteServicesFragment"

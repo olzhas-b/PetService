@@ -25,6 +25,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.budka.R
+import com.example.budka.data.model.ServiceProvider
 import com.example.budka.databinding.MainPageFragmentBinding
 import com.example.budka.utils.Constants
 import com.example.budka.view.adapter.PetSittersListHorizontalAdapter
@@ -32,8 +33,7 @@ import com.example.budka.view.adapter.PetsListHorizontalAdapter
 import com.example.budka.view.adapter.viewHolder.FavListener
 import com.example.budka.viewModel.PetSittersListViewModel
 import com.example.budka.viewModel.PetsListViewModel
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.main_page_fragment.*
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -45,16 +45,53 @@ class MainPageFragment: Fragment() {
     private lateinit var petSittersListHorizontalAdapter: PetSittersListHorizontalAdapter
     private val petsListViewModel: PetsListViewModel by viewModel()
     private val petSittersListViewModel: PetSittersListViewModel by viewModel()
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var country: String? = null
+    private var city: String? = null
+    private lateinit var petSitterListObserver: Observer<List<ServiceProvider>>
+    private lateinit var locationUpdates: LocationCallback
 
-//    private val petsListHorizontalAdapter by lazy {
+
+    //    private val petsListHorizontalAdapter by lazy {
 //        PetsListHorizontalAdapter(petsListViewModel)
 //    }
+
+    init {
+        locationUpdates = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult?) {
+                fusedLocationClient.removeLocationUpdates(this)
+                if (locationResult != null && locationResult.locations.isNotEmpty()) {
+                    val newLocation = locationResult.locations[0]
+                    if(context!=null){
+                        country = getUserAddress(newLocation.latitude, newLocation.longitude).split(',')[1]
+                        city = getUserAddress(newLocation.latitude, newLocation.longitude).split(',')[0]
+                        petSittersListViewModel.fetchPetSittersList(0, country, city)
+                        petSittersListViewModel.getPetSittersList().observe(viewLifecycleOwner, petSitterListObserver)
+
+
+                    }
+
+                } else {
+
+                    Toast.makeText(
+
+                        context,
+                        "Включите геопозицию",
+                        Toast.LENGTH_LONG
+                    ).show()
+
+
+                }
+            }
+        }
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-    viewBinding = MainPageFragmentBinding.inflate(inflater, container, false)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        viewBinding = MainPageFragmentBinding.inflate(inflater, container, false)
         return viewBinding.root
     }
 
@@ -63,11 +100,15 @@ class MainPageFragment: Fragment() {
         activity?.window?.statusBarColor = resources.getColor(R.color.mainColor)
         Picasso.get().load(R.drawable.banner).fit().centerCrop().placeholder(R.drawable.banner).into(viewBinding.bannerIv)
         if(savedInstanceState==null){
-        petSittersListViewModel.fetchPetSittersList(0)
+            petSittersListViewModel.fetchPetSittersList(0, country, city)
+
         }
+        petSitterListObserver = Observer { petSittersListHorizontalAdapter.updatePetSittersList(it) }
         setupAdapter()
         setObservers()
         setOnClickListener()
+        getLastKnownLocation()
+
     }
 
     private fun setObservers(){
@@ -75,9 +116,7 @@ class MainPageFragment: Fragment() {
             petsListHorizontalAdapter.updatePetList(it)
         })
 
-        petSittersListViewModel.getPetSittersList().observe(viewLifecycleOwner, {
-            petSittersListHorizontalAdapter.updatePetSittersList(it)
-        })
+        petSittersListViewModel.getPetSittersList().observe(viewLifecycleOwner, petSitterListObserver)
 
 
     }
@@ -132,6 +171,72 @@ class MainPageFragment: Fragment() {
 
 
     }
+
+    private fun getLastKnownLocation() {
+        val locationRequest = LocationRequest().apply {
+            interval = 120000
+            fastestInterval = 120000
+            priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
+        }
+
+        if (!checkPermission()) {
+            requestPermission()
+        } else {
+            fusedLocationClient.lastLocation
+                .addOnSuccessListener(requireActivity()) { location ->
+                    if (location == null || location.accuracy > 100) {
+                        fusedLocationClient.requestLocationUpdates(
+                            locationRequest,
+                            locationUpdates, null
+                        )
+                    } else {
+
+                        Toast.makeText(context, "Включите геопозицию", Toast.LENGTH_LONG).show()
+                    }
+                }
+                .addOnFailureListener {
+
+                    Toast.makeText(context, "Включите геопозицию", Toast.LENGTH_LONG).show()
+                }
+
+        }
+
+
+    }
+
+    private fun checkPermission(): Boolean {
+        if(ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+            ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
+            == PackageManager.PERMISSION_GRANTED)
+            return true
+        return false
+    }
+
+    private fun requestPermission() {
+        ActivityCompat.requestPermissions(requireActivity(),
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION), Constants.LOCATION_PERMISSION_CODE
+        )
+    }
+
+    private fun getUserAddress(latitude: Double, longitude: Double): String {
+        val geoCoder = Geocoder(requireContext(), Locale.getDefault())
+
+        val address =  geoCoder.getFromLocation(latitude, longitude, 1)
+        val cityName = address.get(0).locality
+        val countryName = address.get(0).countryName
+        return "$cityName, $countryName"
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        fusedLocationClient.removeLocationUpdates(locationUpdates)
+
+        petSittersListViewModel.getPetSittersList().removeObserver (petSitterListObserver)
+    }
+
 
 
 }

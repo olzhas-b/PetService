@@ -117,7 +117,7 @@ class CreateServiceRequiredFragment : Fragment(), SetLocationInterface {
         viewBinding.optionalNavigateBtn.setOnClickListener {
             var serviceType: Int = 0
             ServiceType.from(viewBinding.serviceTypeSp.selectedItem.toString())?.let {
-                serviceType = ServiceType.valueOf(it.name).ordinal + 1
+                serviceType = ServiceType.valueOf(it.name).ordinal
             }
 
             val summary = viewBinding.summaryEt.text.toString()
@@ -126,6 +126,7 @@ class CreateServiceRequiredFragment : Fragment(), SetLocationInterface {
             val country = viewBinding.countriesEdV.text.toString()
             val city = viewBinding.cityEdV.text.toString()
             val requireFields = ServiceRequiredField(
+                args.user?.id,
                 serviceType,
                 summary,
                 petType,
@@ -138,7 +139,7 @@ class CreateServiceRequiredFragment : Fragment(), SetLocationInterface {
             createSerViewModel.imageList.value = uriList
             it.findNavController().navigate(
                 CreateServiceRequiredFragmentDirections.actionCreateServiceRequiredFragmentToCreateServiceOptionalFragment(
-                    requiredField = requireFields, imageList = UriList(uriList), propertiesList = PropertiesList(properties)
+                    requiredField = requireFields, operationType = args.operationType
                 )
             )
         }

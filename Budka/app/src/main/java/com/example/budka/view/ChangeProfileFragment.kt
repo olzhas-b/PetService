@@ -13,9 +13,13 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
@@ -30,10 +34,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.budka.R
-import com.example.budka.data.model.CountryData
-import com.example.budka.data.model.SessionManager
-import com.example.budka.data.model.User
-import com.example.budka.data.model.UserUpdate
+import com.example.budka.data.model.*
 import com.example.budka.databinding.FragmentProfileBinding
 import com.example.budka.databinding.FragmentUpdateProfileBinding
 import com.example.budka.utils.FileUtils
@@ -41,11 +42,15 @@ import com.example.budka.viewModel.CountriesListViewModel
 import com.example.budka.viewModel.ProfileViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_pet_sitter_detail.*
+import kotlinx.coroutines.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
+import java.io.File
+import java.io.FileOutputStream
+import java.net.URL
 
 class ChangeProfileFragment: Fragment() {
     private var _viewBinding: FragmentUpdateProfileBinding? = null
@@ -72,6 +77,7 @@ class ChangeProfileFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        savePhotoFromUrl()
         autoFillFields(arg.profile)
         setObservers()
         setListeners()
@@ -121,12 +127,12 @@ class ChangeProfileFragment: Fragment() {
         viewBinding.confirmBtn.setOnClickListener {
             viewBinding.apply {
                  val user =UserUpdate(
-                    firstName = updateNameEt.toString(),
-                    lastName = updateSurnameEt.toString(),
-                    fullName = updateNameEt.toString() +" "+ updateSurnameEt.toString(),
-                    city = cityEdV.toString(),
-                    country = countriesEdV.toString(),
-                    description = updateDescriptionEt.toString()
+                    firstName = updateNameEt.text.toString(),
+                    lastName = updateSurnameEt.text.toString(),
+                    fullName = updateNameEt.text.toString() +" "+ updateSurnameEt.text.toString(),
+                    city = cityEdV.text.toString(),
+                    country = countriesEdV.text.toString(),
+                    description = updateDescriptionEt.text.toString()
                 )
                 val image = imageUri?.let { it1 -> prepareFilePart("image", it1) }
 
@@ -246,9 +252,54 @@ class ChangeProfileFragment: Fragment() {
         }
     }
 
+    fun savePhotoFromUrl(){
+        val job = Job()
+        val scopeForSaving = CoroutineScope(job + Dispatchers.Main)
+        arg.profile.let { profile ->
+            if(profile.avatar.length>5) {
+                val url = URL(profile.avatar)
+                val num = profile.avatar.substring(profile.avatar.lastIndexOf('/') + 1)
+                scopeForSaving.launch {
+                    saveToStorage(url, profile.fullName + num)
+                }
+            }
+        }
+
+    }
+
     private fun prepareFilePart(partName: String, fileUri: Uri): MultipartBody.Part{
         val file = FileUtils.getFile(requireContext(), fileUri)
         val requestFile = RequestBody.create(MediaType.parse(requireContext().contentResolver.getType(fileUri)), file)
         return MultipartBody.Part.createFormData(partName, file.name, requestFile)
+    }
+
+    private suspend fun saveToStorage(url: URL, imageName: String) {
+
+        withContext(Dispatchers.IO){
+            val image = BitmapFactory.decodeStream(url.openConnection().getInputStream())
+            val path: File =
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES + "Budka") //Creates app specific folder
+
+            path.mkdirs()
+            val imageFile = File(path, "$imageName.png") // Imagename.png
+
+            val out = FileOutputStream(imageFile)
+            try {
+                image.compress(Bitmap.CompressFormat.PNG, 100, out) // Compress Image
+                out.flush()
+                out.close()
+
+                // Tell the media scanner about the new file so that it is
+                // immediately available to the user.
+                MediaScannerConnection.scanFile(
+                    context, arrayOf(imageFile.getAbsolutePath()), null
+                ) { path, uri ->
+                    imageUri = uri
+                }
+            } catch (e: Exception) {
+                Timber.d(e.toString())
+            }
+
+        }
     }
 }

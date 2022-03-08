@@ -331,7 +331,10 @@ class CreateServiceOptionalFragment : Fragment(), UploadNewImageListener, EditTe
                 imagesToService.add(prepareFilePart("images", it))
             }
         }
-        servicesViewModel.createService(imagesToService, createServiceModel)
+        if(arg.operationType == "update")
+            arg.requiredField.serviceId?.let { servicesViewModel.updateService(imagesToService, createServiceModel, it) }
+        else
+            servicesViewModel.createService(imagesToService, createServiceModel)
     }
 
     private fun prepareFilePart(partName: String, fileUri: Uri): MultipartBody.Part{

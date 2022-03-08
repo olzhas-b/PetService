@@ -45,7 +45,9 @@ interface ApiService {
     ): Deferred<Response<Pet>>
 
     @GET(API +"service")
-    fun getPetSitters(@Query("serviceType") serviceType: Int): Deferred<Response<ServiceProviderResponse>>
+    fun getPetSitters(@Query("serviceType") serviceType: Int,
+    @Query("country") country: String?,
+    @Query("city") city: String?): Deferred<Response<ServiceProviderResponse>>
 
     @Multipart
     @POST(API +"service/new")
@@ -53,6 +55,16 @@ interface ApiService {
     fun createService(
         @Part images :List<MultipartBody.Part>,
         @Part("body") body: CreateServiceModel,
+    ): Deferred<Response<CreateServiceModel>>
+
+
+    @Multipart
+    @POST(API + "service/{serviceId}")
+    @JvmSuppressWildcards
+    fun updateService(
+        @Part images :List<MultipartBody.Part>,
+        @Part("body") body: CreateServiceModel,
+        @Path("serviceId") serviceId: Int
     ): Deferred<Response<CreateServiceModel>>
 
     @GET(API +"service/{serviceId}/detail")

@@ -12,9 +12,13 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
@@ -35,11 +39,15 @@ import com.example.budka.utils.FileUtils
 import com.example.budka.viewModel.CountriesListViewModel
 import com.example.budka.viewModel.PetsListViewModel
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
+import java.io.File
+import java.io.FileOutputStream
+import java.net.URL
 
 class CreatePetFragment : Fragment() {
     val REQUEST_CODE = 200
@@ -48,6 +56,8 @@ class CreatePetFragment : Fragment() {
     private val viewBinding get() = _viewBinding!!
     private val petsListViewModel: PetsListViewModel by viewModel()
     private var imageUri: Uri? = null
+    val args: CreatePetFragmentArgs by navArgs()
+
 
 
 
@@ -75,7 +85,18 @@ class CreatePetFragment : Fragment() {
         setObservers()
         setAdapters()
         setListeners()
+        args.pet?.image?.let {
+            savePhotoFromUrl()
+            Picasso.get().load(args.pet?.image).into(viewBinding.uploadIv)
+
+        }?:run{
+            viewBinding.uploadIv.setImageResource(R.drawable.ic_upload_photo)
+        }
+        viewBinding.petNameEt.setText(args.pet?.name)
+        viewBinding.petBreedEt.setText(args.pet?.breed)
+
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -142,6 +163,13 @@ class CreatePetFragment : Fragment() {
         )
         viewBinding.petTypeSp.adapter = typeAdapter
 
+        args.pet?.let { pet->
+            val position = PetType.values().find { it.value == pet.type }?.ordinal
+            if (position != null) {
+                viewBinding.petTypeSp.setSelection(position)
+            }
+        }
+
     }
 
     private fun setPetSize() {
@@ -149,6 +177,7 @@ class CreatePetFragment : Fragment() {
         petSizeList.add("меньше 5кг")
         petSizeList.add("меньше 10кг")
         petSizeList.add("меньше 20кг")
+        petSizeList.add("меньше 30кг")
         petSizeList.add("меньше 40кг")
         petSizeList.add("больше 40кг")
         val petSizeAdapter = ArrayAdapter<String>(
@@ -156,6 +185,20 @@ class CreatePetFragment : Fragment() {
             R.layout.item_pet_type_filter, R.id.text_view_pet_type_item, petSizeList
         )
         viewBinding.petSizeSp.adapter = petSizeAdapter
+        when (args.pet?.weight) {
+            5 -> 0
+            10 -> 1
+            20 -> 2
+            30 -> 3
+            40 -> 4
+            50 -> 5
+            else -> null
+        }?.let {
+            viewBinding.petSizeSp.setSelection(
+                it
+            )
+        }
+
     }
 
 
@@ -231,5 +274,48 @@ class CreatePetFragment : Fragment() {
         return MultipartBody.Part.createFormData(partName, file.name, requestFile)
     }
 
-}
+    fun savePhotoFromUrl(){
+        val job = Job()
+        val scopeForSaving = CoroutineScope(job + Dispatchers.Main)
+        args.pet.let { pet ->
+                val url = URL(pet?.image)
+                val num = pet?.image?.substring(pet.image.lastIndexOf('/') + 1)
+            scopeForSaving.launch {
+                saveToStorage(url, pet?.name + num)
+            }
+            }
+        }
+    private suspend fun saveToStorage(url: URL, imageName: String) {
+
+        withContext(Dispatchers.IO){
+            val image = BitmapFactory.decodeStream(url.openConnection().getInputStream())
+            val path: File =
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES + "Budka") //Creates app specific folder
+
+            path.mkdirs()
+            val imageFile = File(path, "$imageName.png") // Imagename.png
+
+            val out = FileOutputStream(imageFile)
+            try {
+                image.compress(Bitmap.CompressFormat.PNG, 100, out) // Compress Image
+                out.flush()
+                out.close()
+
+                // Tell the media scanner about the new file so that it is
+                // immediately available to the user.
+                MediaScannerConnection.scanFile(
+                    context, arrayOf(imageFile.getAbsolutePath()), null
+                ) { path, uri ->
+                    imageUri = uri
+                }
+            } catch (e: Exception) {
+                Timber.d(e.toString())
+            }
+
+        }
+    }
+
+    }
+
+
 

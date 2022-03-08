@@ -25,4 +25,11 @@ class ServicesUseCase (private val servicesRepository: ServicesRepository){
     ): LiveData<CreateServiceModel>{
         return servicesRepository.createService(images, body)
     }
+
+    fun updateService(images: List<MultipartBody.Part>,
+                      body: CreateServiceModel,
+                      serviceId: Int
+    ): LiveData<CreateServiceModel>{
+        return servicesRepository.updateService(images, body, serviceId)
+    }
 }

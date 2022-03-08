@@ -41,8 +41,10 @@ class ServiceProvidersAdapter internal constructor(
         return employeesList.size
     }
 
-    fun updateEmployeeList(employeeList: List<ServiceProvider>){
-        this.employeesList = employeeList
+    fun updateEmployeeList(employeeList: List<ServiceProvider>?){
+        if (employeeList != null) {
+            this.employeesList = employeeList
+        }
         notifyDataSetChanged()
     }
 

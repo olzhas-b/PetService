@@ -18,4 +18,9 @@ interface ServicesRepository {
     fun createService(images: List<MultipartBody.Part>,
                       body: CreateServiceModel
     ): LiveData<CreateServiceModel>
+
+    fun updateService(images: List<MultipartBody.Part>,
+                      body: CreateServiceModel,
+                      serviceId: Int
+    ): LiveData<CreateServiceModel>
 }

@@ -47,6 +47,10 @@ class ServiceProvidersListFragment: Fragment(), FavListener, NavigationListener 
     private lateinit var serviceProvidersAdapter: ServiceProvidersAdapter
     private val petSittersListViewModel: PetSittersListViewModel by viewModel()
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var country: String? = null
+    private var city: String? = null
+    private var locationUpdates: LocationCallback
+
 
 
     override fun onCreateView(
@@ -59,12 +63,54 @@ class ServiceProvidersListFragment: Fragment(), FavListener, NavigationListener 
         return viewBinding.root
     }
 
+    init {
+        locationUpdates = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult?) {
+                fusedLocationClient.removeLocationUpdates(this)
+                if (locationResult != null && locationResult.locations.isNotEmpty()) {
+                    val newLocation = locationResult.locations[0]
+                    if(context!=null){
+                        viewBinding.petSitterLocationTv.text =
+                            getUserAddress(newLocation.latitude, newLocation.longitude)
+                        country = getUserAddress(newLocation.latitude, newLocation.longitude).split(',')[1]
+                        city = getUserAddress(newLocation.latitude, newLocation.longitude).split(',')[0]
+                        petSittersListViewModel.fetchPetSittersList(0, country, city)
+                        petSittersListViewModel.getPetSittersList().observe(viewLifecycleOwner, {
+                            serviceProvidersAdapter.updateEmployeeList(it)
+                        })
+
+
+                    }
+
+                } else {
+
+                    Toast.makeText(
+
+                        context,
+                        "Включите геопозицию",
+                        Toast.LENGTH_LONG
+                    ).show()
+
+
+                }
+            }
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getLastKnownLocation()
         if(savedInstanceState==null){
-            petSittersListViewModel.fetchPetSittersList(arg.serviceType)
+            arg.apply {
+                this@ServiceProvidersListFragment.country = country
+                this@ServiceProvidersListFragment.city = city
+            }
+            petSittersListViewModel.fetchPetSittersList(arg.serviceType, country, city)
+
+
+
         }
+        if( arg.country == null && arg.city == null)
+            getLastKnownLocation()
         setupAdapter()
         setObservers()
         setOnClickListener()
@@ -88,7 +134,7 @@ class ServiceProvidersListFragment: Fragment(), FavListener, NavigationListener 
 
     private fun setOnClickListener(){
         viewBinding.petSitterFilterIb.setOnClickListener{
-            it.findNavController().navigate(ServiceProvidersListFragmentDirections.actionServiceProvidersFragmentToPetSittersFilterFragment())
+            it.findNavController().navigate(ServiceProvidersListFragmentDirections.actionServiceProvidersFragmentToPetSittersFilterFragment(arg.serviceType))
         }
 
     }
@@ -96,40 +142,21 @@ class ServiceProvidersListFragment: Fragment(), FavListener, NavigationListener 
 
     private fun getLastKnownLocation() {
         val locationRequest = LocationRequest().apply {
-            interval = 120000
-            fastestInterval = 120000
+            interval = 12000
+            fastestInterval = 12000
             priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
         }
+
+
         if (!checkPermission()) {
             requestPermission()
         } else {
             fusedLocationClient.lastLocation
                 .addOnSuccessListener(requireActivity()) { location ->
                     if (location == null || location.accuracy > 100) {
-                        val mLocationCallback = object : LocationCallback() {
-                            override fun onLocationResult(locationResult: LocationResult?) {
-                                fusedLocationClient.removeLocationUpdates(this)
-                                if (locationResult != null && locationResult.locations.isNotEmpty()) {
-                                    val newLocation = locationResult.locations[0]
-                                    if(context!=null){
-                                        viewBinding.petSitterLocationTv.text =
-                                            getUserAddress(newLocation.latitude, newLocation.longitude)
-                                    }
-
-                                } else {
-                                    Toast.makeText(
-                                        context,
-                                        "Включите геопозицию",
-                                        Toast.LENGTH_LONG
-                                    ).show()
-
-                                }
-                            }
-                        }
-
                         fusedLocationClient.requestLocationUpdates(
                             locationRequest,
-                            mLocationCallback, null
+                            locationUpdates, null
                         )
                     } else {
                         Toast.makeText(context, "Включите геопозицию", Toast.LENGTH_LONG).show()
@@ -138,6 +165,8 @@ class ServiceProvidersListFragment: Fragment(), FavListener, NavigationListener 
                 .addOnFailureListener {
                     Toast.makeText(context, "Включите геопозицию", Toast.LENGTH_LONG).show()
                 }
+
+
         }
     }
 
@@ -182,6 +211,12 @@ class ServiceProvidersListFragment: Fragment(), FavListener, NavigationListener 
 
     override fun navigate(serviceProviderData: ServiceProvider) {
         findNavController().navigate(ServiceProvidersListFragmentDirections.actionServiceProvidersFragmentToServiceProviderDetailFragment(serviceProviderData))
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        fusedLocationClient.removeLocationUpdates(locationUpdates)
 
     }
 

@@ -22,8 +22,8 @@ class PetSittersListViewModel (private val petSittersListUseCase: PetSittersList
     private var favoriteServicesList = MutableLiveData<List<ServiceProvider>>()
 
 
-    fun fetchPetSittersList(serviceType: Int) {
-        petSittersList = petSittersListUseCase.getPetSittersList(serviceType) as MutableLiveData<List<ServiceProvider>>
+    fun fetchPetSittersList(serviceType: Int, country: String?, city: String?) {
+        petSittersList = petSittersListUseCase.getPetSittersList(serviceType, country, city) as MutableLiveData<List<ServiceProvider>>
     }
 
     fun getPetSittersList(): LiveData<List<ServiceProvider>> {

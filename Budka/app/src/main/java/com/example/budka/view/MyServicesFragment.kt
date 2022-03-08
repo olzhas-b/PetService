@@ -17,17 +17,19 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.budka.data.model.Pet
 import com.example.budka.data.model.ServiceProvider
 import com.example.budka.databinding.FragmentMyServicesBinding
 import com.example.budka.view.adapter.ServiceProvidersAdapter
 import com.example.budka.view.adapter.UserPetsAdapter
 import com.example.budka.view.adapter.viewHolder.NavigationListener
+import com.example.budka.view.adapter.viewHolder.PetEditListener
 import com.example.budka.viewModel.PetsListViewModel
 import com.example.budka.viewModel.ServicesViewModel
 import kotlinx.android.synthetic.main.fragment_my_services.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MyServicesFragment : Fragment(), NavigationListener {
+class MyServicesFragment : Fragment(), NavigationListener, PetEditListener {
 
     private var _viewBinding: FragmentMyServicesBinding? = null
     private val viewBinding get() = _viewBinding!!
@@ -117,7 +119,7 @@ class MyServicesFragment : Fragment(), NavigationListener {
     }
 
     private fun setupPetsAdapter(){
-        myPetsAdapter = UserPetsAdapter(0)
+        myPetsAdapter = UserPetsAdapter(0, navigationListener = this)
         val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         myServicesRv.layoutManager = layoutManager
         myServicesRv.adapter = myPetsAdapter
@@ -126,6 +128,10 @@ class MyServicesFragment : Fragment(), NavigationListener {
     }
 
     override fun navigate(serviceProviderData: ServiceProvider) {
-        findNavController().navigate(MyServicesFragmentDirections.actionMyServicesToCreateServiceRequiredFragment(user = serviceProviderData))
+        findNavController().navigate(MyServicesFragmentDirections.actionMyServicesToCreateServiceRequiredFragment(user = serviceProviderData, operationType = "update"))
+    }
+
+    override fun navigate(petsData: Pet) {
+        findNavController().navigate(MyServicesFragmentDirections.actionMyServicesToCreatePetFragment(pet = petsData, operationType = "update"))
     }
 }

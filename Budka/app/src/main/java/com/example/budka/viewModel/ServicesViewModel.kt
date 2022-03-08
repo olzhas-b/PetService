@@ -33,4 +33,11 @@ class ServicesViewModel (private val servicesUseCase: ServicesUseCase): BaseView
         return servicesUseCase.createService(images, body)
     }
 
+    fun updateService(images: List<MultipartBody.Part>,
+                      body: CreateServiceModel,
+                      serviceId: Int
+    ): LiveData<CreateServiceModel>{
+        return servicesUseCase.updateService(images, body, serviceId)
+    }
+
 }

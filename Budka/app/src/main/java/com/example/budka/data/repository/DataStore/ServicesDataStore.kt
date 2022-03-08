@@ -33,4 +33,14 @@ class ServicesDataStore(apiService: ApiService): ServicesRepository, BaseService
 
             service.createService( images, body) }
     }
+
+    override fun updateService(
+        images: List<MultipartBody.Part>,
+        body: CreateServiceModel,
+        serviceId: Int
+    ): LiveData<CreateServiceModel> {
+        return postService {
+
+            service.updateService( images, body, serviceId) }
+    }
 }

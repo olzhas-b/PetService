@@ -42,8 +42,10 @@ class PetSittersListHorizontalAdapter internal constructor(
         return  petSitterList.size
     }
 
-    fun updatePetSittersList(petSitterList: List<ServiceProvider>){
-        this.petSitterList = petSitterList
+    fun updatePetSittersList(petSitterList: List<ServiceProvider>?){
+        if (petSitterList != null) {
+            this.petSitterList = petSitterList
+        }
         Log.d("myList", petSitterList.toString())
         notifyDataSetChanged()
     }
