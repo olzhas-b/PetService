@@ -32,4 +32,12 @@ class PetsListDataStore(apiService: ApiService): PetsListRepository, BasePetsDat
     ): LiveData<Pet> {
         return getPetResponse { service.createPet(image, body) }
     }
+
+    override fun updatePet(image: MultipartBody.Part, body: PetCreate, petId: Int): LiveData<Pet> {
+        return getPetResponse { service.updatePet(image, body, petId) }
+    }
+
+    override fun deletePet(petId: Int): LiveData<String> {
+        return deleteResponse {service.deletePet(petId)}
+    }
 }

@@ -49,6 +49,7 @@ class ServiceProvidersListFragment: Fragment(), FavListener, NavigationListener 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var country: String? = null
     private var city: String? = null
+    private var petType: String? = null
     private var locationUpdates: LocationCallback
 
 
@@ -74,7 +75,7 @@ class ServiceProvidersListFragment: Fragment(), FavListener, NavigationListener 
                             getUserAddress(newLocation.latitude, newLocation.longitude)
                         country = getUserAddress(newLocation.latitude, newLocation.longitude).split(',')[1]
                         city = getUserAddress(newLocation.latitude, newLocation.longitude).split(',')[0]
-                        petSittersListViewModel.fetchPetSittersList(0, country, city)
+                        petSittersListViewModel.fetchPetSittersList(0, country, city, petType)
                         petSittersListViewModel.getPetSittersList().observe(viewLifecycleOwner, {
                             serviceProvidersAdapter.updateEmployeeList(it)
                         })
@@ -103,8 +104,9 @@ class ServiceProvidersListFragment: Fragment(), FavListener, NavigationListener 
             arg.apply {
                 this@ServiceProvidersListFragment.country = country
                 this@ServiceProvidersListFragment.city = city
+                this@ServiceProvidersListFragment.petType = petType
             }
-            petSittersListViewModel.fetchPetSittersList(arg.serviceType, country, city)
+            petSittersListViewModel.fetchPetSittersList(arg.serviceType, country, city, petType)
 
 
 

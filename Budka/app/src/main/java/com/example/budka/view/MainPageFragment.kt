@@ -65,7 +65,7 @@ class MainPageFragment: Fragment() {
                     if(context!=null){
                         country = getUserAddress(newLocation.latitude, newLocation.longitude).split(',')[1]
                         city = getUserAddress(newLocation.latitude, newLocation.longitude).split(',')[0]
-                        petSittersListViewModel.fetchPetSittersList(0, country, city)
+                        petSittersListViewModel.fetchPetSittersList(0, country, city, null)
                         petSittersListViewModel.getPetSittersList().observe(viewLifecycleOwner, petSitterListObserver)
 
 
@@ -100,7 +100,7 @@ class MainPageFragment: Fragment() {
         activity?.window?.statusBarColor = resources.getColor(R.color.mainColor)
         Picasso.get().load(R.drawable.banner).fit().centerCrop().placeholder(R.drawable.banner).into(viewBinding.bannerIv)
         if(savedInstanceState==null){
-            petSittersListViewModel.fetchPetSittersList(0, country, city)
+            petSittersListViewModel.fetchPetSittersList(0, country, city,null)
 
         }
         petSitterListObserver = Observer { petSittersListHorizontalAdapter.updatePetSittersList(it) }

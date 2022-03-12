@@ -116,7 +116,7 @@ data class User(
     @SerializedName("averageRating")
     val averageRating: Float,
     @SerializedName("image")
-    val avatar: String
+    val avatar: String?
 ): Parcelable
 
 @Parcelize

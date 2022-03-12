@@ -136,7 +136,10 @@ class CreatePetFragment : Fragment() {
             val image = imageUri?.let { it1 -> prepareFilePart("image", it1) }
 
             if (image != null) {
-                petsListViewModel.createPet(image, pet)
+                if(args.operationType == "update")
+                    args.pet?.let { it1 -> petsListViewModel.updatePet(image, pet, it1.id) }
+                else
+                    petsListViewModel.createPet(image, pet)
             }
 
 

@@ -31,4 +31,16 @@ class PetsListUseCase(val petsListRepository: PetsListRepository){
     ) : LiveData<Pet>{
         return petsListRepository.createPet(image, body)
     }
+
+    fun updatePet(
+        image: MultipartBody.Part,
+        body: PetCreate,
+        petId: Int
+    ) : LiveData<Pet>{
+        return petsListRepository.updatePet(image, body, petId)
+    }
+
+    fun deletePet(petId: Int){
+        petsListRepository.deletePet(petId)
+    }
 }

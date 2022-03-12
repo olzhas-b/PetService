@@ -45,6 +45,12 @@
             app:nullable="true"
             app:argType="string"
             />
+        <argument
+            android:name="petType"
+            android:defaultValue="@null"
+            app:nullable="true"
+            app:argType="string"
+            />
         <action
             android:id="@+id/action_service_providers_fragment_to_pet_sitters_filter_fragment"
             app:destination="@id/service_provider_filter_fragment" />
@@ -70,6 +76,9 @@
         <action
             android:id="@+id/action_service_provider_detail_fragment_to_favoriteServicesFragment"
             app:destination="@id/favoriteServicesFragment" />
+        <action
+            android:id="@+id/action_service_provider_detail_fragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
 
     </fragment>
 
@@ -264,6 +273,18 @@
         <argument
             android:name="profile"
             app:argType="com.example.budka.data.model.User"/>
+    </fragment>
+    <fragment
+        android:id="@+id/userProfileFragment"
+        android:name="com.example.budka.view.UserProfileFragment"
+        android:label="UserProfileFragment" >
+
+        <action
+            android:id="@+id/action_userProfileFragment_to_service_provider_detail_fragment"
+            app:destination="@id/service_provider_detail_fragment" />
+        <argument
+            android:name="userId"
+            app:argType="integer"/>
     </fragment>
 
 </navigation>

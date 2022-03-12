@@ -28,4 +28,12 @@ class MyPageDataStore (apiService: ApiService) :  BaseProfileDataStore(apiServic
     ): LiveData<User> {
         return profileByTokenResponse { service.updateProfile(image, body) }
     }
+
+    override fun getUserProfile(userId: Int): LiveData<User> {
+        return profileByTokenResponse { service.getUserProfile(userId) }
+    }
+
+    override fun setRating(userId: Int, rating: Int): LiveData<String> {
+        return deleteResponse { service.setRating(userId, rating) }
+    }
 }

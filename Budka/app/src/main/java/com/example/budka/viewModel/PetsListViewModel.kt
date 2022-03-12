@@ -44,4 +44,15 @@ class PetsListViewModel(private val petsListUseCase: PetsListUseCase): BaseViewM
         return petsListUseCase.createPet(image, body)
     }
 
+    fun updatePet(image: MultipartBody.Part,
+                  body: PetCreate,
+                  petId: Int
+    ): LiveData<Pet>{
+        return petsListUseCase.updatePet(image, body, petId)
+    }
+
+    fun deletePet(petId: Int){
+        petsListUseCase.deletePet(petId)
+    }
+
 }

@@ -102,7 +102,8 @@ class ServiceProviderFilterFragment:Fragment() {
         viewBinding.applyBtn.setOnClickListener {
             it.findNavController().navigate(ServiceProviderFilterFragmentDirections
                 .actionServiceProviderFilterFragmentToServiceProvidersListFragment(arg.serviceType,
-                    viewBinding.countriesEdV.text.toString(), viewBinding.cityEdV.text.toString()))
+                    viewBinding.countriesEdV.text.toString(), viewBinding.cityEdV.text.toString(),
+                viewBinding.petTypeSp.selectedItem.toString()))
         }
     }
 

@@ -23,4 +23,11 @@ class ProfileUseCase (val myPageRepository: MyPageRepository){
     ): LiveData<User>{
         return myPageRepository.updateProfile(image, body)
     }
+    fun getUserProfile(userId: Int): LiveData<User> {
+        return myPageRepository.getUserProfile(userId)
+    }
+
+    fun setRating(userId: Int, rating: Int): LiveData<String> {
+        return myPageRepository.setRating(userId, rating)
+    }
 }

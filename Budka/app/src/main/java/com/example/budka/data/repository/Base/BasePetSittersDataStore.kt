@@ -18,7 +18,7 @@ import retrofit2.Response
 import timber.log.Timber
 
 abstract class BasePetSittersDataStore(@PublishedApi internal val service: ApiService) {
-    abstract fun getPetSitters(serviceType: Int, country: String?, city: String?): LiveData<List<ServiceProvider>>
+    abstract fun getPetSitters(serviceType: Int, country: String?, city: String?, petType: String?): LiveData<List<ServiceProvider>>
     abstract fun putLike(serviceId: Int): LiveData<String>
     abstract fun deleteLike(serviceId: Int): LiveData<String>
     abstract fun getFavoriteServices(): LiveData<List<ServiceProvider>>

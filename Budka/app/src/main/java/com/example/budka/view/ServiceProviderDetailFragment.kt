@@ -68,6 +68,9 @@ class ServiceProviderDetailFragment: Fragment() {
         serviceProvider.user?.let {
             petListViewModel.fetchUserPetsList(it.id)
         servicesViewModel.fetchUserServicesList(it.id)
+            viewBinding.profileLayout.setOnClickListener {btn->
+                btn.findNavController().navigate(ServiceProviderDetailFragmentDirections.actionServiceProviderDetailFragmentToUserProfileFragment(it.id))
+            }
         }
         setUpAdapter()
         setObservers()

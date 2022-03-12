@@ -21,4 +21,11 @@ interface PetsListRepository {
         image: MultipartBody.Part,
         body: PetCreate
     ): LiveData<Pet>
+    fun updatePet(
+        image: MultipartBody.Part,
+        body: PetCreate,
+        petId: Int
+    ): LiveData<Pet>
+
+    fun deletePet(petId: Int): LiveData<String>
 }

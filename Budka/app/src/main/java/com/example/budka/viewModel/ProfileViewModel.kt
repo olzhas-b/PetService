@@ -36,4 +36,14 @@ class ProfileViewModel(private val profileUseCase: ProfileUseCase): BaseViewMode
         return profileUseCase.updateProfile(image, body)
     }
 
+    fun fetchProfile(userId: Int){
+        profile = profileUseCase.getUserProfile(userId) as MutableLiveData<User>
+    }
+
+    fun setRating(userId: Int, rating: Int){
+        profileUseCase.setRating(userId, rating)
+    }
+
+
+
 }

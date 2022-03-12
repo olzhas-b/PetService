@@ -21,12 +21,18 @@ interface ApiService {
 
     @GET(API + "profile")
     fun getProfileByToken(): Deferred<Response<User>>
+    @GET(API + "profile/{userId}")
+    fun getUserProfile(@Path("userId") userId: Int): Deferred<Response<User>>
 
     @GET(API + "user/pet/all")
     fun getPets(): Deferred<Response<List<Pet>>>
 
     @GET(API +"user/{userId}/pet")
     fun getUserPets(@Path("userId") userId: Int): Deferred<Response<List<Pet>>>
+
+    @POST(API +"user/estimate/{userId}")
+    fun setRating(@Path("userId") userId: Int,
+                    @Query("score") score: Int): Deferred<Response<String>>
 
     @Multipart
     @PUT(API +"profile/edit")
@@ -44,10 +50,20 @@ interface ApiService {
         @Part("body")  body: PetCreate,
     ): Deferred<Response<Pet>>
 
+    @Multipart
+    @POST(API + "user/pet/{petId}")
+    @JvmSuppressWildcards
+    fun updatePet(
+        @Part image :MultipartBody.Part,
+        @Part("body")  body: PetCreate,
+        @Path("petId") serviceId: Int
+    ): Deferred<Response<Pet>>
+
+    @DELETE(API +"user/pet/{petId}/delete")
+    fun deletePet(@Path("petId") petId: Int): Deferred<Response<String>>
+
     @GET(API +"service")
-    fun getPetSitters(@Query("serviceType") serviceType: Int,
-    @Query("country") country: String?,
-    @Query("city") city: String?): Deferred<Response<ServiceProviderResponse>>
+    fun getPetSitters(@QueryMap(encoded = true) country: Map<String, String?>): Deferred<Response<ServiceProviderResponse>>
 
     @Multipart
     @POST(API +"service/new")

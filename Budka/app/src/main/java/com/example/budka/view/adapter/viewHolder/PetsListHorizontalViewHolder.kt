@@ -9,6 +9,7 @@
 package com.example.budka.view.adapter.viewHolder
 
 import android.annotation.SuppressLint
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.example.budka.R
 import com.example.budka.data.model.Pet
@@ -37,6 +38,7 @@ class PetsListHorizontalViewHolder constructor(
 class PetsListVerticalViewHolder constructor(
     val itemPetBinding: ItemPetProfileBinding,
     var navigationListener: PetEditListener ?= null,
+    val showDeleteBtn: Boolean = false
 
     ): RecyclerView.ViewHolder(itemPetBinding.root) {
 
@@ -48,6 +50,14 @@ class PetsListVerticalViewHolder constructor(
         itemView.setOnClickListener {
             navigationListener?.navigate(petsData)
         }
+        itemPetBinding.deleteBtn.visibility = if(showDeleteBtn)
+             View.VISIBLE
+        else
+            View.GONE
+
+        itemPetBinding.deleteBtn.setOnClickListener {
+            navigationListener?.delete(petsData.id)
+        }
     }
 
 
@@ -55,4 +65,5 @@ class PetsListVerticalViewHolder constructor(
 
 interface PetEditListener {
     fun navigate(petsData: Pet)
+    fun delete(petId: Int)
 }

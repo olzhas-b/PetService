@@ -255,12 +255,12 @@ class ChangeProfileFragment: Fragment() {
     fun savePhotoFromUrl(){
         val job = Job()
         val scopeForSaving = CoroutineScope(job + Dispatchers.Main)
-        arg.profile.let { profile ->
-            if(profile.avatar.length>5) {
-                val url = URL(profile.avatar)
-                val num = profile.avatar.substring(profile.avatar.lastIndexOf('/') + 1)
+        arg.profile.avatar?.let { avatar ->
+            if(avatar.length>5) {
+                val url = URL(avatar)
+                val num = avatar.substring(avatar.lastIndexOf('/') + 1)
                 scopeForSaving.launch {
-                    saveToStorage(url, profile.fullName + num)
+                    saveToStorage(url, arg.profile.fullName + num)
                 }
             }
         }

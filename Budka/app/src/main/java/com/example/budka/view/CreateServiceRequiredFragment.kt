@@ -117,7 +117,7 @@ class CreateServiceRequiredFragment : Fragment(), SetLocationInterface {
         viewBinding.optionalNavigateBtn.setOnClickListener {
             var serviceType: Int = 0
             ServiceType.from(viewBinding.serviceTypeSp.selectedItem.toString())?.let {
-                serviceType = ServiceType.valueOf(it.name).ordinal
+                serviceType = ServiceType.valueOf(it.name).ordinal + 1
             }
 
             val summary = viewBinding.summaryEt.text.toString()
@@ -233,7 +233,7 @@ class CreateServiceRequiredFragment : Fragment(), SetLocationInterface {
         )
         viewBinding.serviceTypeSp.adapter = serviceAdapter
         args.user?.let {
-            it.serviceType?.let { it1 -> viewBinding.serviceTypeSp.setSelection(it1) }
+            it.serviceType?.let { it1 -> viewBinding.serviceTypeSp.setSelection(it1-1) }
         }
     }
 

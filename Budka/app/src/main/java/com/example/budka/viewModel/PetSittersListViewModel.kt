@@ -12,6 +12,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.budka.data.model.Pet
+import com.example.budka.data.model.PetType
 import com.example.budka.data.model.ServiceProvider
 import com.example.budka.data.model.User
 import com.example.budka.domain.useCase.PetSittersListUseCase
@@ -22,8 +23,8 @@ class PetSittersListViewModel (private val petSittersListUseCase: PetSittersList
     private var favoriteServicesList = MutableLiveData<List<ServiceProvider>>()
 
 
-    fun fetchPetSittersList(serviceType: Int, country: String?, city: String?) {
-        petSittersList = petSittersListUseCase.getPetSittersList(serviceType, country, city) as MutableLiveData<List<ServiceProvider>>
+    fun fetchPetSittersList(serviceType: Int, country: String?, city: String?, petType: String?) {
+        petSittersList = petSittersListUseCase.getPetSittersList(serviceType, country, city, petType) as MutableLiveData<List<ServiceProvider>>
     }
 
     fun getPetSittersList(): LiveData<List<ServiceProvider>> {

@@ -8,30 +8,24 @@
 
 package com.example.budka.data.repository.DataStore
 
-import android.R.string
 import androidx.lifecycle.LiveData
 import com.example.budka.data.api.ApiService
 import com.example.budka.data.model.ServiceProvider
 import com.example.budka.data.repository.Base.BasePetSittersDataStore
 import com.example.budka.domain.repository.PetSittersListRepository
-import java.net.URLEncoder
 
 
 class PetSittersListDataStore(apiService: ApiService) : PetSittersListRepository, BasePetSittersDataStore(
     apiService
 ) {
-    override fun getPetSitters(serviceType: Int, country: String?, city: String?): LiveData<List<ServiceProvider>> {
-        val countryEncoded =
-            country?.toByteArray(java.nio.charset.StandardCharsets.UTF_8)?.let { String(it, java.nio.charset.StandardCharsets.ISO_8859_1) }
-        val cityEncoded = city?.let {URLEncoder.encode(
-            it,
-            java.nio.charset.StandardCharsets.UTF_8.toString()
-        )  }
+    override fun getPetSitters(serviceType: Int, country: String?, city: String?, petType: String?): LiveData<List<ServiceProvider>> {
+        val data: MutableMap<String, String?> = HashMap()
+        data["serviceType"] = serviceType.toString()
+        data["country"] = country?: run { "" }
+        data["city"] = city?: run { "" }
+        data["petType"] = petType?: run { "" }
         return fetchData { service.getPetSitters(
-            serviceType = serviceType,
-            country = countryEncoded,
-            city = cityEncoded
-        ) }
+            data) }
     }
 
     override fun putLike(serviceId: Int): LiveData<String> {

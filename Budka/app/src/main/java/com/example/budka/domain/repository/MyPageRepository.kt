@@ -19,4 +19,6 @@ interface MyPageRepository {
     fun updateProfile(image: MultipartBody.Part,
                       body: UserUpdate
     ): LiveData<User>
+    fun getUserProfile(userId: Int): LiveData<User>
+    fun setRating(userId: Int, rating: Int): LiveData<String>
 }

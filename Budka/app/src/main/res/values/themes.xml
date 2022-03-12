@@ -32,6 +32,11 @@
         <item name="colorControlActivated">@color/duskYellow</item>
     </style>
 
+    <style name="MyRatingBarUser" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@android:color/darker_gray</item>
+        <item name="colorControlActivated">@color/duskYellow</item>
+    </style>
+
     <style name="CustomActionBar" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:windowActionBarOverlay">true</item>
         <!-- Support library compatibility -->

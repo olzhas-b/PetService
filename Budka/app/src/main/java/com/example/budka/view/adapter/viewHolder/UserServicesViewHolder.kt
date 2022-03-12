@@ -26,27 +26,27 @@ class UserServicesViewHolder (
     @SuppressLint("SetTextI18n")
     fun setUp(services: ServiceProvider){
         when(services.serviceType) {
-            0 ->     {
+            1 ->     {
                 itemOtherServiceBinding.serviceNameTv.text = "Зооняня"
                 itemOtherServiceBinding.serviceIconIv.setImageResource(R.drawable.ic_pet_sitter)
             }
-            1 ->     {
+            2 ->     {
                 itemOtherServiceBinding.serviceNameTv.text = "Выгул"
                 itemOtherServiceBinding.serviceIconIv.setImageResource(R.drawable.ic_pet_walking)
             }
-            2 ->     {
+            3 ->     {
                 itemOtherServiceBinding.serviceNameTv.text = "Ветеринария"
                 itemOtherServiceBinding.serviceIconIv.setImageResource(R.drawable.ic_vet)
             }
-            3 ->     {
+            4 ->     {
                 itemOtherServiceBinding.serviceNameTv.text = "Дрессировка"
                 itemOtherServiceBinding.serviceIconIv.setImageResource(R.drawable.ic_training)
             }
-            4 ->     {
+            5 ->     {
                 itemOtherServiceBinding.serviceNameTv.text = "Груминг"
                 itemOtherServiceBinding.serviceIconIv.setImageResource(R.drawable.ic_grooming)
             }
-            5 ->     {
+            6 ->     {
                 itemOtherServiceBinding.serviceNameTv.text = "Зоогостиницы"
                 itemOtherServiceBinding.serviceIconIv.setImageResource(R.drawable.ic_zoohostel)
             }

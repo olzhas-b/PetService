@@ -14,6 +14,8 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Pet(
+    @SerializedName("id")
+    val id: Int,
     @SerializedName("name")
     val name: String,
     @SerializedName("type")

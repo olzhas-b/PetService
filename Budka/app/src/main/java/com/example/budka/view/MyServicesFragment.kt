@@ -119,7 +119,7 @@ class MyServicesFragment : Fragment(), NavigationListener, PetEditListener {
     }
 
     private fun setupPetsAdapter(){
-        myPetsAdapter = UserPetsAdapter(0, navigationListener = this)
+        myPetsAdapter = UserPetsAdapter(0, navigationListener = this, true)
         val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         myServicesRv.layoutManager = layoutManager
         myServicesRv.adapter = myPetsAdapter
@@ -133,5 +133,9 @@ class MyServicesFragment : Fragment(), NavigationListener, PetEditListener {
 
     override fun navigate(petsData: Pet) {
         findNavController().navigate(MyServicesFragmentDirections.actionMyServicesToCreatePetFragment(pet = petsData, operationType = "update"))
+    }
+
+    override fun delete(petId: Int) {
+        petsListViewModel.deletePet(petId)
     }
 }
