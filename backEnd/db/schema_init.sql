@@ -52,8 +52,8 @@ CREATE TABLE "user" (
                         "country" varchar(40),
                         "location" varchar(80),
                         "description" varchar(1000),
-                        "count_rating" numeric(18) default 5,
-                        "average_rating" numeric(7, 6) default 5.000000,
+                        "count_rating" numeric(18) default 0,
+                        "average_rating" numeric(7, 6) default 0.000000,
                         "created" timestamp(6),
                         "updated" timestamp(6),
                         "is_deleted" boolean default false not null ,
@@ -109,7 +109,7 @@ CREATE TABLE "rating" (
                           "user_id" BIGINT,
                           "estimator_id" BIGINT,
                           "created" timestamp(6),
-                          score numeric(1) not null default 5
+                          score numeric(1) not null default 0
 );
 
 CREATE TABLE "image" (
@@ -117,7 +117,7 @@ CREATE TABLE "image" (
                          "name" varchar(40),
                          "content" bytea,
                          "content_type" varchar(40),
-                         "status" numeric(3) default 0 not null
+                         "status" numeric(3)  not null default 0
 );
 
 CREATE TABLE "review" (

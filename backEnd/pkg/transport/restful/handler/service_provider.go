@@ -8,6 +8,7 @@ import (
 	"github.com/olzhas-b/PetService/backEnd/pkg/models"
 	filter2 "github.com/olzhas-b/PetService/backEnd/pkg/models/filter"
 	"github.com/olzhas-b/PetService/backEnd/pkg/transport/restful/common"
+	"github.com/olzhas-b/PetService/backEnd/tools"
 	"mime/multipart"
 )
 
@@ -45,4 +46,13 @@ func (h *Handler) CtlCreateService(ctx *fiber.Ctx) error {
 		return fmt.Errorf("Handler.CtlCreateService: %w", err)
 	}
 	return common.GenShortResponse(ctx, consts.Success, result.ID, "")
+}
+
+func (h *Handler) CtlDeleteService(ctx *fiber.Ctx) error {
+	id := tools.StrToInt64(ctx.Params("id"))
+	err := h.services.IServiceProviderService.ServiceDeleteService(ctx.Context(), id)
+	if err != nil {
+		return common.GenShortResponse(ctx, consts.DBDeleteErr, id, "")
+	}
+	return common.GenShortResponse(ctx, consts.Success, "successfully deleted", "")
 }

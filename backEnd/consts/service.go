@@ -1,5 +1,7 @@
 package consts
 
 const (
-	New = "new"
+	New   = "new"
+	True  = true
+	False = false
 )

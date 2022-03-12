@@ -62,6 +62,7 @@ func (h *Handler) AddRoutes(srv *fiber.App) {
 		service.Get("", h.CtlGetAllServiceProvider)
 		service.Get("/:id/detail", h.CtlGetServiceDetail)
 		service.Post("/:id", middles.AuthorizationMiddleWare(h.services), h.CtlCreateService)
+		service.Delete("/:id", middles.AuthorizationMiddleWare(h.services), h.CtlDeleteService)
 	}
 
 	favorite := service.Group("/favorite")

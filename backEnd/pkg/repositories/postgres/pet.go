@@ -14,6 +14,16 @@ func NewPetRepository(DB *gorm.DB) *PetRepository {
 	return &PetRepository{DB: DB}
 }
 
+func (repo *PetRepository) GetAllPets(ctx context.Context) (pets models.PetList, err error) {
+	err = repo.DB.Model(models.Pet{}).
+		Preload("Image", func(DB *gorm.DB) *gorm.DB {
+			return DB.Omit("content")
+		}).
+		Find(&pets).
+		Error
+	return
+}
+
 func (repo *PetRepository) GetPetsByUserID(ctx context.Context, id int64) (pets models.PetList, err error) {
 	defer func() {
 		if err != nil {
@@ -40,7 +50,7 @@ func (repo *PetRepository) CreateOrUpdatePet(ctx context.Context, pet models.Pet
 	}()
 
 	err = repo.DB.
-		Omit("status").
+		Omit("status", "image_id").
 		Save(&pet).
 		Error
 
@@ -95,16 +105,16 @@ func (repo *PetRepository) GetPetByID(ctx context.Context, id int64) (pet models
 	return
 }
 
-func (repo *PetRepository) GetAllPets(ctx context.Context) (pets models.PetList, err error) {
-	err = repo.DB.Model(models.Pet{}).Find(&pets).Error
-	return
+func (repo *PetRepository) GetPetImageID(ctx context.Context, ID int64) (imageID int64) {
+	repo.DB.Debug().Model(models.Pet{}).
+		Where("id = ?", ID).
+		Pluck("image_id", &imageID)
+	return imageID
 }
 
-func (repo *PetRepository) GetPetImageID(ctx context.Context, ID int64) (imageID int64) {
-	repo.DB.Table("pet").
-		Select("image.id").
-		Joins("INNER JOIN image on pet.image_id = image.id").
-		Where("pet.id = ?", ID).
-		Take(&imageID)
-	return imageID
+func (repo *PetRepository) UpdateImageID(ctx context.Context, ID int64, imageID int64) error {
+	return repo.DB.Model(&models.Pet{}).
+		Where("id = ?", ID).
+		Update("image_id", imageID).
+		Error
 }

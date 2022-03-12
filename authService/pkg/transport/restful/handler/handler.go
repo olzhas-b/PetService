@@ -24,17 +24,6 @@ func MiddlewareHelloWorld() fiber.Handler {
 func (h *Handler) InitializeRoutes(srv *fiber.App) error {
 	srv.Use(
 		recover.New(),
-		//basicauth.New(
-		//	basicauth.Config{
-		//		Next:            nil,
-		//		Users:           nil,
-		//		Realm:           "Restricted",
-		//		Authorizer:      nil,
-		//		Unauthorized:    nil,
-		//		ContextUsername: "",
-		//		ContextPassword: "",
-		//	},
-		//),
 	)
 	h.AddRoutes(srv)
 	return nil

@@ -26,7 +26,7 @@ func (s *Server) RunHTTPServer(config *config.Config, routes *handler.Handler) e
 	//	ExposeHeaders:    strings.Join(config.Cors.ExposeHeaders, ","),
 	//	MaxAge:           int((config.Cors.MaxAge * time.Hour).Seconds()),
 	//}))
-	//
+
 	err := routes.InitializeRoutes(s.HTTPServer)
 	if err != nil {
 		return err

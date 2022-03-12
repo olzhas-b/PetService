@@ -13,4 +13,5 @@ type IPetRepository interface {
 	DeletePetByID(ctx context.Context, userID int64, petID int64) (err error)
 	GetAllPets(ctx context.Context) (pets models.PetList, err error)
 	GetPetImageID(ctx context.Context, ID int64) (imageID int64)
+	UpdateImageID(ctx context.Context, ID int64, imageID int64) error
 }

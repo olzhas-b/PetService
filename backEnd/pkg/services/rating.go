@@ -19,8 +19,11 @@ func NewRatingService(repo *repositories.Repositories) *RatingService {
 
 func (srv *RatingService) ServiceEstimate(ctx context.Context, rating models.Rating) (err error) {
 	estimatorID := utils.GetCurrentUserID(ctx)
-	if rating.Score < 1 && rating.Score > 5 {
-		return errors.New("incorrect score")
+	if estimatorID == rating.UserID {
+		return errors.New("Вы не можете оценить себя")
+	}
+	if rating.Score < 1 || rating.Score > 5 {
+		return errors.New("incorrect error")
 	}
 
 	rating.Created = time.Now()

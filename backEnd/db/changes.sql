@@ -57,3 +57,17 @@ alter table service_image drop constraint service_image_image_id_fkey,
     references image(id)
     on delete cascade ;
 
+
+-- 12.03.2022
+
+
+alter table "user"
+    alter column average_rating set default 0;
+
+alter table "user"
+    alter column count_rating set default 0;
+
+alter table "rating"
+    alter column score set default 0;
+
+

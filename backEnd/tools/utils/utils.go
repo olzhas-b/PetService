@@ -1,12 +1,13 @@
 package utils
 
 import (
+	"bytes"
 	"context"
 	"github.com/gofiber/fiber/v2"
 	"github.com/olzhas-b/PetService/backEnd/consts"
 	"github.com/olzhas-b/PetService/backEnd/pkg/models"
 	"github.com/olzhas-b/PetService/backEnd/tools"
-	"io/ioutil"
+	"io"
 	"os"
 	"strings"
 )
@@ -60,9 +61,20 @@ func GetLocalImage(path string) (image models.Image) {
 	if err != nil {
 		return
 	}
-	defer file.Close()
-	bs, _ := ioutil.ReadAll(file)
+	// handle close error to prevent resources leak
+	defer func() {
+		closeErr := file.Close()
+		if err == nil && closeErr != nil {
+			err = closeErr
+		}
+	}()
+
+	buf := bytes.NewBuffer(nil)
+	if _, err = io.Copy(buf, file); err != nil {
+		return
+	}
+
 	return models.Image{
-		Content: bs,
+		Content: buf.Bytes(),
 	}
 }

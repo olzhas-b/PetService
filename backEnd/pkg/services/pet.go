@@ -25,26 +25,42 @@ func (srv *PetService) ServiceGetPetsByUserID(ctx context.Context, id int64) (pe
 }
 
 func (srv *PetService) ServiceCreateOrUpdatePet(ctx context.Context, pet models.Pet, file *multipart.FileHeader, requestType string) (result models.Pet, err error) {
+	var image models.Image
 	if requestType == consts.New {
 		pet.ID = 0
 	} else {
 		pet.ID = tools.StrToInt64(requestType)
 	}
-	var image models.Image
 	pet.UserID = utils.GetCurrentUserID(ctx)
+
+	// save or create pet
+	result, err = srv.repo.IPetRepository.CreateOrUpdatePet(ctx, pet)
+	if err != nil {
+		return
+	}
+
+	// get image from customer or default image  from local storage
 	if file != nil {
 		image = models.Image{
-			ID:          srv.repo.IPetRepository.GetPetImageID(ctx, pet.ID),
 			Name:        file.Filename,
 			ContentType: file.Header.Get("Content-Type"),
 			Content:     tools.ReadProperly(file),
 		}
 	} else {
-		image.ID = srv.repo.IPetRepository.GetPetImageID(ctx, pet.ID)
+		image = utils.GetLocalImage(consts.ServiceAvatarPath)
 	}
-	pet.Image = &image
+	image.ID = srv.repo.IPetRepository.GetPetImageID(ctx, result.ID)
 
-	return srv.repo.IPetRepository.CreateOrUpdatePet(ctx, pet)
+	// save image to database
+	image, err = srv.repo.IImageRepository.UpdateOrSaveImage(ctx, image)
+	if err != nil {
+		return
+	}
+	result.Image = &image
+
+	// update pets image_id
+	err = srv.repo.IPetRepository.UpdateImageID(ctx, result.ID, image.ID)
+	return
 }
 
 func (srv *PetService) ServiceUpdatePet(ctx context.Context, pet models.Pet, file *multipart.FileHeader, userID int64) (result models.Pet, err error) {

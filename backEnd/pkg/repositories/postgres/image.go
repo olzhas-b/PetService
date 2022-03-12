@@ -42,3 +42,12 @@ func (repo *ImageRepository) DeleteImageByID(ctx context.Context, id int64) (err
 		Error
 	return
 }
+
+func (repo *ImageRepository) UpdateOrSaveImage(ctx context.Context, image models.Image) (result models.Image, err error) {
+	err = repo.DB.Model(models.Image{}).
+		Where("id = ?", image.ID).
+		Save(&image).
+		Error
+
+	return image, err
+}

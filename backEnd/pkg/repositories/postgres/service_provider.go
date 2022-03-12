@@ -3,6 +3,7 @@ package postgres
 import (
 	"context"
 	"errors"
+	"github.com/olzhas-b/PetService/backEnd/consts"
 	"github.com/olzhas-b/PetService/backEnd/pkg/models"
 	"github.com/olzhas-b/PetService/backEnd/pkg/models/filter"
 	"gorm.io/gorm"
@@ -28,7 +29,8 @@ func (repo *ServiceProviderRepository) GetAllServices(ctx context.Context, userI
 			"service.service_type",
 			"service.status",
 		}).
-		Joins("INNER JOIN \"user\" ON service.user_id = \"user\".id")
+		Joins("INNER JOIN \"user\" ON service.user_id = \"user\".id").
+		Where("service.is_deleted = ?", consts.False)
 
 	if filter.ServiceType != 0 {
 		db = db.Where("service.service_type = ?", filter.ServiceType)
@@ -129,10 +131,20 @@ func (repo *ServiceProviderRepository) GetFavoriteServices(ctx context.Context, 
 		}).
 		Preload("Images", func(db *gorm.DB) *gorm.DB {
 			return db.Omit("content")
-		}).Find(&listService).Error
+		}).Find(&listService).
+		Error
 	return
 }
 
 func (repo *ServiceProviderRepository) DeleteImagesByServiceID(ctx context.Context, serviceID int64) (err error) {
 	return repo.DB.Exec(`DELETE FROM image WHERE id in (select image_id from service_image where service_id = ?)`, serviceID).Error
+}
+
+func (repo *ServiceProviderRepository) DeleteService(ctx context.Context, id, userID int64) (err error) {
+	err = repo.DB.Model(models.Service{}).
+		Where("id = ?", id).
+		Where("user_id = ?", userID).
+		Update("is_deleted", true).
+		Error
+	return
 }

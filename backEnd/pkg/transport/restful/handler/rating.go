@@ -17,7 +17,7 @@ func (h *Handler) CtlEstimateUser(ctx *fiber.Ctx) error {
 		Score:  int8(score),
 	}
 	if err := h.services.IRatingService.ServiceEstimate(ctx.Context(), rating); err != nil {
-		return common.GenShortResponse(ctx, consts.NotFoundErr, err.Error(), err.Error())
+		return common.GenShortResponse(ctx, consts.DBInsertErr, err.Error(), err.Error())
 	}
 	return common.GenShortResponse(ctx, consts.Success, "successfully estimated", "")
 }

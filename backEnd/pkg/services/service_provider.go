@@ -79,3 +79,8 @@ func (srv *ServiceProvider) ServiceGetFavoriteServices(ctx context.Context) (mod
 	userID := utils.GetCurrentUserID(ctx)
 	return srv.repo.GetFavoriteServices(ctx, userID)
 }
+
+func (srv *ServiceProvider) ServiceDeleteService(ctx context.Context, id int64) (err error) {
+	userID := utils.GetCurrentUserID(ctx)
+	return srv.repo.IServiceProviderRepository.DeleteService(ctx, id, userID)
+}

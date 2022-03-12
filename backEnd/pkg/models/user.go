@@ -55,6 +55,7 @@ func (u *User) ConvertToDto() (result map[string]interface{}) {
 	result["status"] = u.Status
 	result["updated"] = u.Updated
 	result["created"] = u.Created
+	result["description"] = u.Description
 
 	if u.Image != nil {
 		result["image"] = u.Image.ConvertToURL()
