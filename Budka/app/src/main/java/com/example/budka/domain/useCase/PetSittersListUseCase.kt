@@ -29,6 +29,8 @@ class PetSittersListUseCase (val petSittersListRepository: PetSittersListReposit
         petSittersListRepository.deleteLike(serviceId)
     }
 
+
+
     fun getFavoriteServices(): LiveData<List<ServiceProvider>> {
         return petSittersListRepository.getFavoriteServices()
     }

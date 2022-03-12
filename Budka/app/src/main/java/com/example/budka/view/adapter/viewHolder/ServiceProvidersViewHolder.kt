@@ -9,6 +9,7 @@
 package com.example.budka.view.adapter.viewHolder
 
 import android.annotation.SuppressLint
+import android.view.View
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.budka.R
@@ -37,6 +38,11 @@ class ServiceProvidersViewHolder constructor(
         Picasso.get().load(image).fit().centerCrop().into(itemPetSitterBinding.perSitterIv)
         if(isMyServicesPage && serviceProviderData.serviceType!=null){
             itemPetSitterBinding.petSitterNameTv.text = ServiceType.values()[serviceProviderData.serviceType].value
+            itemPetSitterBinding.deleteBtn.visibility = View.VISIBLE
+            itemPetSitterBinding.bookmarkIv.visibility = View.GONE
+            itemPetSitterBinding.deleteBtn.setOnClickListener {
+                navigationListener?.deleteService(serviceProviderData.id)
+            }
         } else {
             itemPetSitterBinding.petSitterNameTv.text = serviceProviderData.user?.fullName
 
@@ -46,6 +52,8 @@ class ServiceProvidersViewHolder constructor(
         itemView.setOnClickListener {
             navigationListener?.navigate(serviceProviderData)
         }
+
+
         if(serviceProviderData.isFavorite == true){
             itemPetSitterBinding.bookmarkIv.setImageResource(R.drawable.ic_filled_bookmark)
         } else{
@@ -73,4 +81,6 @@ interface FavListener {
 
 interface NavigationListener {
     fun navigate(serviceProviderData: ServiceProvider)
+    fun deleteService(serviceId: Int)
+
 }

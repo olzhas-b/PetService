@@ -222,4 +222,8 @@ class ServiceProvidersListFragment: Fragment(), FavListener, NavigationListener 
 
     }
 
+    override fun deleteService(serviceId: Int) {
+        Log.d("not", "not")
+    }
+
 }

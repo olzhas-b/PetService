@@ -9,6 +9,7 @@
 package com.example.budka.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -71,6 +72,10 @@ class FavoriteServicesFragment: Fragment(), FavListener, NavigationListener {
 
     override fun navigate(serviceProviderData: ServiceProvider) {
         findNavController().navigate(FavoriteServicesFragmentDirections.actionFavoriteServicesFragmentToServiceProviderDetailFragment(serviceProviderData))
+    }
+
+    override fun deleteService(serviceId: Int) {
+        Log.d("not", "not")
     }
 
 }

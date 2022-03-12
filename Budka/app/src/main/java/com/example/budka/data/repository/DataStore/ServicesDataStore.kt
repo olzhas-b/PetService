@@ -43,4 +43,9 @@ class ServicesDataStore(apiService: ApiService): ServicesRepository, BaseService
 
             service.updateService( images, body, serviceId) }
     }
+
+    override fun deleteService(serviceId: Int): LiveData<String> {
+        return deleteResponse {service.deleteService(serviceId)  }
+    }
+
 }

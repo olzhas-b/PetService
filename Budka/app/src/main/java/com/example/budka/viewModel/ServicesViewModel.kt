@@ -40,4 +40,8 @@ class ServicesViewModel (private val servicesUseCase: ServicesUseCase): BaseView
         return servicesUseCase.updateService(images, body, serviceId)
     }
 
+    fun deleteService(serviceId: Int) {
+        servicesUseCase.deleteService(serviceId)
+    }
+
 }

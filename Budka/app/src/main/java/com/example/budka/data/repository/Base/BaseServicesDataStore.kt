@@ -24,6 +24,8 @@ abstract class BaseServicesDataStore (@PublishedApi internal val service: ApiSer
     abstract fun getUserServices(user_id: Int): LiveData<List<ServiceProvider>>
     abstract fun createService(images :List<MultipartBody.Part>, body: CreateServiceModel): LiveData<CreateServiceModel>
     abstract fun updateService(images :List<MultipartBody.Part>, body: CreateServiceModel, serviceId: Int): LiveData<CreateServiceModel>
+    abstract fun deleteService(serviceId: Int): LiveData<String>
+
 
 
     inline fun fetchData(crossinline call: (ApiService) -> Deferred<Response<ServiceProviderResponse>>): LiveData<List<ServiceProvider>> {
@@ -76,6 +78,29 @@ abstract class BaseServicesDataStore (@PublishedApi internal val service: ApiSer
                     Timber.d("Error: ${e.message}")
                 }
                 catch (e: Exception){
+                    Timber.d("Error: ${e.message}")
+                }
+            }
+        }
+        return result
+
+    }
+
+    inline fun deleteResponse(crossinline call: (ApiService) -> Deferred<Response<String>>): LiveData<String> {
+        val result = MutableLiveData<String>()
+        CoroutineScope(Dispatchers.IO).launch {
+            val request = call(service)
+            withContext(Dispatchers.Main){
+                try {
+                    val response = request.await()
+                    if (response.isSuccessful) {
+                        result.value = response.body()
+                    } else {
+                        Timber.d("Error occurred with code ${response.code()}")
+                    }
+                } catch (e: HttpException){
+                    Timber.d("Error: ${e.message()}")
+                } catch (e: Throwable){
                     Timber.d("Error: ${e.message}")
                 }
             }

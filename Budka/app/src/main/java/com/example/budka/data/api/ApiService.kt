@@ -62,6 +62,9 @@ interface ApiService {
     @DELETE(API +"user/pet/{petId}/delete")
     fun deletePet(@Path("petId") petId: Int): Deferred<Response<String>>
 
+    @DELETE(API +"service/{serviceId}")
+    fun deleteService(@Path("serviceId") petId: Int): Deferred<Response<String>>
+
     @GET(API +"service")
     fun getPetSitters(@QueryMap(encoded = true) country: Map<String, String?>): Deferred<Response<ServiceProviderResponse>>
 

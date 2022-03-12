@@ -32,4 +32,8 @@ class ServicesUseCase (private val servicesRepository: ServicesRepository){
     ): LiveData<CreateServiceModel>{
         return servicesRepository.updateService(images, body, serviceId)
     }
+
+    fun deleteService(serviceId: Int){
+        servicesRepository.deleteService(serviceId)
+    }
 }

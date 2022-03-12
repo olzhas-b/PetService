@@ -23,4 +23,7 @@ interface ServicesRepository {
                       body: CreateServiceModel,
                       serviceId: Int
     ): LiveData<CreateServiceModel>
+
+    fun deleteService(serviceId: Int): LiveData<String>
+
 }

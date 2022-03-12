@@ -138,4 +138,8 @@ class MyServicesFragment : Fragment(), NavigationListener, PetEditListener {
     override fun delete(petId: Int) {
         petsListViewModel.deletePet(petId)
     }
+
+    override fun deleteService(serviceId: Int) {
+        myservicesViewModel.deleteService(serviceId)
+    }
 }
