@@ -27,6 +27,7 @@ func (repo *ServiceProviderRepository) GetAllServices(ctx context.Context, userI
 			"service.price_per_time",
 			"service.last_activity",
 			"service.service_type",
+			"service.currency_code",
 			"service.status",
 		}).
 		Joins("INNER JOIN \"user\" ON service.user_id = \"user\".id").
