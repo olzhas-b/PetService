@@ -22,15 +22,17 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.budka.R
-import com.example.budka.data.model.ServiceProvider
+import com.example.budka.data.model.*
 import com.example.budka.databinding.MainPageFragmentBinding
 import com.example.budka.utils.Constants
 import com.example.budka.view.adapter.PetSittersListHorizontalAdapter
 import com.example.budka.view.adapter.PetsListHorizontalAdapter
 import com.example.budka.view.adapter.viewHolder.FavListener
+import com.example.budka.view.adapter.viewHolder.NavigationListener
 import com.example.budka.viewModel.PetSittersListViewModel
 import com.example.budka.viewModel.PetsListViewModel
 import com.google.android.gms.location.*
@@ -39,7 +41,7 @@ import kotlinx.android.synthetic.main.main_page_fragment.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.util.*
 
-class MainPageFragment: Fragment() {
+class MainPageFragment: Fragment(), NavigationListener {
     private lateinit var viewBinding: MainPageFragmentBinding
     private lateinit var petsListHorizontalAdapter: PetsListHorizontalAdapter
     private lateinit var petSittersListHorizontalAdapter: PetSittersListHorizontalAdapter
@@ -48,7 +50,7 @@ class MainPageFragment: Fragment() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var country: String? = null
     private var city: String? = null
-    private lateinit var petSitterListObserver: Observer<List<ServiceProvider>>
+    private lateinit var petSitterListObserver: Observer<NetworkResult<List<ServiceProvider>>>
     private lateinit var locationUpdates: LocationCallback
 
 
@@ -63,7 +65,7 @@ class MainPageFragment: Fragment() {
                 if (locationResult != null && locationResult.locations.isNotEmpty()) {
                     val newLocation = locationResult.locations[0]
                     if(context!=null){
-                        country = getUserAddress(newLocation.latitude, newLocation.longitude).split(',')[1]
+                        country = getUserAddress(newLocation.latitude, newLocation.longitude).split(',')[1].substring(1)
                         city = getUserAddress(newLocation.latitude, newLocation.longitude).split(',')[0]
                         petSittersListViewModel.fetchPetSittersList(0, country, city, null)
                         petSittersListViewModel.getPetSittersList().observe(viewLifecycleOwner, petSitterListObserver)
@@ -103,7 +105,18 @@ class MainPageFragment: Fragment() {
             petSittersListViewModel.fetchPetSittersList(0, country, city,null)
 
         }
-        petSitterListObserver = Observer { petSittersListHorizontalAdapter.updatePetSittersList(it) }
+        petSitterListObserver = Observer {result->
+            result.doIfSuccess {
+                petSittersListHorizontalAdapter.updatePetSittersList(it)
+
+            }
+            result.doIfFailure{ error, data ->
+                error?.let{(activity as MainActivity).showAlert(it)}
+
+            }
+
+            result.doIfLoading {  }
+            }
         setupAdapter()
         setObservers()
         setOnClickListener()
@@ -112,8 +125,18 @@ class MainPageFragment: Fragment() {
     }
 
     private fun setObservers(){
-        petsListViewModel.getPetsList().observe(viewLifecycleOwner, Observer {
-            petsListHorizontalAdapter.updatePetList(it)
+        petsListViewModel.getPetsList().observe(viewLifecycleOwner, Observer {result ->
+            result.doIfSuccess { pets ->
+                pets?.let{petsListHorizontalAdapter.updatePetList(it)}
+            }
+            result.doIfFailure{ error, data ->
+                error?.let{(activity as MainActivity).showAlert(it)}
+
+            }
+
+
+
+
         })
 
         petSittersListViewModel.getPetSittersList().observe(viewLifecycleOwner, petSitterListObserver)
@@ -123,7 +146,7 @@ class MainPageFragment: Fragment() {
 
     private fun setupAdapter(){
         petsListHorizontalAdapter = PetsListHorizontalAdapter()
-        petSittersListHorizontalAdapter = PetSittersListHorizontalAdapter()
+        petSittersListHorizontalAdapter = PetSittersListHorizontalAdapter(navigationListener = this)
         val petsLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false )
         mainPagePetsRv.layoutManager = petsLayoutManager
         mainPagePetsRv.addItemDecoration(DividerItemDecoration(activity, petsLayoutManager.orientation))
@@ -237,6 +260,13 @@ class MainPageFragment: Fragment() {
         petSittersListViewModel.getPetSittersList().removeObserver (petSitterListObserver)
     }
 
+    override fun navigate(serviceProviderData: ServiceProvider) {
+        findNavController().navigate(MainPageFragmentDirections.actionMainPageFragmentToServiceProviderDetailFragment(serviceProviderData))
+
+    }
+
+    override fun deleteService(serviceId: Int) {
+    }
 
 
 }

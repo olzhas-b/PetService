@@ -25,3 +25,13 @@ data class SignInModel(
 data class LoginData(
     var signIn: SignInModel
 )
+
+data class SignUpData(
+    var username: String,
+    val login: String,
+    val phone: String,
+    val password: String,
+    val firstName: String,
+    val lastName: String,
+    val fullName: String
+)

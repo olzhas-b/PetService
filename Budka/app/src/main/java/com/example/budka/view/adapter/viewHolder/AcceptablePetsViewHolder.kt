@@ -25,7 +25,6 @@ class AcceptablePetsViewHolder  constructor(
 
     @SuppressLint("SetTextI18n")
     fun setUp(petType: String){
-        Log.d("myType", petType.toString())
 
         when(petType) {
             "Собаки" ->     {

@@ -18,7 +18,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.budka.R
-import com.example.budka.data.model.Statesealed
+import com.example.budka.data.model.doIfFailure
+import com.example.budka.data.model.doIfLoading
+import com.example.budka.data.model.doIfSuccess
 import com.example.budka.viewModel.SignInViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -26,6 +28,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 class LoginActivity: AppCompatActivity() {
 
     private lateinit var wrongDataText: TextView
+    private lateinit var hint: TextView
     private lateinit var signInButton: Button
     private lateinit var username: EditText
     private lateinit var password: EditText
@@ -35,7 +38,6 @@ class LoginActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        signInProcessing()
         bindViews()
     }
 
@@ -46,36 +48,34 @@ class LoginActivity: AppCompatActivity() {
         progressBar = findViewById(R.id.progressBar)
         progressBar.visibility = View.GONE
         wrongDataText = findViewById(R.id.tvWrongData)
+        hint = findViewById(R.id.tvAccountLink)
+
+        hint.setOnClickListener {
+            val intent = Intent(this, RegistrationActivity::class.java)
+            this.startActivity(intent)
+        }
+
 
         signInButton.setOnClickListener {
-            signInViewModel.signIn(username.text.toString(), password.text.toString())
+            signInViewModel.signIn(username.text.toString(), password.text.toString()). observe(this,
+                {result ->
+                    result.doIfSuccess {
+                        progressBar.visibility = View.GONE
+                        val intent = Intent(this, MainActivity::class.java)
+                        this.startActivity(intent)
+                    }
+                    result.doIfFailure { error, data ->
+                        progressBar.visibility = View.GONE
+                        wrongDataText.text = error
+
+                    }
+                    result.doIfLoading {
+                        if(it){
+                            progressBar.visibility = View.VISIBLE
+                        }
+                    }
+                }
+            )
         }
-    }
-
-    private fun signInProcessing() {
-        signInViewModel.state.observe(this, Observer { result ->
-            when(result) {
-
-                is Statesealed.ShowLoading ->{
-                    progressBar.visibility = View.VISIBLE
-                }
-
-                is Statesealed.HideLoading ->{
-                    progressBar.visibility = View.GONE
-                }
-
-                is Statesealed.Result ->{
-                    val intent = Intent(this, MainActivity::class.java)
-                    this.startActivity(intent)
-                }
-
-                is Statesealed.FailedLoading ->{
-                    signInViewModel.message.observe(this, Observer { message ->
-                        wrongDataText.text = message
-                    })
-                }
-
-            }
-        })
     }
 }

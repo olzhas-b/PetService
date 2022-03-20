@@ -10,6 +10,7 @@ package com.example.budka.view
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.Uri
@@ -26,11 +27,13 @@ import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.budka.data.model.CreateServiceModel
+import com.example.budka.R
+import com.example.budka.data.model.*
 import com.example.budka.data.model.Properties
-import com.example.budka.data.model.UploadImage
 import com.example.budka.databinding.CreateServiceOptionalFragmentBinding
 import com.example.budka.utils.FileUtils
 import com.example.budka.view.adapter.AddPropertiesAdapter
@@ -64,6 +67,8 @@ class CreateServiceOptionalFragment : Fragment(), UploadNewImageListener, EditTe
     private var additionalPropertiesList = MutableLiveData<PropertiesList>()
     private var imageListLiveData = MutableLiveData<UriList>()
     private val createSerViewModel: createServiceViewModel by activityViewModels()
+    private lateinit var serviceObserver: Observer<NetworkResult<String>>
+
 
 
 
@@ -139,6 +144,32 @@ class CreateServiceOptionalFragment : Fragment(), UploadNewImageListener, EditTe
     }
 
     fun setObservers() {
+        serviceObserver = Observer { result ->
+            result.doIfSuccess {
+                (activity as MainActivity).showProgressBar()
+                val successDialog = AlertDialog.Builder(requireContext())
+                successDialog.setIcon(R.drawable.ic_baseline_check_24)
+                successDialog.setTitle("Данные сохранены!")
+                successDialog.setPositiveButton(
+                    "OK"
+                ) {_,_ ->
+                    findNavController().navigate(CreateServiceOptionalFragmentDirections.actionCreateServiceOptionalFragmentToProfileFragment())
+                }
+                successDialog.create()
+                successDialog.show()
+            }
+            result.doIfFailure{ error, data ->
+                (activity as MainActivity).showProgressBar()
+                error?.let{(activity as MainActivity).showAlert(it)}
+
+            }
+
+            if(result is NetworkResult.Loading){
+                (activity as MainActivity).showProgressBar(true)
+
+            }
+
+        }
         additionalPropertiesList.observe(viewLifecycleOwner, {
             propertiesList.clear()
             it.propertiesList?.let { it1 -> propertiesList.addAll(it1) }
@@ -315,9 +346,9 @@ class CreateServiceOptionalFragment : Fragment(), UploadNewImageListener, EditTe
 
         val createServiceModel = CreateServiceModel(
             serviceType = requiredField.serviceType,
-            price = 3000,
-            currencyCode = localCurrency,
-            pricePerTime = "hour",
+            price = requiredField.servicePrice,
+            currencyCode = requiredField.currencyCode,
+            pricePerTime = requiredField.pricePerTime,
             longitude = requiredField.longitude.toDouble(),
             latitude = requiredField.latitude.toDouble(),
             description = requiredField.summary,
@@ -332,9 +363,9 @@ class CreateServiceOptionalFragment : Fragment(), UploadNewImageListener, EditTe
             }
         }
         if(arg.operationType == "update")
-            arg.requiredField.serviceId?.let { servicesViewModel.updateService(imagesToService, createServiceModel, it) }
+            arg.requiredField.serviceId?.let { servicesViewModel.updateService(imagesToService, createServiceModel, it).observe(viewLifecycleOwner, serviceObserver) }
         else
-            servicesViewModel.createService(imagesToService, createServiceModel)
+            servicesViewModel.createService(imagesToService, createServiceModel).observe(viewLifecycleOwner, serviceObserver)
     }
 
     private fun prepareFilePart(partName: String, fileUri: Uri): MultipartBody.Part{

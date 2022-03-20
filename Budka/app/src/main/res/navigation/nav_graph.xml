@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_mainPageFragment_to_service_providers_fragment"
             app:destination="@id/ServiceProvidersListFragment" />
+        <action
+            android:id="@+id/action_mainPageFragment_to_service_provider_detail_fragment"
+            app:destination="@id/service_provider_detail_fragment" />
 
     </fragment>
     <fragment
@@ -79,6 +82,9 @@
         <action
             android:id="@+id/action_service_provider_detail_fragment_to_userProfileFragment"
             app:destination="@id/userProfileFragment" />
+        <action
+            android:id="@+id/action_service_provider_detail_fragment_to_mainPageFragment"
+            app:destination="@id/mainPageFragment" />
 
     </fragment>
 
@@ -210,6 +216,9 @@
             app:argType="string"
             android:defaultValue="create"
             />
+        <action
+            android:id="@+id/action_createServiceOptionalFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
     <fragment
         android:id="@+id/mapsFragment"

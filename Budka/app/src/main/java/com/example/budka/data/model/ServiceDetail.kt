@@ -32,7 +32,7 @@ data class Properties(
 data class CreateServiceModel(
     val serviceType: Int,
     val price: Int,
-    val currencyCode: String,
+    val currencyCode: String?,
     val pricePerTime: String,
     val longitude: Double,
     val latitude: Double,

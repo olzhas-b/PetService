@@ -18,6 +18,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.example.budka.data.model.SessionManager
 import com.example.budka.data.model.User
+import com.example.budka.data.model.doIfFailure
+import com.example.budka.data.model.doIfSuccess
 import com.example.budka.databinding.FragmentProfileBinding
 import com.example.budka.viewModel.ProfileViewModel
 import com.squareup.picasso.Picasso
@@ -58,14 +60,20 @@ class ProfileFragment: Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun setObservers(){
-        profileViewModel.getProfile().observe(viewLifecycleOwner, {
-            profile -> profile.apply {
-            user = profile
-            Picasso.get().load(avatar).into(viewBinding.userAvatar)
-            viewBinding.tvName.text = fullName
-            viewBinding.tvAddress.text = city+ ", " + country
-            viewBinding.userRating.rating = averageRating
-        }
+        profileViewModel.getProfile().observe(viewLifecycleOwner, { result ->
+            result.doIfSuccess { profile ->
+                profile?.apply {
+                    user = profile
+                    Picasso.get().load(avatar).into(viewBinding.userAvatar)
+                    viewBinding.tvName.text = fullName
+                    viewBinding.tvAddress.text = city + ", " + country
+                    viewBinding.userRating.rating = averageRating
+                }
+            }
+            result.doIfFailure { error, data ->
+                error?.let { (activity as MainActivity).showAlert(it) }
+
+            }
         })
     }
 

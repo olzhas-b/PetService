@@ -10,6 +10,7 @@ package com.example.budka.view
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -29,7 +30,9 @@ import android.widget.ArrayAdapter
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.budka.R
 import com.example.budka.data.model.*
@@ -57,6 +60,8 @@ class CreatePetFragment : Fragment() {
     private val petsListViewModel: PetsListViewModel by viewModel()
     private var imageUri: Uri? = null
     val args: CreatePetFragmentArgs by navArgs()
+    private lateinit var petObserver: Observer<NetworkResult<Pet>>
+
 
 
 
@@ -104,8 +109,35 @@ class CreatePetFragment : Fragment() {
     }
 
     private fun setObservers() {
+        petObserver = Observer { result ->
+            result.doIfSuccess {
+                (activity as MainActivity).showProgressBar()
+                val successDialog = AlertDialog.Builder(requireContext())
+                successDialog.setIcon(R.drawable.ic_baseline_check_24)
+                successDialog.setTitle("Данные сохранены!")
+                successDialog.setPositiveButton(
+                    "OK"
+                ) {_,_ ->
+                    findNavController().navigate(CreatePetFragmentDirections.actionCreatePetFragmentToProfileFragment())
+                }
+                successDialog.create()
+                successDialog.show()
+            }
+            result.doIfFailure{ error, data ->
+                (activity as MainActivity).showProgressBar()
+                error?.let{(activity as MainActivity).showAlert(it)}
 
-    }
+            }
+
+            if(result is NetworkResult.Loading){
+                (activity as MainActivity).showProgressBar(true)
+
+            }
+
+        }
+
+        }
+
 
     private fun setListeners() {
         viewBinding.cardView.setOnClickListener {
@@ -137,9 +169,11 @@ class CreatePetFragment : Fragment() {
 
             if (image != null) {
                 if(args.operationType == "update")
-                    args.pet?.let { it1 -> petsListViewModel.updatePet(image, pet, it1.id) }
+                    args.pet?.let { it1 -> petsListViewModel.updatePet(image, pet, it1.id).observe(
+                        viewLifecycleOwner, petObserver
+                    ) }
                 else
-                    petsListViewModel.createPet(image, pet)
+                    petsListViewModel.createPet(image, pet).observe(viewLifecycleOwner, petObserver)
             }
 
 

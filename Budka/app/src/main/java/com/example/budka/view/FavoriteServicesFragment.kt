@@ -15,7 +15,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.budka.data.model.NetworkResult
 import com.example.budka.data.model.ServiceProvider
+import com.example.budka.data.model.doIfFailure
+import com.example.budka.data.model.doIfSuccess
 import com.example.budka.databinding.FragmentFavoriteServicesBinding
 import com.example.budka.view.adapter.ServiceProvidersAdapter
 import com.example.budka.view.adapter.viewHolder.FavListener
@@ -49,8 +52,22 @@ class FavoriteServicesFragment: Fragment(), FavListener, NavigationListener {
     }
 
     private fun setObservers() {
-        petSittersListViewModel.getFavoriteServices().observe(viewLifecycleOwner, {
-            serviceProvidersAdapter.updateEmployeeList(it)
+        petSittersListViewModel.getFavoriteServices().observe(viewLifecycleOwner, { result ->
+            result.doIfSuccess {
+                (activity as MainActivity).showProgressBar()
+                serviceProvidersAdapter.updateEmployeeList(it)
+
+            }
+            result.doIfFailure{ error, data ->
+                (activity as MainActivity).showProgressBar()
+                error?.let{(activity as MainActivity).showAlert(it)}
+
+            }
+
+            if(result is NetworkResult.Loading){
+                (activity as MainActivity).showProgressBar(true)
+
+            }
         })
     }
 

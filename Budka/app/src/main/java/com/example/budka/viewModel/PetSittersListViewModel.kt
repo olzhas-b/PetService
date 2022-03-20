@@ -11,39 +11,36 @@ package com.example.budka.viewModel
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.budka.data.model.Pet
-import com.example.budka.data.model.PetType
-import com.example.budka.data.model.ServiceProvider
-import com.example.budka.data.model.User
+import com.example.budka.data.model.*
 import com.example.budka.domain.useCase.PetSittersListUseCase
 import com.example.budka.domain.useCase.PetsListUseCase
 
 class PetSittersListViewModel (private val petSittersListUseCase: PetSittersListUseCase): BaseViewModel() {
-    var petSittersList = MutableLiveData<List<ServiceProvider>>()
-    private var favoriteServicesList = MutableLiveData<List<ServiceProvider>>()
+    var petSittersList = MutableLiveData< NetworkResult<List<ServiceProvider>>>()
+    private var favoriteServicesList = MutableLiveData<NetworkResult<List<ServiceProvider>>>()
 
 
     fun fetchPetSittersList(serviceType: Int, country: String?, city: String?, petType: String?) {
-        petSittersList = petSittersListUseCase.getPetSittersList(serviceType, country, city, petType) as MutableLiveData<List<ServiceProvider>>
+        petSittersList = petSittersListUseCase.getPetSittersList(serviceType, country, city, petType) as MutableLiveData<NetworkResult<List<ServiceProvider>>>
     }
 
-    fun getPetSittersList(): LiveData<List<ServiceProvider>> {
+    fun getPetSittersList(): LiveData<NetworkResult<List<ServiceProvider>>> {
         return petSittersList
     }
 
     fun fetchFavoriteServices() {
-        favoriteServicesList = petSittersListUseCase.getFavoriteServices() as MutableLiveData<List<ServiceProvider>>
+        favoriteServicesList = petSittersListUseCase.getFavoriteServices() as MutableLiveData<NetworkResult<List<ServiceProvider>>>
     }
 
-    fun getFavoriteServices(): LiveData<List<ServiceProvider>> {
+    fun getFavoriteServices(): LiveData<NetworkResult<List<ServiceProvider>>> {
         return favoriteServicesList
     }
 
-    fun putLike(serviceId: Int) {
-        petSittersListUseCase.putLike(serviceId)
+    fun putLike(serviceId: Int): LiveData<NetworkResult<String>> {
+        return petSittersListUseCase.putLike(serviceId)
     }
 
-    fun deleteLike(serviceId: Int) {
-        petSittersListUseCase.deleteLike(serviceId)
+    fun deleteLike(serviceId: Int): LiveData<NetworkResult<String>> {
+       return petSittersListUseCase.deleteLike(serviceId)
     }
 }

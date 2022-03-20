@@ -50,14 +50,18 @@
         app:layout_constraintTop_toBottomOf="@id/uploadImageBlock"
         tools:listitem="@layout/item_create_other_properties"
         tools:itemCount="3"/>
+
         <Button
             android:id="@+id/check"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:theme="@style/appMainTheme"
+            android:background="@drawable/my_button"
+            android:text="Сохранить"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/otherPropertiesRv"
-            android:text="Check"/>
+            app:layout_constraintTop_toBottomOf="@id/otherPropertiesRv"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

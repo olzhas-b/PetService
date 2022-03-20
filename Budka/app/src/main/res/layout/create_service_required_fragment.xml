@@ -67,13 +67,72 @@
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/servicePriceBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/serviceTypeBLock">
+
+            <TextView
+                android:id="@+id/text_view_servicePrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
+                android:text="Цена за услугу"
+                android:textSize="20sp" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:elevation="2dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/corner_input"
+                >
+                <EditText
+                    android:id="@+id/priceEt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/corner_input"
+                    android:layout_marginBottom="5dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/currencySp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:elevation="2dp"
+                    android:hint="Сумма"
+                    />
+
+                    <Spinner
+                        android:id="@+id/currencySp"
+                        android:layout_width="wrap_content"
+app:layout_constraintEnd_toStartOf="@id/pricePerTime"                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_height="wrap_content"
+                        tools:listitem="@layout/item_currency_type"
+                        android:spinnerMode="dropdown"/>
+                    <Spinner
+                        android:id="@+id/pricePerTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+app:layout_constraintEnd_toEndOf="parent"                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        tools:listitem="@layout/item_currency_type"
+                        android:spinnerMode="dropdown"/>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+        <LinearLayout
             android:id="@+id/summaryBlock"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/serviceTypeBLock">
+            app:layout_constraintTop_toBottomOf="@id/servicePriceBlock">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

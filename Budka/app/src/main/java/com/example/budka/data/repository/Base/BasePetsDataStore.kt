@@ -19,29 +19,33 @@ import retrofit2.Response
 import timber.log.Timber
 
 abstract class BasePetsDataStore(@PublishedApi internal val service: ApiService) {
-    abstract fun getAllPets(): LiveData<List<Pet>>
-    abstract fun getUserPets(user_id: Int): LiveData<List<Pet>>
+    abstract fun getAllPets():  LiveData<NetworkResult<List<Pet>>>
+    abstract fun getUserPets(user_id: Int): LiveData<NetworkResult<List<Pet>>>
     abstract fun createPet(image: MultipartBody.Part,
-                        body: PetCreate): LiveData<Pet>
+                        body: PetCreate): LiveData<NetworkResult<Pet>>
     abstract fun updatePet(image: MultipartBody.Part,
-                           body: PetCreate, petId: Int ): LiveData<Pet>
-    abstract fun deletePet(petId: Int): LiveData<String>
+                           body: PetCreate, petId: Int ): LiveData<NetworkResult<Pet>>
+    abstract fun deletePet(petId: Int): LiveData<NetworkResult<String>>
 
-    inline fun fetchData(crossinline call: (ApiService) -> Deferred<Response<List<Pet>>>): LiveData<List<Pet>> {
-        val result = MutableLiveData<List<Pet>>()
+    inline fun fetchData(crossinline call: (ApiService) -> Deferred<Response<List<Pet>>>): LiveData<NetworkResult<List<Pet>>> {
+        val result = MutableLiveData<NetworkResult<List<Pet>>>()
         CoroutineScope(Dispatchers.IO).launch {
             val request = call(service)
             withContext(Dispatchers.Main){
                 try {
+                    result.value = NetworkResult.Loading()
                     val response = request.await()
                     if (response.isSuccessful) {
-                        result.value = response.body()
+                        result.value = NetworkResult.Success(response.body())
                     } else {
+                        result.value = NetworkResult.Error("Запрос завершился с кодом${response.code()}")
                         Timber.d("Error occurred with code ${response.code()}")
                     }
                 } catch (e: HttpException){
+                    result.value = NetworkResult.Error("Ошибка: ${e.message()}")
                     Timber.d("Error: ${e.message()}")
                 } catch (e: Throwable){
+                    result.value = NetworkResult.Error("Ошибка: ${e.message}")
                     Timber.d("Error: ${e.message}")
                 }
             }
@@ -50,21 +54,25 @@ abstract class BasePetsDataStore(@PublishedApi internal val service: ApiService)
 
     }
 
-    inline fun getPetResponse(crossinline call: (ApiService) -> Deferred<Response<Pet>>): LiveData<Pet> {
-        val result = MutableLiveData<Pet>()
+    inline fun getPetResponse(crossinline call: (ApiService) -> Deferred<Response<Pet>>): LiveData<NetworkResult<Pet>> {
+        val result = MutableLiveData<NetworkResult<Pet>>()
         CoroutineScope(Dispatchers.IO).launch {
             val request = call(service)
             withContext(Dispatchers.Main){
                 try {
+                    result.value = NetworkResult.Loading()
                     val response = request.await()
                     if (response.isSuccessful) {
-                        result.value = response.body()
+                        result.value = NetworkResult.Success(response.body())
                     } else {
+                        result.value = NetworkResult.Error("Запрос завершился с кодом${response.code()}")
                         Timber.d("Error occurred with code ${response.code()}")
                     }
                 } catch (e: HttpException){
+                    result.value = NetworkResult.Error("Ошибка: ${e.message()}")
                     Timber.d("Error: ${e.message()}")
                 } catch (e: Throwable){
+                    result.value = NetworkResult.Error("Ошибка: ${e.message}")
                     Timber.d("Error: ${e.message}")
                 }
             }
@@ -73,21 +81,25 @@ abstract class BasePetsDataStore(@PublishedApi internal val service: ApiService)
 
     }
 
-    inline fun deleteResponse(crossinline call: (ApiService) -> Deferred<Response<String>>): LiveData<String> {
-        val result = MutableLiveData<String>()
+    inline fun deleteResponse(crossinline call: (ApiService) -> Deferred<Response<String>>):LiveData<NetworkResult<String>> {
+        val result = MutableLiveData<NetworkResult<String>>()
         CoroutineScope(Dispatchers.IO).launch {
             val request = call(service)
             withContext(Dispatchers.Main){
                 try {
+                    result.value = NetworkResult.Loading()
                     val response = request.await()
                     if (response.isSuccessful) {
-                        result.value = response.body()
+                        result.value = NetworkResult.Success(response.body())
                     } else {
+                        result.value = NetworkResult.Error("Запрос завершился с кодом${response.code()}")
                         Timber.d("Error occurred with code ${response.code()}")
                     }
                 } catch (e: HttpException){
+                    result.value = NetworkResult.Error("Ошибка: ${e.message()}")
                     Timber.d("Error: ${e.message()}")
                 } catch (e: Throwable){
+                    result.value = NetworkResult.Error("Ошибка: ${e.message}")
                     Timber.d("Error: ${e.message}")
                 }
             }

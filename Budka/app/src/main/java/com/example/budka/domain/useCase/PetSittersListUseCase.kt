@@ -9,29 +9,25 @@
 package com.example.budka.domain.useCase
 
 import androidx.lifecycle.LiveData
-import com.example.budka.data.model.Pet
-import com.example.budka.data.model.PetType
-import com.example.budka.data.model.ServiceProvider
-import com.example.budka.data.model.User
+import com.example.budka.data.model.*
 import com.example.budka.domain.repository.PetSittersListRepository
 import com.example.budka.domain.repository.PetsListRepository
 
 class PetSittersListUseCase (val petSittersListRepository: PetSittersListRepository){
-    fun getPetSittersList(serviceType: Int, country: String?, city: String?, petType: String?): LiveData<List<ServiceProvider>> {
+    fun getPetSittersList(serviceType: Int, country: String?, city: String?, petType: String?):  LiveData<NetworkResult<List<ServiceProvider>>> {
         return petSittersListRepository.getPetSitters(serviceType, country, city, petType)
     }
 
-    fun putLike(serviceId: Int){
-        petSittersListRepository.putLike(serviceId)
+    fun putLike(serviceId: Int): LiveData<NetworkResult<String>>{
+        return petSittersListRepository.putLike(serviceId)
     }
 
-    fun deleteLike(serviceId: Int){
-        petSittersListRepository.deleteLike(serviceId)
+    fun deleteLike(serviceId: Int): LiveData<NetworkResult<String>>{
+        return petSittersListRepository.deleteLike(serviceId)
     }
 
 
-
-    fun getFavoriteServices(): LiveData<List<ServiceProvider>> {
+    fun getFavoriteServices():  LiveData<NetworkResult<List<ServiceProvider>>> {
         return petSittersListRepository.getFavoriteServices()
     }
 }

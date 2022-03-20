@@ -8,6 +8,7 @@
 
 package com.example.budka.view
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,8 +18,8 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.budka.data.model.Pet
-import com.example.budka.data.model.ServiceProvider
+import com.example.budka.R
+import com.example.budka.data.model.*
 import com.example.budka.databinding.FragmentMyServicesBinding
 import com.example.budka.view.adapter.ServiceProvidersAdapter
 import com.example.budka.view.adapter.UserPetsAdapter
@@ -79,15 +80,28 @@ class MyServicesFragment : Fragment(), NavigationListener, PetEditListener {
 
 
     private fun setMyPetsObserver(){
-        petsListViewModel.getUserPetsList().observe(viewLifecycleOwner, {
-            myPetsAdapter.updatePetList(it)
+        petsListViewModel.getUserPetsList().observe(viewLifecycleOwner, { result ->
+            result.doIfSuccess { pets ->
+                pets?.let { myPetsAdapter.updatePetList(pets) }
+            }
+            result.doIfFailure { error, data ->
+                error?.let { (activity as MainActivity).showAlert(it) }
+
+            }
         })
     }
 
     private fun setMyServicesObserver(){
-        myservicesViewModel.getUserServicesList().observe(viewLifecycleOwner, {
-            serviceProvidersAdapter.updateEmployeeList(it)
-        })
+        myservicesViewModel.getUserServicesList().observe(viewLifecycleOwner,
+            { result ->
+                result.doIfSuccess { services ->
+                    services?.let { serviceProvidersAdapter.updateEmployeeList(services) }
+                }
+                result.doIfFailure { error, data ->
+                    error?.let { (activity as MainActivity).showAlert(it) }
+
+                }
+            })
     }
 
     private fun setServiceListeners(){
@@ -136,10 +150,46 @@ class MyServicesFragment : Fragment(), NavigationListener, PetEditListener {
     }
 
     override fun delete(petId: Int) {
-        petsListViewModel.deletePet(petId)
+        petsListViewModel.deletePet(petId).observe(viewLifecycleOwner, { result ->
+            result.doIfSuccess {
+                (activity as MainActivity).showProgressBar()
+                petsListViewModel.fetchUserPetsList(args.userId)
+                setMyPetsObserver()
+
+            }
+            result.doIfFailure{ error, data ->
+                (activity as MainActivity).showProgressBar()
+                (activity as MainActivity).showProgressBar()
+                error?.let{(activity as MainActivity).showAlert(it)}
+            }
+
+            if(result is NetworkResult.Loading){
+                (activity as MainActivity).showProgressBar(true)
+
+            }
+
+        })
     }
 
     override fun deleteService(serviceId: Int) {
-        myservicesViewModel.deleteService(serviceId)
+        myservicesViewModel.deleteService(serviceId).observe(viewLifecycleOwner, { result ->
+            result.doIfSuccess {
+                (activity as MainActivity).showProgressBar()
+                myservicesViewModel.fetchUserServicesList(args.userId)
+                setMyServicesObserver()
+
+            }
+            result.doIfFailure{ error, data ->
+                (activity as MainActivity).showProgressBar()
+                (activity as MainActivity).showProgressBar()
+                error?.let{(activity as MainActivity).showAlert(it)}
+            }
+
+            if(result is NetworkResult.Loading){
+                (activity as MainActivity).showProgressBar(true)
+
+            }
+
+        })
     }
 }

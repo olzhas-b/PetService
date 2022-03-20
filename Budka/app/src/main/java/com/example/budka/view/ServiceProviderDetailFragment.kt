@@ -8,6 +8,7 @@
 
 package com.example.budka.view
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.os.*
 import android.view.LayoutInflater
@@ -21,9 +22,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.budka.R
-import com.example.budka.data.model.LongLat
-import com.example.budka.data.model.ServiceDetail
-import com.example.budka.data.model.ServiceProvider
+import com.example.budka.data.model.*
 import com.example.budka.databinding.FragmentPetSitterDetailBinding
 import com.example.budka.view.adapter.*
 import com.example.budka.viewModel.PetsListViewModel
@@ -32,6 +31,11 @@ import com.example.budka.viewModel.ServicesViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_pet_sitter_detail.*
 import org.koin.android.viewmodel.ext.android.viewModel
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 
 
 class ServiceProviderDetailFragment: Fragment() {
@@ -74,6 +78,53 @@ class ServiceProviderDetailFragment: Fragment() {
         }
         setUpAdapter()
         setObservers()
+        viewBinding.callBtn.setOnClickListener {
+checkPermission()
+        }
+    }
+
+    fun checkPermission() {
+        if (ContextCompat.checkSelfPermission(requireActivity(),
+                Manifest.permission.CALL_PHONE)
+            != PackageManager.PERMISSION_GRANTED) {
+
+            // Permission is not granted
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(),
+                    Manifest.permission.CALL_PHONE)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(requireActivity(),
+                    arrayOf(Manifest.permission.CALL_PHONE),
+                    42)
+            }
+        } else {
+            // Permission has already been granted
+            callPhone()
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<String>, grantResults: IntArray) {
+        if (requestCode == 42) {
+            // If request is cancelled, the result arrays are empty.
+            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                // permission was granted, yay!
+                callPhone()
+            } else {
+                // permission denied, boo! Disable the
+                // functionality
+            }
+            return
+        }
+    }
+
+    fun callPhone(){
+        val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + arg.user.user?.phone))
+        startActivity(intent)
     }
 
 
@@ -87,15 +138,39 @@ class ServiceProviderDetailFragment: Fragment() {
 
         viewBinding.petSitterNameTv.text = serviceProvider.user?.fullName
         viewBinding.addressTv.text = serviceProvider.user?.country +", " + serviceProvider.user?.city
-        serviceDetailViewModel.getServiceDetail().observe(viewLifecycleOwner, {
-            setServiceDetail(it)
+        serviceDetailViewModel.getServiceDetail().observe(viewLifecycleOwner, { result ->
+            result.doIfSuccess { serviceDetail ->
+                serviceDetail?.let {
+                    setServiceDetail(serviceDetail)
+                }
+            }
+            result.doIfFailure { error, data ->
+                error?.let { (activity as MainActivity).showAlert(it) }
 
+            }
         })
-        petListViewModel.getUserPetsList().observe(viewLifecycleOwner, {
-            userPetsAdapter.updatePetList(it)
-        })
-        servicesViewModel.getUserServicesList().observe(viewLifecycleOwner, {
-            userServicesAdapter.updateServiceList(it)
+        petListViewModel.getUserPetsList().observe(viewLifecycleOwner,
+            { result ->
+                result.doIfSuccess { pets ->
+                    pets?.let { userPetsAdapter.updatePetList(it) }
+                }
+                result.doIfFailure { error, data ->
+                    error?.let { (activity as MainActivity).showAlert(it) }
+
+                }
+            }
+                )
+        servicesViewModel.getUserServicesList().observe(viewLifecycleOwner,{result->
+            result.doIfSuccess {
+                it?.let{userServicesAdapter.updateServiceList(it)}
+
+            }
+            result.doIfFailure{ error, data ->
+                error?.let{(activity as MainActivity).showAlert(it)}
+
+            }
+
+            result.doIfLoading {  }
         })
 
 

@@ -10,6 +10,7 @@ package com.example.budka.viewModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.budka.data.model.NetworkResult
 import com.example.budka.data.model.Pet
 import com.example.budka.data.model.User
 import com.example.budka.data.model.UserUpdate
@@ -20,28 +21,28 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 
 class ProfileViewModel(private val profileUseCase: ProfileUseCase): BaseViewModel() {
-    private var profile = MutableLiveData<User>()
+    private var profile = MutableLiveData< NetworkResult<User>>()
 
     fun fetchProfile(){
-        profile = profileUseCase.getProfileByToken() as MutableLiveData<User>
+        profile = profileUseCase.getProfileByToken() as MutableLiveData<NetworkResult<User>>
     }
 
-    fun getProfile(): LiveData<User> {
+    fun getProfile(): LiveData<NetworkResult<User>> {
         return profile
     }
 
     fun updateProfile(image: MultipartBody.Part,
                       body: UserUpdate
-    ): LiveData<User>{
+    ):LiveData<NetworkResult<User>> {
         return profileUseCase.updateProfile(image, body)
     }
 
-    fun fetchProfile(userId: Int){
-        profile = profileUseCase.getUserProfile(userId) as MutableLiveData<User>
+    fun fetchProfile(userId: Int) {
+        profile = profileUseCase.getUserProfile(userId) as MutableLiveData<NetworkResult<User>>
     }
 
-    fun setRating(userId: Int, rating: Int){
-        profileUseCase.setRating(userId, rating)
+    fun setRating(userId: Int, rating: Int):LiveData<NetworkResult<String>> {
+        return profileUseCase.setRating(userId, rating)
     }
 
 

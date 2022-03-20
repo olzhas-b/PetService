@@ -16,24 +16,24 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
 class ServicesUseCase (private val servicesRepository: ServicesRepository){
-    fun getUserServices(user_id: Int): LiveData<List<ServiceProvider>> {
+    fun getUserServices(user_id: Int): LiveData<NetworkResult<List<ServiceProvider>>> {
         return servicesRepository.getUserServices(user_id)
     }
 
     fun createService(images: List<MultipartBody.Part>,
                       body: CreateServiceModel
-    ): LiveData<CreateServiceModel>{
+    ): LiveData<NetworkResult<String>>{
         return servicesRepository.createService(images, body)
     }
 
     fun updateService(images: List<MultipartBody.Part>,
                       body: CreateServiceModel,
                       serviceId: Int
-    ): LiveData<CreateServiceModel>{
+    ): LiveData<NetworkResult<String>>{
         return servicesRepository.updateService(images, body, serviceId)
     }
 
-    fun deleteService(serviceId: Int){
-        servicesRepository.deleteService(serviceId)
+    fun deleteService(serviceId: Int): LiveData<NetworkResult<String>>{
+        return servicesRepository.deleteService(serviceId)
     }
 }

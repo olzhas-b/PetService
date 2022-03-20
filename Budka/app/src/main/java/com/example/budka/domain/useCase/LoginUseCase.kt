@@ -9,12 +9,15 @@
 package com.example.budka.domain.useCase
 
 import androidx.lifecycle.LiveData
-import com.example.budka.data.model.LoginData
-import com.example.budka.data.model.LoginResponse
+import com.example.budka.data.model.*
 import com.example.budka.domain.repository.LoginRepository
 
 class LoginUseCase(val accountRepository: LoginRepository) {
-    fun Login(data: LoginData): LiveData<LoginResponse> {
+    fun Login(data: LoginData):  LiveData<NetworkResult<LoginResponse>> {
         return accountRepository.validateWithLogin(data)
+    }
+
+    fun Register(data: SignUpData):  LiveData<NetworkResult<ServiceProvider>> {
+        return accountRepository.registerUser(data)
     }
 }

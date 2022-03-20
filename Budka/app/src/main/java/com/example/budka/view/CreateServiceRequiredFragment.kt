@@ -74,6 +74,9 @@ class CreateServiceRequiredFragment : Fragment(), SetLocationInterface {
         super.onViewCreated(view, savedInstanceState)
         if(savedInstanceState==null){
             args.user?.let {
+                it.price?.let { it1 -> viewBinding.priceEt.setText(it1.toString()) }
+                viewBinding.countriesEdV.setText(it.user?.country)
+                viewBinding.cityEdV.setText(it.user?.city)
                 savePhotoFromUrl()
                 serviceDetailViewModel.fetchServiceDetail(it.id)
             }
@@ -95,13 +98,16 @@ class CreateServiceRequiredFragment : Fragment(), SetLocationInterface {
 
         serviceDetailViewModel.getServiceDetail().observe(viewLifecycleOwner, {
             viewBinding.apply {
-                it.apply {
-                    summaryEt.setText(description)
-                    acceptablePetTypes.value = acceptablePets
-                    acceptablePetSize.value = acceptableSize
-                    this@CreateServiceRequiredFragment.latitude = latitude
-                    this@CreateServiceRequiredFragment.longitude = longitude
-                    createSerViewModel.propertiesList.value = additionalProperties
+                it.doIfSuccess {
+                    it?.apply {
+                        summaryEt.setText(description)
+                        acceptablePetTypes.value = acceptablePets
+                        acceptablePetSize.value = acceptableSize
+                        this@CreateServiceRequiredFragment.latitude = latitude
+                        this@CreateServiceRequiredFragment.longitude = longitude
+                        createSerViewModel.propertiesList.value = additionalProperties
+                    }
+
                 }
             }
         })
@@ -123,8 +129,11 @@ class CreateServiceRequiredFragment : Fragment(), SetLocationInterface {
             val summary = viewBinding.summaryEt.text.toString()
             val petType = viewBinding.petTypeSp.selectedItem.toString()
             val petSize = viewBinding.petSizeSp.selectedItem.toString()
+            val currencyCode = if(viewBinding.currencySp.selectedItem.toString().equals(" ")) null else viewBinding.currencySp.selectedItem.toString()
             val country = viewBinding.countriesEdV.text.toString()
             val city = viewBinding.cityEdV.text.toString()
+            val price = viewBinding.priceEt.text.toString().toInt()
+            val pricePerTime = viewBinding.pricePerTime.selectedItem.toString()
             val requireFields = ServiceRequiredField(
                 args.user?.id,
                 serviceType,
@@ -134,7 +143,10 @@ class CreateServiceRequiredFragment : Fragment(), SetLocationInterface {
                 country,
                 city,
                 this.longitude,
-                this.latitude
+                this.latitude,
+                price,
+                currencyCode,
+                pricePerTime
             )
             createSerViewModel.imageList.value = uriList
             it.findNavController().navigate(
@@ -149,6 +161,8 @@ class CreateServiceRequiredFragment : Fragment(), SetLocationInterface {
         setPetSize()
         setServiceType()
         setPetTypes()
+        setPricePerTime()
+        setCurrencyType()
 
     }
 
@@ -234,6 +248,43 @@ class CreateServiceRequiredFragment : Fragment(), SetLocationInterface {
         viewBinding.serviceTypeSp.adapter = serviceAdapter
         args.user?.let {
             it.serviceType?.let { it1 -> viewBinding.serviceTypeSp.setSelection(it1-1) }
+        }
+    }
+
+    private fun setCurrencyType() {
+        val currencyType = mutableListOf<String>()
+        for (currency in CurrencyType.values()) {
+            currencyType.add(currency.value)
+        }
+        val currencyAdapter = ArrayAdapter<String>(
+            requireActivity(),
+            R.layout.item_currency_type, R.id.text_view_pet_type_item, currencyType
+        )
+        viewBinding.currencySp.adapter = currencyAdapter
+        args.user?.let {
+            it.currencyCode?.let { it1 -> CurrencyType.from(it1)?.let { it2 ->
+                viewBinding.currencySp.setSelection(
+                    it2.ordinal)
+            } }
+        }
+    }
+
+    private fun setPricePerTime() {
+        val pricePerTime = mutableListOf<String>()
+        for (pricept in PricePerTime.values()) {
+            pricePerTime.add(pricept.value)
+        }
+
+        val pricePerTimeAdapter = ArrayAdapter<String>(
+            requireActivity(),
+            R.layout.item_currency_type, R.id.text_view_pet_type_item, pricePerTime
+        )
+        viewBinding.pricePerTime.adapter = pricePerTimeAdapter
+        args.user?.let {
+            it.pricePerTime?.let { it1 -> PricePerTime.from(it1)?.let { it2 ->
+                viewBinding.pricePerTime.setSelection(
+                    it2.ordinal)
+            } }
         }
     }
 

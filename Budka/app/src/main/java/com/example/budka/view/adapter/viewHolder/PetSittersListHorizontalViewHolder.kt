@@ -21,8 +21,10 @@ import com.example.budka.utils.setUpPriceMask
 import com.squareup.picasso.Picasso
 
 class PetSittersListHorizontalViewHolder  constructor(
-    val nearestPetSitterItemBinding: NearestPetSitterItemBinding
-): RecyclerView.ViewHolder(nearestPetSitterItemBinding.root) {
+    val nearestPetSitterItemBinding: NearestPetSitterItemBinding,
+    var navigationListener: NavigationListener ?= null,
+
+    ): RecyclerView.ViewHolder(nearestPetSitterItemBinding.root) {
 
     @SuppressLint("SetTextI18n")
     fun setUp(petSitterData: ServiceProvider){
@@ -35,6 +37,9 @@ class PetSittersListHorizontalViewHolder  constructor(
             image = petSitterData.images[0]
         }
         Picasso.get().load(image).fit().centerCrop().placeholder(R.drawable.akimbek).into(nearestPetSitterItemBinding.nearestPerSitterIv)
+        itemView.setOnClickListener {
+            navigationListener?.navigate(petSitterData)
+        }
 
 
 

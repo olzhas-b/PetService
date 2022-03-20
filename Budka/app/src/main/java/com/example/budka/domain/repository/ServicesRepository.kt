@@ -14,16 +14,16 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
 interface ServicesRepository {
-    fun getUserServices(user_id:Int): LiveData<List<ServiceProvider>>
+    fun getUserServices(user_id:Int):  LiveData<NetworkResult<List<ServiceProvider>>>
     fun createService(images: List<MultipartBody.Part>,
                       body: CreateServiceModel
-    ): LiveData<CreateServiceModel>
+    ):  LiveData<NetworkResult<String>>
 
     fun updateService(images: List<MultipartBody.Part>,
                       body: CreateServiceModel,
                       serviceId: Int
-    ): LiveData<CreateServiceModel>
+    ):  LiveData<NetworkResult<String>>
 
-    fun deleteService(serviceId: Int): LiveData<String>
+    fun deleteService(serviceId: Int):  LiveData<NetworkResult<String>>
 
 }

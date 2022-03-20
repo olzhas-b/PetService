@@ -21,14 +21,14 @@ import okhttp3.RequestBody
 
 class ServicesDataStore(apiService: ApiService): ServicesRepository, BaseServicesDataStore(apiService) {
 
-    override fun getUserServices(user_id: Int): LiveData<List<ServiceProvider>> {
+    override fun getUserServices(user_id: Int):  LiveData<NetworkResult<List<ServiceProvider>>> {
         return fetchData { service.getUserServices(user_id) }
     }
 
     override fun createService(
         images: List<MultipartBody.Part>,
         body: CreateServiceModel
-    ): LiveData<CreateServiceModel> {
+    ):  LiveData<NetworkResult<String>> {
         return postService {
 
             service.createService( images, body) }
@@ -38,13 +38,13 @@ class ServicesDataStore(apiService: ApiService): ServicesRepository, BaseService
         images: List<MultipartBody.Part>,
         body: CreateServiceModel,
         serviceId: Int
-    ): LiveData<CreateServiceModel> {
+    ):  LiveData<NetworkResult<String>> {
         return postService {
 
             service.updateService( images, body, serviceId) }
     }
 
-    override fun deleteService(serviceId: Int): LiveData<String> {
+    override fun deleteService(serviceId: Int):  LiveData<NetworkResult<String>> {
         return deleteResponse {service.deleteService(serviceId)  }
     }
 

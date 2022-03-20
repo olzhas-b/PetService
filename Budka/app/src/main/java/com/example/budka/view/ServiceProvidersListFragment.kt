@@ -26,6 +26,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.budka.data.model.ServiceProvider
+import com.example.budka.data.model.doIfFailure
+import com.example.budka.data.model.doIfLoading
+import com.example.budka.data.model.doIfSuccess
 import com.example.budka.databinding.FragmentPetSittersPageBinding
 import com.example.budka.utils.Constants
 import com.example.budka.view.adapter.ServiceProvidersAdapter
@@ -73,11 +76,20 @@ class ServiceProvidersListFragment: Fragment(), FavListener, NavigationListener 
                     if(context!=null){
                         viewBinding.petSitterLocationTv.text =
                             getUserAddress(newLocation.latitude, newLocation.longitude)
-                        country = getUserAddress(newLocation.latitude, newLocation.longitude).split(',')[1]
+                        country = getUserAddress(newLocation.latitude, newLocation.longitude).split(',')[1].substring(1)
                         city = getUserAddress(newLocation.latitude, newLocation.longitude).split(',')[0]
                         petSittersListViewModel.fetchPetSittersList(0, country, city, petType)
-                        petSittersListViewModel.getPetSittersList().observe(viewLifecycleOwner, {
-                            serviceProvidersAdapter.updateEmployeeList(it)
+                        petSittersListViewModel.getPetSittersList().observe(viewLifecycleOwner, {result->
+                            result.doIfSuccess {
+                                it?.let{serviceProvidersAdapter.updateEmployeeList(it)}
+
+                            }
+                            result.doIfFailure{ error, data ->
+                                error?.let{(activity as MainActivity).showAlert(it)}
+
+                            }
+
+                            result.doIfLoading {  }
                         })
 
 
@@ -119,8 +131,17 @@ class ServiceProvidersListFragment: Fragment(), FavListener, NavigationListener 
     }
 
     private fun setObservers(){
-        petSittersListViewModel.getPetSittersList().observe(viewLifecycleOwner, {
-            serviceProvidersAdapter.updateEmployeeList(it)
+        petSittersListViewModel.getPetSittersList().observe(viewLifecycleOwner, {result->
+            result.doIfSuccess {
+                it?.let{serviceProvidersAdapter.updateEmployeeList(it)}
+
+            }
+            result.doIfFailure{ error, data ->
+                error?.let{(activity as MainActivity).showAlert(it)}
+
+            }
+
+            result.doIfLoading {  }
         })
     }
 
@@ -201,12 +222,12 @@ class ServiceProvidersListFragment: Fragment(), FavListener, NavigationListener 
     override fun changeFavourite(isFavourite: Boolean, serviceId: Int) {
         if(isFavourite){
             petSittersListViewModel.putLike(serviceId)
-            petSittersListViewModel.petSittersList.value?.filter { it.id == serviceId }?.firstOrNull()?.isFavorite = true
+            petSittersListViewModel.petSittersList.value?.data?.firstOrNull { it.id == serviceId }?.isFavorite = true
 
         }
         else{
             petSittersListViewModel.deleteLike(serviceId)
-            petSittersListViewModel.petSittersList.value?.filter { it.id == serviceId }?.firstOrNull()?.isFavorite = false
+            petSittersListViewModel.petSittersList.value?.data?.firstOrNull { it.id == serviceId }?.isFavorite = false
 
         }
     }

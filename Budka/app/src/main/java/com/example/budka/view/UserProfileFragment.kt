@@ -20,8 +20,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.budka.data.model.SessionManager
-import com.example.budka.data.model.User
+import com.example.budka.data.model.*
 import com.example.budka.databinding.FragmentUserProfileBinding
 import com.example.budka.databinding.VoteDialogBinding
 import com.example.budka.view.adapter.UserPetsAdapter
@@ -79,21 +78,44 @@ class UserProfileFragment: Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun setObservers(){
-        profileViewModel.getProfile().observe(viewLifecycleOwner, { profile ->
-            profile.apply {
-                user = profile
-                Picasso.get().load(avatar).into(viewBinding.userAvatar)
-                viewBinding.tvName.text = fullName
-                viewBinding.tvAddress.text = city + ", " + country
-                viewBinding.userRating.rating = averageRating
-                viewBinding.profileAboutTv.text = description
+        profileViewModel.getProfile().observe(viewLifecycleOwner,
+            {result->
+            result.doIfSuccess {  profile ->
+                profile?.apply {
+                    user = profile
+                    Picasso.get().load(avatar).into(viewBinding.userAvatar)
+                    viewBinding.tvName.text = fullName
+                    viewBinding.tvAddress.text = city + ", " + country
+                    viewBinding.userRating.rating = averageRating
+                    viewBinding.profileAboutTv.text = description
+                }
+            }
+            result.doIfFailure { error, data ->
+                error?.let { (activity as MainActivity).showAlert(it) }
+
+            }
+        }
+        )
+        petListViewModel.getUserPetsList().observe(viewLifecycleOwner,{result ->
+            result.doIfSuccess { pets ->
+                pets?.let{userPetsAdapter.updatePetList(it)}
+            }
+            result.doIfFailure{ error, data ->
+                error?.let{(activity as MainActivity).showAlert(it)}
+
             }
         })
-        petListViewModel.getUserPetsList().observe(viewLifecycleOwner, {
-            userPetsAdapter.updatePetList(it)
-        })
-        servicesViewModel.getUserServicesList().observe(viewLifecycleOwner, {
-            userServicesAdapter.updateServiceList(it)
+        servicesViewModel.getUserServicesList().observe(viewLifecycleOwner, {result->
+            result.doIfSuccess {
+                it?.let{userServicesAdapter.updateServiceList(it)}
+
+            }
+            result.doIfFailure{ error, data ->
+                error?.let{(activity as MainActivity).showAlert(it)}
+
+            }
+
+            result.doIfLoading {  }
         })
     }
 
@@ -137,9 +159,27 @@ class UserProfileFragment: Fragment() {
         voteDialog.setPositiveButton(
             "Оценить"
         ) { dialog, which ->
-            profileViewModel.setRating(arg.userId, bind.ratingbar.rating.toInt())
-            profileViewModel.fetchProfile(arg.userId)
-            profileViewModel.getProfile()
+            profileViewModel.setRating(arg.userId, bind.ratingbar.rating.toInt()).observe(viewLifecycleOwner,
+                {result->
+                    result.doIfSuccess {
+                        (activity as MainActivity).showProgressBar()
+                        profileViewModel.fetchProfile(arg.userId)
+                        profileViewModel.getProfile()
+
+                    }
+                    result.doIfFailure{ error, data ->
+                        (activity as MainActivity).showProgressBar()
+                        error?.let{(activity as MainActivity).showAlert(it)}
+
+                    }
+
+                    result.doIfLoading {
+                        (activity as MainActivity).showProgressBar(true)
+
+                    }
+                }
+            )
+
             dialog.dismiss()
         }
             .setNegativeButton(

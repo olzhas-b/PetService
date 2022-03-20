@@ -21,7 +21,10 @@ data class ServiceRequiredField(
     val country: String,
     val city: String,
     val longitude: Double,
-    val latitude: Double
+    val latitude: Double,
+    val servicePrice: Int,
+    val currencyCode: String?,
+    val pricePerTime: String
 
 ): Parcelable
 

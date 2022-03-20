@@ -17,31 +17,31 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
 class ServicesViewModel (private val servicesUseCase: ServicesUseCase): BaseViewModel() {
-    private var userServicesList = MutableLiveData<List<ServiceProvider>>()
+    private var userServicesList = MutableLiveData<NetworkResult<List<ServiceProvider>>>()
 
     fun fetchUserServicesList(user_id: Int){
-        userServicesList = servicesUseCase.getUserServices(user_id) as MutableLiveData<List<ServiceProvider>>
+        userServicesList = servicesUseCase.getUserServices(user_id) as MutableLiveData<NetworkResult<List<ServiceProvider>>>
     }
 
-    fun getUserServicesList(): LiveData<List<ServiceProvider>> {
+    fun getUserServicesList(): LiveData<NetworkResult<List<ServiceProvider>>> {
         return userServicesList
     }
 
     fun createService(images: List<MultipartBody.Part>,
                       body: CreateServiceModel
-    ): LiveData<CreateServiceModel>{
+    ): LiveData<NetworkResult<String>> {
         return servicesUseCase.createService(images, body)
     }
 
     fun updateService(images: List<MultipartBody.Part>,
                       body: CreateServiceModel,
                       serviceId: Int
-    ): LiveData<CreateServiceModel>{
+    ): LiveData<NetworkResult<String>> {
         return servicesUseCase.updateService(images, body, serviceId)
     }
 
-    fun deleteService(serviceId: Int) {
-        servicesUseCase.deleteService(serviceId)
+    fun deleteService(serviceId: Int): LiveData<NetworkResult<String>> {
+        return servicesUseCase.deleteService(serviceId)
     }
 
 }

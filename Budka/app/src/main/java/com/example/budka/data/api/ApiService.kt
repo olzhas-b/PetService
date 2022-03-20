@@ -11,7 +11,6 @@ package com.example.budka.data.api
 import com.example.budka.data.model.*
 import kotlinx.coroutines.Deferred
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -74,7 +73,7 @@ interface ApiService {
     fun createService(
         @Part images :List<MultipartBody.Part>,
         @Part("body") body: CreateServiceModel,
-    ): Deferred<Response<CreateServiceModel>>
+    ): Deferred<Response<String>>
 
 
     @Multipart
@@ -84,7 +83,7 @@ interface ApiService {
         @Part images :List<MultipartBody.Part>,
         @Part("body") body: CreateServiceModel,
         @Path("serviceId") serviceId: Int
-    ): Deferred<Response<CreateServiceModel>>
+    ): Deferred<Response<String>>
 
     @GET(API +"service/{serviceId}/detail")
     fun getServiceDetail(@Path("serviceId") serviceId: Int): Deferred<Response<ServiceDetail>>
@@ -109,5 +108,11 @@ interface ApiService {
         @Url url: String,
         @Body data: SignInModel
     ):Deferred<Response<LoginResponse>>
+
+    @POST
+    fun register(
+        @Url url: String,
+        @Body data: SignUpData
+    ):Deferred<Response<ServiceProvider>>
 
 }

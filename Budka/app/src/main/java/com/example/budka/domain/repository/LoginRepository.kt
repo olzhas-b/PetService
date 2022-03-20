@@ -9,9 +9,9 @@
 package com.example.budka.domain.repository
 
 import androidx.lifecycle.LiveData
-import com.example.budka.data.model.LoginData
-import com.example.budka.data.model.LoginResponse
+import com.example.budka.data.model.*
 
 interface LoginRepository {
-    fun validateWithLogin(data: LoginData): LiveData<LoginResponse>
+    fun validateWithLogin(data: LoginData):  LiveData<NetworkResult<LoginResponse>>
+    fun registerUser(data: SignUpData):  LiveData<NetworkResult<ServiceProvider>>
 }

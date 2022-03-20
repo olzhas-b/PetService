@@ -9,8 +9,10 @@
 package com.example.budka.data.repository.DataStore
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.budka.data.api.ApiService
 import com.example.budka.data.model.CreateServiceModel
+import com.example.budka.data.model.NetworkResult
 import com.example.budka.data.model.Pet
 import com.example.budka.data.model.PetCreate
 import com.example.budka.data.repository.Base.BasePetsDataStore
@@ -19,25 +21,25 @@ import okhttp3.MultipartBody
 
 class PetsListDataStore(apiService: ApiService): PetsListRepository, BasePetsDataStore(apiService) {
 
-    override fun getAllPets(): LiveData<List<Pet>> {
+    override fun getAllPets(): LiveData<NetworkResult<List<Pet>>> {
         return fetchData { service.getPets()}
     }
 
-    override fun getUserPets(user_id: Int): LiveData<List<Pet>> {
+    override fun getUserPets(user_id: Int): LiveData<NetworkResult<List<Pet>>> {
         return fetchData { service.getUserPets(user_id) }
     }
 
     override fun createPet(image: MultipartBody.Part,
                         body: PetCreate
-    ): LiveData<Pet> {
+    ):  LiveData<NetworkResult<Pet>> {
         return getPetResponse { service.createPet(image, body) }
     }
 
-    override fun updatePet(image: MultipartBody.Part, body: PetCreate, petId: Int): LiveData<Pet> {
+    override fun updatePet(image: MultipartBody.Part, body: PetCreate, petId: Int):  LiveData<NetworkResult<Pet>> {
         return getPetResponse { service.updatePet(image, body, petId) }
     }
 
-    override fun deletePet(petId: Int): LiveData<String> {
+    override fun deletePet(petId: Int):  LiveData<NetworkResult<String>> {
         return deleteResponse {service.deletePet(petId)}
     }
 }

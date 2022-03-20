@@ -11,6 +11,7 @@ package com.example.budka.view
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -32,10 +33,10 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.budka.R
 import com.example.budka.data.model.*
-import com.example.budka.databinding.FragmentProfileBinding
 import com.example.budka.databinding.FragmentUpdateProfileBinding
 import com.example.budka.utils.FileUtils
 import com.example.budka.viewModel.CountriesListViewModel
@@ -137,8 +138,32 @@ class ChangeProfileFragment: Fragment() {
                 val image = imageUri?.let { it1 -> prepareFilePart("image", it1) }
 
                 if (image != null) {
-                    profileViewModel.updateProfile(image, user)
-                    it.findNavController().navigate(ChangeProfileFragmentDirections.actionChangeProfileFragmentToProfileFragment())
+                    profileViewModel.updateProfile(image, user).observe(viewLifecycleOwner, { result ->
+                        result.doIfSuccess {
+                            (activity as MainActivity).showProgressBar()
+                            val successDialog = AlertDialog.Builder(requireContext())
+                            successDialog.setIcon(R.drawable.ic_baseline_check_24)
+                            successDialog.setTitle("Профиль успешно обновлён!")
+                            successDialog.setPositiveButton(
+                                "OK"
+                            ) {_,_ ->
+                                findNavController().navigate(ChangeProfileFragmentDirections.actionChangeProfileFragmentToProfileFragment())
+                            }
+                            successDialog.create()
+                            successDialog.show()
+                        }
+                        result.doIfFailure{ error, data ->
+                            (activity as MainActivity).showProgressBar()
+                            error?.let{(activity as MainActivity).showAlert(it)}
+
+                        }
+
+                        if(result is NetworkResult.Loading){
+                            (activity as MainActivity).showProgressBar(true)
+
+                        }
+
+                    })
                 }
             }
         }

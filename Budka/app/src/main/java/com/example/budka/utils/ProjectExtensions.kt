@@ -51,7 +51,11 @@ fun TextView.setUpPriceMask(
                 val finalText = "$amount ${currency.getSymbol(localeKz)}"
                 setText(finalText)
             }
-        }}
+        }
+        else{
+            setText("$amount")
+        }
+    }
     catch (e: Exception){
         e.printStackTrace()
     }

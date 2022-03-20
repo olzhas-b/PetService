@@ -28,7 +28,7 @@ class PetsListHorizontalViewHolder constructor(
     fun setUp(petsData: Pet){
         itemPetBinding.mainPagePetNameTv.text = petsData.name
 //        itemPetBinding.mainPagePetOwnerNameTv.text = petsData.user?.first_name+" "+ petsData.user?.last_name
-        Picasso.get().load("http://192.168.43.145:8080/api/v1/image/2.png").fit().centerCrop().placeholder(R.drawable.img_aktos).into(itemPetBinding.mainPagePetsIv)
+        Picasso.get().load(petsData.image).fit().centerCrop().placeholder(R.drawable.img_aktos).into(itemPetBinding.mainPagePetsIv)
 
     }
 
@@ -46,7 +46,7 @@ class PetsListVerticalViewHolder constructor(
     fun setUp(petsData: Pet){
         itemPetBinding.petNameTv.text= petsData.name
 //        itemPetBinding.mainPagePetOwnerNameTv.text = petsData.user?.first_name+" "+ petsData.user?.last_name
-        Picasso.get().load("http://192.168.43.145:8080/api/v1/image/2.png").fit().centerCrop().placeholder(R.drawable.img_aktos).into(itemPetBinding.petsAvatarIv)
+        Picasso.get().load(petsData.image).fit().centerCrop().placeholder(R.drawable.img_aktos).into(itemPetBinding.petsAvatarIv)
         itemView.setOnClickListener {
             navigationListener?.navigate(petsData)
         }
