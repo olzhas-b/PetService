@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ /**
+  ~  * Created by Ali Ashkeyev on 12.02.2022, 15:47
+  ~  * Copyright (c) 2022 . All rights reserved.
+  ~  * Last modified 12.02.2022, 15:47
+  ~  */
+  -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- image viwer to view the images -->
+    <ImageView
+        android:id="@+id/albumIv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

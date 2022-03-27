@@ -9,6 +9,8 @@
 package com.example.budka.data.api
 
 import android.content.SharedPreferences
+import android.util.Log
+import com.example.budka.data.model.SessionManager
 import com.example.budka.utils.Constants.Companion.BASE_URL
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
@@ -20,7 +22,7 @@ import java.util.concurrent.TimeUnit
 
 object ApiClient { fun create(okHttpClient: OkHttpClient): ApiService {
     return Retrofit.Builder()
-        .baseUrl(BASE_URL)
+        .baseUrl("http://192.168.43.226:8080/")
         .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(CoroutineCallAdapterFactory())
         .client(okHttpClient)
@@ -41,14 +43,15 @@ object ApiClient { fun create(okHttpClient: OkHttpClient): ApiService {
             .build()
     }
 
-    fun getAuthInterceptor(): Interceptor {
+    fun getAuthInterceptor(sessionManager: SessionManager): Interceptor {
         return Interceptor { chain ->
             val newRequest = chain.request()
                 .newBuilder()
-//                .addHeader("Authorization", sharedPreferences.getString("token", "")!!)
-                .build()
-
-            chain.proceed(newRequest)
+//                .addHeader("Bearer ", sharedPreferences.getString("token", "")!!)
+            Log.d("mytoken",  sessionManager.fetchSessionId().toString())
+            sessionManager.fetchSessionId()?.let{result->
+                newRequest.header("Authorization", "Bearer $result") }
+            chain.proceed(newRequest.build())
         }
     }
 }

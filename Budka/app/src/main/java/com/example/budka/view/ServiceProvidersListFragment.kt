@@ -9,6 +9,7 @@
 package com.example.budka.view
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
@@ -22,11 +23,18 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.budka.data.model.ServiceProvider
+import com.example.budka.data.model.doIfFailure
+import com.example.budka.data.model.doIfLoading
+import com.example.budka.data.model.doIfSuccess
 import com.example.budka.databinding.FragmentPetSittersPageBinding
 import com.example.budka.utils.Constants
 import com.example.budka.view.adapter.ServiceProvidersAdapter
+import com.example.budka.view.adapter.viewHolder.FavListener
+import com.example.budka.view.adapter.viewHolder.NavigationListener
 import com.example.budka.viewModel.PetSittersListViewModel
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.OnCompleteListener
@@ -37,12 +45,17 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import java.util.*
 
 
-class ServiceProvidersListFragment: Fragment() {
+class ServiceProvidersListFragment: Fragment(), FavListener, NavigationListener {
     val arg: ServiceProvidersListFragmentArgs by navArgs()
     private lateinit var viewBinding: FragmentPetSittersPageBinding
     private lateinit var serviceProvidersAdapter: ServiceProvidersAdapter
     private val petSittersListViewModel: PetSittersListViewModel by viewModel()
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var country: String? = null
+    private var city: String? = null
+    private var petType: String? = null
+    private var locationUpdates: LocationCallback
+
 
 
     override fun onCreateView(
@@ -55,25 +68,91 @@ class ServiceProvidersListFragment: Fragment() {
         return viewBinding.root
     }
 
+    init {
+        locationUpdates = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult?) {
+                fusedLocationClient.removeLocationUpdates(this)
+                if (locationResult != null && locationResult.locations.isNotEmpty()) {
+                    val newLocation = locationResult.locations[0]
+                    if(context!=null){
+                        viewBinding.petSitterLocationTv.text =
+                            getUserAddress(newLocation.latitude, newLocation.longitude)
+                        country = getUserAddress(newLocation.latitude, newLocation.longitude).split(',')[1].substring(1)
+                        city = getUserAddress(newLocation.latitude, newLocation.longitude).split(',')[0]
+                        petSittersListViewModel.fetchPetSittersList(arg.serviceType, country, city, petType)
+                        petSittersListViewModel.getPetSittersList().observe(viewLifecycleOwner, {result->
+                            result.doIfSuccess {
+                                viewBinding.petSittersResult.setText("Найдено ${it?.total} обьявлении")
+                                it?.let{serviceProvidersAdapter.updateEmployeeList(it.rows)}
+
+                            }
+                            result.doIfFailure{ error, data ->
+                                error?.let{(activity as MainActivity).showAlert(it)}
+
+                            }
+
+                            result.doIfLoading {  }
+                        })
+
+
+                    }
+
+                } else {
+
+                    Toast.makeText(
+
+                        context,
+                        "Включите геопозицию",
+                        Toast.LENGTH_LONG
+                    ).show()
+
+
+                }
+            }
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getLastKnownLocation()
         if(savedInstanceState==null){
-            petSittersListViewModel.fetchPetSittersList(arg.serviceType)
+            arg.apply {
+                this@ServiceProvidersListFragment.country = country
+                this@ServiceProvidersListFragment.city = city
+                this@ServiceProvidersListFragment.petType = petType
+            }
+            petSittersListViewModel.fetchPetSittersList(arg.serviceType, country, city, petType)
+            viewBinding.petSitterLocationTv.text = "$city, $country"
+
+
+
         }
+        if( arg.country == null && arg.city == null)
+            getLastKnownLocation()
         setupAdapter()
         setObservers()
         setOnClickListener()
     }
 
     private fun setObservers(){
-        petSittersListViewModel.getPetSittersList().observe(viewLifecycleOwner, {
-            serviceProvidersAdapter.updateEmployeeList(it)
+        petSittersListViewModel.getPetSittersList().observe(viewLifecycleOwner, {result->
+            result.doIfSuccess {
+                viewBinding.petSittersResult.setText("Найдено ${it?.total} обьявлении")
+                it?.let{serviceProvidersAdapter.updateEmployeeList(it.rows)}
+
+
+            }
+            result.doIfFailure{ error, data ->
+                error?.let{(activity as MainActivity).showAlert(it)}
+
+            }
+
+            result.doIfLoading {  }
         })
     }
 
     private fun setupAdapter(){
-        serviceProvidersAdapter = ServiceProvidersAdapter()
+        serviceProvidersAdapter = ServiceProvidersAdapter(favListener  = this, navigationListener = this)
         val layoutManager = LinearLayoutManager(activity,LinearLayoutManager.VERTICAL, false)
         service_providers_rv.layoutManager = layoutManager
         service_providers_rv.adapter = serviceProvidersAdapter
@@ -84,7 +163,7 @@ class ServiceProvidersListFragment: Fragment() {
 
     private fun setOnClickListener(){
         viewBinding.petSitterFilterIb.setOnClickListener{
-            it.findNavController().navigate(ServiceProvidersListFragmentDirections.actionServiceProvidersFragmentToPetSittersFilterFragment())
+            it.findNavController().navigate(ServiceProvidersListFragmentDirections.actionServiceProvidersFragmentToPetSittersFilterFragment(arg.serviceType))
         }
 
     }
@@ -92,40 +171,21 @@ class ServiceProvidersListFragment: Fragment() {
 
     private fun getLastKnownLocation() {
         val locationRequest = LocationRequest().apply {
-            interval = 120000
-            fastestInterval = 120000
+            interval = 12000
+            fastestInterval = 12000
             priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
         }
+
+
         if (!checkPermission()) {
             requestPermission()
         } else {
             fusedLocationClient.lastLocation
                 .addOnSuccessListener(requireActivity()) { location ->
                     if (location == null || location.accuracy > 100) {
-                        val mLocationCallback = object : LocationCallback() {
-                            override fun onLocationResult(locationResult: LocationResult?) {
-                                fusedLocationClient.removeLocationUpdates(this)
-                                if (locationResult != null && locationResult.locations.isNotEmpty()) {
-                                    val newLocation = locationResult.locations[0]
-                                    if(context!=null){
-                                        viewBinding.petSitterLocationTv.text =
-                                            getUserAddress(newLocation.latitude, newLocation.longitude)
-                                    }
-
-                                } else {
-                                    Toast.makeText(
-                                        context,
-                                        "Включите геопозицию",
-                                        Toast.LENGTH_LONG
-                                    ).show()
-
-                                }
-                            }
-                        }
-
                         fusedLocationClient.requestLocationUpdates(
                             locationRequest,
-                            mLocationCallback, null
+                            locationUpdates, null
                         )
                     } else {
                         Toast.makeText(context, "Включите геопозицию", Toast.LENGTH_LONG).show()
@@ -134,6 +194,8 @@ class ServiceProvidersListFragment: Fragment() {
                 .addOnFailureListener {
                     Toast.makeText(context, "Включите геопозицию", Toast.LENGTH_LONG).show()
                 }
+
+
         }
     }
 
@@ -161,6 +223,34 @@ class ServiceProvidersListFragment: Fragment() {
             val countryName = address.get(0).countryName
             return "$cityName, $countryName"
 
+    }
+
+    override fun changeFavourite(isFavourite: Boolean, serviceId: Int) {
+        if(isFavourite){
+            petSittersListViewModel.putLike(serviceId)
+            petSittersListViewModel.petSittersList.value?.data?.rows?.firstOrNull { it.id == serviceId }?.isFavorite = true
+
+        }
+        else{
+            petSittersListViewModel.deleteLike(serviceId)
+            petSittersListViewModel.petSittersList.value?.data?.rows?.firstOrNull { it.id == serviceId }?.isFavorite = false
+
+        }
+    }
+
+    override fun navigate(serviceProviderData: ServiceProvider) {
+        findNavController().navigate(ServiceProvidersListFragmentDirections.actionServiceProvidersFragmentToServiceProviderDetailFragment(serviceProviderData))
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        fusedLocationClient.removeLocationUpdates(locationUpdates)
+
+    }
+
+    override fun deleteService(serviceId: Int) {
+        Log.d("not", "not")
     }
 
 }

@@ -9,10 +9,12 @@
 package com.example.budka.domain.repository
 
 import androidx.lifecycle.LiveData
-import com.example.budka.data.model.Pet
-import com.example.budka.data.model.ServiceProvider
-import com.example.budka.data.model.User
+import com.example.budka.data.model.*
 
 interface PetSittersListRepository {
-    fun getPetSitters(serviceType: String): LiveData<List<ServiceProvider>>
+    fun getPetSitters(serviceType: Int, country: String?, city: String?, petType: String?):  LiveData<NetworkResult<ServiceProviderResponse>>
+    fun putLike(serviceId: Int):  LiveData<NetworkResult<String>>
+    fun deleteLike(serviceId: Int):  LiveData<NetworkResult<String>>
+    fun getFavoriteServices():  LiveData<NetworkResult<List<ServiceProvider>>>
+
 }

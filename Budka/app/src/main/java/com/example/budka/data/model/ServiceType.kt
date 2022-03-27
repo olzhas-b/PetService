@@ -14,6 +14,9 @@ enum class ServiceType (val value: String) {
     VET("Ветеринары"),
     TRAINING("Дрессировка"),
     GROOMING("Груминг"),
-    ZOOHOSTEL("Зоогостиницы"),
+    ZOOHOSTEL("Зоогостиницы");
+    companion object{
+        fun from(s: String): ServiceType? = values().find { it.value == s }
+    }
 
 }
