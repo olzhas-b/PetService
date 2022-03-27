@@ -15,6 +15,9 @@ type Services struct {
 	interfaces.IAuthorizationService
 	interfaces.IServiceDetailService
 	interfaces.IPetService
+	interfaces.IRatingService
+	interfaces.ICountryService
+	interfaces.IFavoriteService
 }
 
 func NewServices(repo *repo.Repositories, redis *redis.Client) *Services {
@@ -25,5 +28,8 @@ func NewServices(repo *repo.Repositories, redis *redis.Client) *Services {
 		IServiceDetailService:   NewServiceDetailService(repo),
 		IAuthorizationService:   NewAuthorizationService(redis),
 		IPetService:             NewPetService(repo),
+		IRatingService:          NewRatingService(repo),
+		ICountryService:         NewCountryService(repo),
+		IFavoriteService:        NewFavoriteService(repo),
 	}
 }

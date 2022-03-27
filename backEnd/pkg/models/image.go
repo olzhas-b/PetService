@@ -1,6 +1,11 @@
 package models
 
-import "mime/multipart"
+import (
+	"fmt"
+	"github.com/olzhas-b/PetService/backEnd/pkg/config"
+
+	"mime/multipart"
+)
 
 type Image struct {
 	ID          int64  `gorm:"id" json:"id"`
@@ -12,6 +17,21 @@ type Image struct {
 
 func (i *Image) TableName() string {
 	return "image"
+}
+
+func (i *Image) ConvertToURL() string {
+	url := config.GlobalConfig.HTTP.DNS()
+	url += "/api/v1/image"
+	return fmt.Sprintf("%s/%d.%s", url, i.ID, i.contentTypeToFileType(i.ContentType))
+}
+
+func (i *Image) contentTypeToFileType(contentType string) string {
+	switch contentType {
+	case "":
+		return "jbeg"
+	default:
+		return "png"
+	}
 }
 
 type ImageToSave struct {

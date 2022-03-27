@@ -1,6 +1,7 @@
 package postgres
 
 import (
+	"context"
 	"github.com/olzhas-b/PetService/backEnd/pkg/models"
 	"gorm.io/gorm"
 )
@@ -26,4 +27,27 @@ func (repo *ImageRepository) GetImageByID(id int64) (image models.Image, err err
 		Find(&image).
 		Error
 	return
+}
+
+func (repo *ImageRepository) DeleteImageByID(ctx context.Context, id int64) (err error) {
+	defer func() {
+		if err != nil {
+
+		}
+	}()
+
+	err = repo.DB.
+		Where("id = ?", id).
+		Delete(&models.Image{}).
+		Error
+	return
+}
+
+func (repo *ImageRepository) UpdateOrSaveImage(ctx context.Context, image models.Image) (result models.Image, err error) {
+	err = repo.DB.Model(models.Image{}).
+		Where("id = ?", image.ID).
+		Save(&image).
+		Error
+
+	return image, err
 }

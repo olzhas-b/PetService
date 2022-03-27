@@ -3,7 +3,7 @@ package logger
 import (
 	"context"
 	"github.com/mattn/go-colorable"
-	"github.com/olzhas-b/PetService/backEnd/config"
+	"github.com/olzhas-b/PetService/backEnd/pkg/config"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -12,11 +12,6 @@ const InstanceZapLogger int = iota
 
 func InitLogger(cfg *config.Config) {
 	var level zapcore.Level
-	// if cfg.Debug {
-	// 	level = zap.InfoLevel
-	// } else {
-	// 	level = zap.WarnLevel
-	// }
 	writer := zapcore.Lock(zapcore.AddSync(colorable.NewColorableStdout()))
 	core := zapcore.NewCore(getEncoder(cfg), writer, level)
 
@@ -34,9 +29,7 @@ func getEncoder(cfg *config.Config) zapcore.Encoder {
 	encoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder // for color
 	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
 	encoderConfig.TimeKey = "time"
-	//if isJSON {
-	//	return zapcore.NewJSONEncoder(encoderConfig)
-	//}
+
 	return zapcore.NewConsoleEncoder(encoderConfig)
 }
 

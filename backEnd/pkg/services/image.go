@@ -19,16 +19,15 @@ func NewImageService(repo *repositories.Repositories) *ImageService {
 	return &ImageService{repo: repo}
 }
 
-func (srv *ImageService) ServiceSaveImage(image models.ImageToSave) (err error) {
+func (srv *ImageService) ServiceSaveImage(files []*multipart.FileHeader) (err error) {
 	var images []models.Image
-	for _, val := range image.Files {
+	for _, file := range files {
 		newImage := models.Image{
-			Name:        val.Filename,
-			ContentType: val.Header.Get("Content-Type"),
+			Name:        file.Filename,
+			ContentType: file.Header.Get("Content-Type"),
 		}
 		func() {
-			var file multipart.File
-			file, err = val.Open()
+			file, err := file.Open()
 			if err != nil {
 				return
 			}
