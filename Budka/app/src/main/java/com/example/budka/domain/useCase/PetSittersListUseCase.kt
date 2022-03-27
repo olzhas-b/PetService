@@ -14,7 +14,7 @@ import com.example.budka.domain.repository.PetSittersListRepository
 import com.example.budka.domain.repository.PetsListRepository
 
 class PetSittersListUseCase (val petSittersListRepository: PetSittersListRepository){
-    fun getPetSittersList(serviceType: Int, country: String?, city: String?, petType: String?):  LiveData<NetworkResult<List<ServiceProvider>>> {
+    fun getPetSittersList(serviceType: Int, country: String?, city: String?, petType: String?):  LiveData<NetworkResult<ServiceProviderResponse>> {
         return petSittersListRepository.getPetSitters(serviceType, country, city, petType)
     }
 

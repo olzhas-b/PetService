@@ -16,15 +16,15 @@ import com.example.budka.domain.useCase.PetSittersListUseCase
 import com.example.budka.domain.useCase.PetsListUseCase
 
 class PetSittersListViewModel (private val petSittersListUseCase: PetSittersListUseCase): BaseViewModel() {
-    var petSittersList = MutableLiveData< NetworkResult<List<ServiceProvider>>>()
+    var petSittersList = MutableLiveData< NetworkResult<ServiceProviderResponse>>()
     private var favoriteServicesList = MutableLiveData<NetworkResult<List<ServiceProvider>>>()
 
 
     fun fetchPetSittersList(serviceType: Int, country: String?, city: String?, petType: String?) {
-        petSittersList = petSittersListUseCase.getPetSittersList(serviceType, country, city, petType) as MutableLiveData<NetworkResult<List<ServiceProvider>>>
+        petSittersList = petSittersListUseCase.getPetSittersList(serviceType, country, city, petType) as MutableLiveData<NetworkResult<ServiceProviderResponse>>
     }
 
-    fun getPetSittersList(): LiveData<NetworkResult<List<ServiceProvider>>> {
+    fun getPetSittersList(): LiveData<NetworkResult<ServiceProviderResponse>> {
         return petSittersList
     }
 

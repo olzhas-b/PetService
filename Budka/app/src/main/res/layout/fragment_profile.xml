@@ -44,17 +44,24 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
-
-            <ImageView
-                android:id="@+id/userAvatar"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/profileCv"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:layout_margin="9dp"
                 android:adjustViewBounds="true"
-                android:background="@drawable/circle_avatar"
                 android:padding="3dp"
-                android:scaleType="centerInside"
-                />
+                app:cardCornerRadius="60dp">
+
+                <ImageView
+                    android:id="@+id/userAvatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    tools:src="@drawable/img_warik" />
+
+            </com.google.android.material.card.MaterialCardView>
+
 
         </LinearLayout>
 
@@ -126,6 +133,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/favCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
@@ -133,16 +141,29 @@
                     android:text="0"
                     android:textColor="@color/white"
                     android:textSize="25sp" />
-
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
-                    android:text="followers"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_gravity="center"
+                        android:layout_width="11dp"
+                        android:layout_height="11dp"
+                        android:layout_marginEnd="2dp"
+                        android:src="@drawable/ic_filled_bookmark"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-light"
+                        android:text="Избрали"
 
-                    android:textAllCaps="true"
-                    android:textColor="@color/white"
-                    android:textSize="13sp" />
+                        android:textAllCaps="true"
+                        android:textColor="@color/white"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
+
+
 
             </LinearLayout>
 
@@ -165,6 +186,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/rateCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
@@ -172,15 +194,28 @@
                     android:text="0"
                     android:textColor="@color/white"
                     android:textSize="25sp" />
-
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
-                    android:text="following"
-                    android:textAllCaps="true"
-                    android:textColor="@color/white"
-                    android:textSize="13sp" />
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_gravity="center"
+                        android:layout_width="11dp"
+                        android:layout_height="12dp"
+                        android:layout_marginEnd="2dp"
+                        android:src="@drawable/ic_white_star"/>
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-light"
+                        android:text="Оценили"
+                        android:textAllCaps="true"
+                        android:textColor="@color/white"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+
 
             </LinearLayout>
 
@@ -189,6 +224,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/buttonsLy"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
@@ -346,7 +382,19 @@
         </LinearLayout>
 
     </LinearLayout>
+            <Button
+                android:id="@+id/logOutBtn"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:theme="@style/appMainTheme"
+                android:background="@drawable/my_button"
+                android:text="Выйти"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/buttonsLy"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

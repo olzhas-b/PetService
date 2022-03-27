@@ -12,6 +12,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.view.View
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.recyclerview.widget.RecyclerView
 import com.example.budka.R
@@ -32,7 +33,12 @@ class UploadImageViewHolder (
             itemUploadImageBinding.uploadIv.setImageResource(R.drawable.ic_upload_photo)
         }
         else{
-            Picasso.get().load(image.imageUri).fit().centerCrop().placeholder(R.drawable.img_aktos).into(itemUploadImageBinding.uploadIv)
+            Picasso.get().load(image.imageUri).fit().centerCrop().placeholder(R.drawable.img_aktos)
+                .into(itemUploadImageBinding.uploadIv)
+            itemUploadImageBinding.deleteBtn.visibility = View.VISIBLE
+            itemUploadImageBinding.deleteBtn.setOnClickListener {
+                uploadNewImageListener?.deleteImg(image)
+            }
         }
         itemView.setOnClickListener {
             uploadNewImageListener?.upload(image.isFirstElement)
@@ -42,4 +48,5 @@ class UploadImageViewHolder (
 
 interface UploadNewImageListener {
     fun upload(isFirstElement: Boolean)
+    fun deleteImg(image: UploadImage)
 }

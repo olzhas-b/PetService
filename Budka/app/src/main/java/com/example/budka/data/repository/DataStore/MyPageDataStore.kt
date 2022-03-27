@@ -37,4 +37,8 @@ class MyPageDataStore (apiService: ApiService) :  BaseProfileDataStore(apiServic
     override fun setRating(userId: Int, rating: Int):  LiveData<NetworkResult<String>> {
         return deleteResponse { service.setRating(userId, rating) }
     }
+
+    override fun deleteSession(): LiveData<NetworkResult<String>> {
+        return deleteResponse { service.deleteSession("http://192.168.43.226:8081/api/v1/user/sign-out") }
+    }
 }

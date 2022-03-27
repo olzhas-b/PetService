@@ -26,6 +26,8 @@ data class Pet(
     val weight: Int,
     @SerializedName("image")
     val image: String,
+    @SerializedName("userID")
+    val userID: Int,
 ): Parcelable
 
 data class PetCreate(

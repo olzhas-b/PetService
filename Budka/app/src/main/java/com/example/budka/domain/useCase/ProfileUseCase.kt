@@ -31,4 +31,8 @@ class ProfileUseCase (val myPageRepository: MyPageRepository){
     fun setRating(userId: Int, rating: Int): LiveData<NetworkResult<String>> {
         return myPageRepository.setRating(userId, rating)
     }
+
+    fun deleteSession(): LiveData<NetworkResult<String>>{
+        return myPageRepository.deleteSession()
+    }
 }

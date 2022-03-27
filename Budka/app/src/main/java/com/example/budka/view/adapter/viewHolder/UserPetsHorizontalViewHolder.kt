@@ -17,13 +17,18 @@ import com.example.budka.databinding.ItemPetBinding
 import com.squareup.picasso.Picasso
 
 class UserPetsHorizontalViewHolder (
-    val itemPetBinding: ItemPetBinding
+    val itemPetBinding: ItemPetBinding,
+    val listener: ((Pet) -> Unit)? = null
+
 ): RecyclerView.ViewHolder(itemPetBinding.root) {
 
     @SuppressLint("SetTextI18n")
     fun setUp(petsData: Pet){
         itemPetBinding.petNameTv.text = petsData.name
         Picasso.get().load(petsData.image).fit().centerCrop().placeholder(R.drawable.img_aktos).into(itemPetBinding.petsAvatarIv)
+        itemView.setOnClickListener {
+            listener?.invoke(petsData)
+        }
 
     }
 }

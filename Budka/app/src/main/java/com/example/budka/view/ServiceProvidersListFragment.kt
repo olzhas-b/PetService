@@ -9,6 +9,7 @@
 package com.example.budka.view
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
@@ -78,10 +79,11 @@ class ServiceProvidersListFragment: Fragment(), FavListener, NavigationListener 
                             getUserAddress(newLocation.latitude, newLocation.longitude)
                         country = getUserAddress(newLocation.latitude, newLocation.longitude).split(',')[1].substring(1)
                         city = getUserAddress(newLocation.latitude, newLocation.longitude).split(',')[0]
-                        petSittersListViewModel.fetchPetSittersList(0, country, city, petType)
+                        petSittersListViewModel.fetchPetSittersList(arg.serviceType, country, city, petType)
                         petSittersListViewModel.getPetSittersList().observe(viewLifecycleOwner, {result->
                             result.doIfSuccess {
-                                it?.let{serviceProvidersAdapter.updateEmployeeList(it)}
+                                viewBinding.petSittersResult.setText("Найдено ${it?.total} обьявлении")
+                                it?.let{serviceProvidersAdapter.updateEmployeeList(it.rows)}
 
                             }
                             result.doIfFailure{ error, data ->
@@ -110,6 +112,7 @@ class ServiceProvidersListFragment: Fragment(), FavListener, NavigationListener 
         }
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if(savedInstanceState==null){
@@ -119,6 +122,7 @@ class ServiceProvidersListFragment: Fragment(), FavListener, NavigationListener 
                 this@ServiceProvidersListFragment.petType = petType
             }
             petSittersListViewModel.fetchPetSittersList(arg.serviceType, country, city, petType)
+            viewBinding.petSitterLocationTv.text = "$city, $country"
 
 
 
@@ -133,7 +137,9 @@ class ServiceProvidersListFragment: Fragment(), FavListener, NavigationListener 
     private fun setObservers(){
         petSittersListViewModel.getPetSittersList().observe(viewLifecycleOwner, {result->
             result.doIfSuccess {
-                it?.let{serviceProvidersAdapter.updateEmployeeList(it)}
+                viewBinding.petSittersResult.setText("Найдено ${it?.total} обьявлении")
+                it?.let{serviceProvidersAdapter.updateEmployeeList(it.rows)}
+
 
             }
             result.doIfFailure{ error, data ->
@@ -222,12 +228,12 @@ class ServiceProvidersListFragment: Fragment(), FavListener, NavigationListener 
     override fun changeFavourite(isFavourite: Boolean, serviceId: Int) {
         if(isFavourite){
             petSittersListViewModel.putLike(serviceId)
-            petSittersListViewModel.petSittersList.value?.data?.firstOrNull { it.id == serviceId }?.isFavorite = true
+            petSittersListViewModel.petSittersList.value?.data?.rows?.firstOrNull { it.id == serviceId }?.isFavorite = true
 
         }
         else{
             petSittersListViewModel.deleteLike(serviceId)
-            petSittersListViewModel.petSittersList.value?.data?.firstOrNull { it.id == serviceId }?.isFavorite = false
+            petSittersListViewModel.petSittersList.value?.data?.rows?.firstOrNull { it.id == serviceId }?.isFavorite = false
 
         }
     }

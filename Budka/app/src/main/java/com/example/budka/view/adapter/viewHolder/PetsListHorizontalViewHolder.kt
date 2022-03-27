@@ -20,6 +20,7 @@ import com.example.budka.databinding.ItemPetProfileBinding
 import com.squareup.picasso.Picasso
 
 class PetsListHorizontalViewHolder constructor(
+    val listener: ((Pet) -> Unit)? = null,
     val itemPetBinding: ItemNearestPetsBinding,
 
     ): RecyclerView.ViewHolder(itemPetBinding.root) {
@@ -29,6 +30,9 @@ class PetsListHorizontalViewHolder constructor(
         itemPetBinding.mainPagePetNameTv.text = petsData.name
 //        itemPetBinding.mainPagePetOwnerNameTv.text = petsData.user?.first_name+" "+ petsData.user?.last_name
         Picasso.get().load(petsData.image).fit().centerCrop().placeholder(R.drawable.img_aktos).into(itemPetBinding.mainPagePetsIv)
+        itemView.setOnClickListener {
+            listener?.invoke(petsData)
+        }
 
     }
 
@@ -38,7 +42,8 @@ class PetsListHorizontalViewHolder constructor(
 class PetsListVerticalViewHolder constructor(
     val itemPetBinding: ItemPetProfileBinding,
     var navigationListener: PetEditListener ?= null,
-    val showDeleteBtn: Boolean = false
+    val showDeleteBtn: Boolean = false,
+    val listener: ((Pet) -> Unit)? = null
 
     ): RecyclerView.ViewHolder(itemPetBinding.root) {
 
@@ -49,6 +54,7 @@ class PetsListVerticalViewHolder constructor(
         Picasso.get().load(petsData.image).fit().centerCrop().placeholder(R.drawable.img_aktos).into(itemPetBinding.petsAvatarIv)
         itemView.setOnClickListener {
             navigationListener?.navigate(petsData)
+            listener?.invoke(petsData)
         }
         itemPetBinding.deleteBtn.visibility = if(showDeleteBtn)
              View.VISIBLE

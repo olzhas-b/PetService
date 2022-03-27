@@ -110,6 +110,11 @@ interface ApiService {
     ):Deferred<Response<LoginResponse>>
 
     @POST
+    fun deleteSession(
+        @Url url: String,
+    ):Deferred<Response<String>>
+
+    @POST
     fun register(
         @Url url: String,
         @Body data: SignUpData

@@ -17,6 +17,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RatingBar
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -88,6 +89,8 @@ class UserProfileFragment: Fragment() {
                     viewBinding.tvAddress.text = city + ", " + country
                     viewBinding.userRating.rating = averageRating
                     viewBinding.profileAboutTv.text = description
+                    viewBinding.rateCount.text = (countRating?:0).toString()
+                    viewBinding.favCount.text = (cntFavorite?:0).toString()
                 }
             }
             result.doIfFailure { error, data ->
@@ -115,7 +118,7 @@ class UserProfileFragment: Fragment() {
 
             }
 
-            result.doIfLoading {  }
+            result.doIfLoading {   }
         })
     }
 
@@ -127,7 +130,7 @@ class UserProfileFragment: Fragment() {
     }
 
     private fun setupAdapter(){
-        userPetsAdapter = UserPetsAdapter(1)
+        userPetsAdapter = UserPetsAdapter(1, {pet-> findNavController().navigate(UserProfileFragmentDirections.actionUserProfileFragmentToPetDetailFragment(pet))})
         userServicesAdapter = UserServicesAdapter()
 
         val userPetsLayoutManager = LinearLayoutManager(

@@ -11,14 +11,14 @@ package com.example.budka.data.model
 sealed class NetworkResult<T>(
     val data: T? = null,
     val message: String? = null,
-    val show: Boolean = false
+    var show: Boolean = false
 ) {
 
     class Success<T>(data: T?) : NetworkResult<T>(data)
 
     class Error<T>(message: String?, data: T? = null) : NetworkResult<T>(data, message)
 
-    class Loading<T> : NetworkResult<T>()
+    class Loading<T> : NetworkResult<T>(show = true)
 
 
 
@@ -40,6 +40,7 @@ inline fun <reified T> NetworkResult<T>.doIfSuccess(callback: (data: T?) -> Unit
 
 inline fun <reified T> NetworkResult<T>.doIfLoading(callback: (show: Boolean) -> Unit) {
     if (this is NetworkResult.Loading) {
+        this.show = true
         callback(true)
     }
 }

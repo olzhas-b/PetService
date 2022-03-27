@@ -12,7 +12,7 @@ import androidx.lifecycle.LiveData
 import com.example.budka.data.model.*
 
 interface PetSittersListRepository {
-    fun getPetSitters(serviceType: Int, country: String?, city: String?, petType: String?):  LiveData<NetworkResult<List<ServiceProvider>>>
+    fun getPetSitters(serviceType: Int, country: String?, city: String?, petType: String?):  LiveData<NetworkResult<ServiceProviderResponse>>
     fun putLike(serviceId: Int):  LiveData<NetworkResult<String>>
     fun deleteLike(serviceId: Int):  LiveData<NetworkResult<String>>
     fun getFavoriteServices():  LiveData<NetworkResult<List<ServiceProvider>>>

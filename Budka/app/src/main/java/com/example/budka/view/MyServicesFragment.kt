@@ -133,7 +133,7 @@ class MyServicesFragment : Fragment(), NavigationListener, PetEditListener {
     }
 
     private fun setupPetsAdapter(){
-        myPetsAdapter = UserPetsAdapter(0, navigationListener = this, true)
+        myPetsAdapter = UserPetsAdapter(0, navigationListener = this, showDeleteBtn = true, listener = null)
         val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         myServicesRv.layoutManager = layoutManager
         myServicesRv.adapter = myPetsAdapter

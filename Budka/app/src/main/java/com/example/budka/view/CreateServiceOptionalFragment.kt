@@ -280,6 +280,11 @@ class CreateServiceOptionalFragment : Fragment(), UploadNewImageListener, EditTe
         }
     }
 
+    override fun deleteImg(image: UploadImage) {
+        imageList.remove(image)
+        uploadImageAdapter.updateImageList(imageList)
+    }
+
     override fun changeText(property: Properties) {
 //        sendPropertiesList.add(property)
         sendPropertiesMap[property.label!!] = property.text

@@ -22,4 +22,5 @@ interface MyPageRepository {
     ):  LiveData<NetworkResult<User>>
     fun getUserProfile(userId: Int):  LiveData<NetworkResult<User>>
     fun setRating(userId: Int, rating: Int):  LiveData<NetworkResult<String>>
+    fun deleteSession():  LiveData<NetworkResult<String>>
 }

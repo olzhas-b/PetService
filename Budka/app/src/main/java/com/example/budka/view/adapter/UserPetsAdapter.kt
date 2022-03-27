@@ -19,8 +19,9 @@ import com.example.budka.databinding.ItemPetProfileBinding
 import com.example.budka.view.adapter.viewHolder.*
 
 class UserPetsAdapter internal constructor(myViewType: Int,
-                                           var navigationListener: PetEditListener?= null,
-                                           val showDeleteBtn: Boolean = false
+                                           var listener: ((Pet) -> Unit)?= null,
+                                           val showDeleteBtn: Boolean = false,
+                                           val navigationListener: PetEditListener?= null
 
                                            ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var petList: List<Pet> = emptyList()
@@ -36,14 +37,14 @@ class UserPetsAdapter internal constructor(myViewType: Int,
         when(viewType){
             HORIZONTAL -> {
                 val itemBinding = ItemPetBinding.inflate(inflater, parent, false)
-                return UserPetsHorizontalViewHolder(itemBinding)
+                return UserPetsHorizontalViewHolder(itemBinding, listener)
             }
             VERTICAL -> {
                 val itemBinding = ItemPetProfileBinding.inflate(inflater, parent, false)
-                return PetsListVerticalViewHolder(itemBinding, navigationListener, showDeleteBtn)
+                return PetsListVerticalViewHolder(itemBinding, navigationListener, showDeleteBtn, listener)
             }
         }
-        return UserPetsHorizontalViewHolder(ItemPetBinding.inflate(inflater, parent, false))
+        return UserPetsHorizontalViewHolder(ItemPetBinding.inflate(inflater, parent, false), listener)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {

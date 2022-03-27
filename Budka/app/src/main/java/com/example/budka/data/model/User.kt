@@ -112,7 +112,9 @@ data class User(
     @SerializedName("description")
     val description: String,
     @SerializedName("countRating")
-    val countRating: Int,
+    val countRating: Int?,
+    @SerializedName("cntFavorite")
+    val cntFavorite: Int?,
     @SerializedName("averageRating")
     val averageRating: Float,
     @SerializedName("image")

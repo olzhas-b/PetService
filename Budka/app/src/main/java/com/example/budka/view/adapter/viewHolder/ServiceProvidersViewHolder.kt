@@ -18,6 +18,9 @@ import com.example.budka.databinding.ItemPetSitterBinding
 import com.example.budka.utils.setUpPriceMask
 import com.example.budka.view.ServiceProvidersListFragmentDirections
 import com.squareup.picasso.Picasso
+import java.math.BigDecimal
+import java.text.DecimalFormat
+import kotlin.math.roundToLong
 
 class ServiceProvidersViewHolder constructor(
     val itemPetSitterBinding: ItemPetSitterBinding,
@@ -30,14 +33,19 @@ class ServiceProvidersViewHolder constructor(
     @SuppressLint("SetTextI18n")
     fun setUp(serviceProviderData: ServiceProvider){
         var image: String? = null
-        itemPetSitterBinding.petSitterRb.rating = serviceProviderData.user?.averageRating?.toFloat()?:0.0.toFloat()
+        val df = DecimalFormat("#,#")
+        itemPetSitterBinding.petSitterRb.rating =(df.format(serviceProviderData.user?.averageRating)?:"0.0").toFloat()
         if(!serviceProviderData.images.isNullOrEmpty()){
             image = serviceProviderData.images[0]
         }
 
         Picasso.get().load(image).fit().centerCrop().into(itemPetSitterBinding.perSitterIv)
         if(isMyServicesPage && serviceProviderData.serviceType!=null){
-            itemPetSitterBinding.petSitterNameTv.text = ServiceType.values()[serviceProviderData.serviceType].value
+
+            itemPetSitterBinding.petSitterNameTv.text = if(serviceProviderData.serviceType!=0)
+                ServiceType.values()[serviceProviderData.serviceType-1].value
+            else
+                ""
             itemPetSitterBinding.deleteBtn.visibility = View.VISIBLE
             itemPetSitterBinding.bookmarkIv.visibility = View.GONE
             itemPetSitterBinding.deleteBtn.setOnClickListener {

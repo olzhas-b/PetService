@@ -83,6 +83,7 @@ class MainActivity: AppCompatActivity() {
     }
 
     fun showAlert(error: String){
+        showProgressBar()
         val errorDialog = AlertDialog.Builder(this)
         errorDialog.setIcon(R.drawable.ic_baseline_error_24)
         errorDialog.setTitle(error)

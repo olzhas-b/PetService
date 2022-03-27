@@ -271,6 +271,7 @@
             android:textSize="21sp"
             />
         <TextView
+            android:id="@+id/nearestPetSitterMoreTv"
             android:layout_width="150dp"
             android:textColor="@color/mainColor"
             android:gravity="end"
@@ -317,6 +318,7 @@
                     android:textSize="21sp"
                     />
                 <TextView
+                    android:id="@+id/nearestPetsMoreTv"
                     android:layout_width="150dp"
                     android:textColor="@color/mainColor"
                     android:gravity="end"
@@ -377,11 +379,12 @@
                     android:layout_height="223dp"
                     android:scaleType="centerCrop"/>
                     <Button
+                        android:id="@+id/moreBtn"
                         android:text="Подробнее"
                         android:background="@drawable/my_button"
                         android:layout_height="40dp"
                         android:theme="@style/appMainTheme"
-                        android:layout_width="130dp"
+                        android:layout_width="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="30dp"/>
 

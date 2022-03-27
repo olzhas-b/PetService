@@ -51,6 +51,7 @@ class UserServicesViewHolder (
                 itemOtherServiceBinding.serviceIconIv.setImageResource(R.drawable.ic_zoohostel)
             }
 
+
     }
         itemOtherServiceBinding.servicePriceTv.setUpPriceMask(services.price.toString(),services.currencyCode ,services.pricePerTime)
 }

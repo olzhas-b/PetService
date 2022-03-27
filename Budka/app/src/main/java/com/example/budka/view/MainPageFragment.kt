@@ -37,7 +37,6 @@ import com.example.budka.viewModel.PetSittersListViewModel
 import com.example.budka.viewModel.PetsListViewModel
 import com.google.android.gms.location.*
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.main_page_fragment.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.util.*
 
@@ -50,7 +49,7 @@ class MainPageFragment: Fragment(), NavigationListener {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var country: String? = null
     private var city: String? = null
-    private lateinit var petSitterListObserver: Observer<NetworkResult<List<ServiceProvider>>>
+    private lateinit var petSitterListObserver: Observer<NetworkResult<ServiceProviderResponse>>
     private lateinit var locationUpdates: LocationCallback
 
 
@@ -67,7 +66,7 @@ class MainPageFragment: Fragment(), NavigationListener {
                     if(context!=null){
                         country = getUserAddress(newLocation.latitude, newLocation.longitude).split(',')[1].substring(1)
                         city = getUserAddress(newLocation.latitude, newLocation.longitude).split(',')[0]
-                        petSittersListViewModel.fetchPetSittersList(0, country, city, null)
+                        petSittersListViewModel.fetchPetSittersList(1, country, city, null)
                         petSittersListViewModel.getPetSittersList().observe(viewLifecycleOwner, petSitterListObserver)
 
 
@@ -102,12 +101,12 @@ class MainPageFragment: Fragment(), NavigationListener {
         activity?.window?.statusBarColor = resources.getColor(R.color.mainColor)
         Picasso.get().load(R.drawable.banner).fit().centerCrop().placeholder(R.drawable.banner).into(viewBinding.bannerIv)
         if(savedInstanceState==null){
-            petSittersListViewModel.fetchPetSittersList(0, country, city,null)
+            petSittersListViewModel.fetchPetSittersList(1, country, city,null)
 
         }
         petSitterListObserver = Observer {result->
             result.doIfSuccess {
-                petSittersListHorizontalAdapter.updatePetSittersList(it)
+                petSittersListHorizontalAdapter.updatePetSittersList(it?.rows)
 
             }
             result.doIfFailure{ error, data ->
@@ -145,51 +144,63 @@ class MainPageFragment: Fragment(), NavigationListener {
     }
 
     private fun setupAdapter(){
-        petsListHorizontalAdapter = PetsListHorizontalAdapter()
+        petsListHorizontalAdapter = PetsListHorizontalAdapter {pet-> findNavController().navigate(MainPageFragmentDirections.actionMainPageFragmentToPetDetailFragment(pet))}
         petSittersListHorizontalAdapter = PetSittersListHorizontalAdapter(navigationListener = this)
         val petsLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false )
-        mainPagePetsRv.layoutManager = petsLayoutManager
-        mainPagePetsRv.addItemDecoration(DividerItemDecoration(activity, petsLayoutManager.orientation))
-        mainPagePetsRv.adapter = petsListHorizontalAdapter
-        mainPagePetsRv.setHasFixedSize(true)
-        mainPagePetsRv.setItemViewCacheSize(20)
-        mainPagePetsRv.isNestedScrollingEnabled = false
+        with(viewBinding){
+            mainPagePetsRv.layoutManager = petsLayoutManager
+            mainPagePetsRv.addItemDecoration(DividerItemDecoration(activity, petsLayoutManager.orientation))
+            mainPagePetsRv.adapter = petsListHorizontalAdapter
+            mainPagePetsRv.setHasFixedSize(true)
+            mainPagePetsRv.setItemViewCacheSize(20)
+            mainPagePetsRv.isNestedScrollingEnabled = false
 
-        val petSittersLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false )
-        nearPetSitterRv.layoutManager = petSittersLayoutManager
-        nearPetSitterRv.adapter = petSittersListHorizontalAdapter
-        nearPetSitterRv.setHasFixedSize(true)
-        nearPetSitterRv.setItemViewCacheSize(20)
-        nearPetSitterRv.isNestedScrollingEnabled =  false
+            val petSittersLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false )
+            nearPetSitterRv.layoutManager = petSittersLayoutManager
+            nearPetSitterRv.adapter = petSittersListHorizontalAdapter
+            nearPetSitterRv.setHasFixedSize(true)
+            nearPetSitterRv.setItemViewCacheSize(20)
+            nearPetSitterRv.isNestedScrollingEnabled =  false
+        }
+
 
 
     }
 
     private fun setOnClickListener(){
-        petSitterBtn.setOnClickListener {
-            it.findNavController().navigate(MainPageFragmentDirections.actionMainPageFragmentToServiceProvidersFragment(0))
-        }
         viewBinding.apply {
-            petWalking.setOnClickListener {
+            petSitterBtn.setOnClickListener {
                 it.findNavController().navigate(MainPageFragmentDirections.actionMainPageFragmentToServiceProvidersFragment(1))
-
             }
-            vet.setOnClickListener {
+            nearestPetSitterMoreTv.setOnClickListener {
+                it.findNavController().navigate(MainPageFragmentDirections.actionMainPageFragmentToServiceProvidersFragment(1))
+            }
+
+            nearestPetsMoreTv.setOnClickListener {
+                it.findNavController().navigate(MainPageFragmentDirections.actionMainPageFragmentToPetsFragment())
+            }
+            petWalking.setOnClickListener {
                 it.findNavController().navigate(MainPageFragmentDirections.actionMainPageFragmentToServiceProvidersFragment(2))
 
             }
-            training.setOnClickListener {
+            vet.setOnClickListener {
                 it.findNavController().navigate(MainPageFragmentDirections.actionMainPageFragmentToServiceProvidersFragment(3))
 
             }
-            grooming.setOnClickListener {
+            training.setOnClickListener {
                 it.findNavController().navigate(MainPageFragmentDirections.actionMainPageFragmentToServiceProvidersFragment(4))
 
             }
-            hostel.setOnClickListener {
+            grooming.setOnClickListener {
                 it.findNavController().navigate(MainPageFragmentDirections.actionMainPageFragmentToServiceProvidersFragment(5))
 
             }
+            hostel.setOnClickListener {
+                it.findNavController().navigate(MainPageFragmentDirections.actionMainPageFragmentToServiceProvidersFragment(6))
+
+            }
+
+            moreBtn.setOnClickListener { it.findNavController().navigate(MainPageFragmentDirections.actionMainPageFragmentToCreateServiceRequiredFragment()) }
         }
 
 

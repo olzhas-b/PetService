@@ -46,5 +46,10 @@ class ProfileViewModel(private val profileUseCase: ProfileUseCase): BaseViewMode
     }
 
 
+    fun logOut(): LiveData<NetworkResult<String>>{
+        return profileUseCase.deleteSession()
+    }
+
+
 
 }

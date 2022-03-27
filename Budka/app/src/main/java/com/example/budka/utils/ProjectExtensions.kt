@@ -12,6 +12,7 @@ import android.text.InputFilter
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
 import android.util.Log
 import android.widget.TextView
 import com.example.budka.R
@@ -27,7 +28,6 @@ fun TextView.setUpPriceMask(
     currencyCode: String?= null,
     pricePerTime: String?
 ){
-    setMaxLength(11)
     try{
         val amount = text?.toInt()
         val formatSymbols = DecimalFormatSymbols(Locale.ENGLISH)
@@ -46,6 +46,10 @@ fun TextView.setUpPriceMask(
                     finalText.length,
                     0
                 )
+                spannable.setSpan( RelativeSizeSpan(0.8f),
+                    finalText.length - (pricePerTime.length + 1),
+                    finalText.length,
+                    0);
                 setText(spannable, TextView.BufferType.SPANNABLE)
             } else {
                 val finalText = "$amount ${currency.getSymbol(localeKz)}"
