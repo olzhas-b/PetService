@@ -29,7 +29,7 @@
             android:id="@+id/nearestPerSitterIv"
             android:layout_width="match_parent"
             android:layout_height="157dp"
-            android:scaleType="centerCrop"
+            android:scaleType="fitXY"
             android:contentDescription="@string/petSitter"
             tools:src="@drawable/akimbek" />
 

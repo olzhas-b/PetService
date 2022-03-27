@@ -28,14 +28,9 @@ var cfgFile string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "PetService",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Use:     "pet",
+	Short:   "my api",
+	Version: "0.0.1",
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	//	Run: func(cmd *cobra.Command, args []string) { },
@@ -53,6 +48,8 @@ func Execute() {
 func init() {
 	rootCmd.AddCommand(
 		generateCmd,
+		startCmd,
+		configCmd,
 	)
 	cobra.OnInitialize(initConfig)
 
@@ -82,7 +79,7 @@ func initConfig() {
 
 		// Search config in home directory with name ".PerService" (without extension).
 		viper.AddConfigPath(home)
-		viper.SetConfigName(".PerService")
+		viper.SetConfigName(".PetService")
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match

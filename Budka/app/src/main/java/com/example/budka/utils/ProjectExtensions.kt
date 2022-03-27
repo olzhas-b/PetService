@@ -12,6 +12,7 @@ import android.text.InputFilter
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
 import android.util.Log
 import android.widget.TextView
 import com.example.budka.R
@@ -27,25 +28,38 @@ fun TextView.setUpPriceMask(
     currencyCode: String?= null,
     pricePerTime: String?
 ){
-    setMaxLength(11)
     try{
         val amount = text?.toInt()
         val formatSymbols = DecimalFormatSymbols(Locale.ENGLISH)
         formatSymbols.decimalSeparator = '.'
         formatSymbols.groupingSeparator = ' '
         val localeKz = Locale("ru", "kz")
-        val currency = Currency.getInstance(currencyCode?:"KZT")
+        if(currencyCode?.length==3) {
+            val currency = Currency.getInstance(currencyCode ?: "KZT")
 
-        if (pricePerTime != null) {
-            val finalText = "$amount ${currency.getSymbol(localeKz)}/$pricePerTime"
-            val spannable =  SpannableString(finalText)
-            spannable.setSpan(ForegroundColorSpan(resources.getColor(R.color.pricePerAmount)), finalText.length-(pricePerTime.length+1), finalText.length,0 )
-            setText(spannable, TextView.BufferType.SPANNABLE)
+            if (pricePerTime != null) {
+                val finalText = "$amount ${currency.getSymbol(localeKz)}/$pricePerTime"
+                val spannable = SpannableString(finalText)
+                spannable.setSpan(
+                    ForegroundColorSpan(resources.getColor(R.color.pricePerAmount)),
+                    finalText.length - (pricePerTime.length + 1),
+                    finalText.length,
+                    0
+                )
+                spannable.setSpan( RelativeSizeSpan(0.8f),
+                    finalText.length - (pricePerTime.length + 1),
+                    finalText.length,
+                    0);
+                setText(spannable, TextView.BufferType.SPANNABLE)
+            } else {
+                val finalText = "$amount ${currency.getSymbol(localeKz)}"
+                setText(finalText)
+            }
         }
         else{
-            val finalText = "$amount ${currency.getSymbol(localeKz)}"
-            setText(finalText)
-        }}
+            setText("$amount")
+        }
+    }
     catch (e: Exception){
         e.printStackTrace()
     }

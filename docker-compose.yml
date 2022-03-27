@@ -1,0 +1,58 @@
+version: "3.7"
+
+services:
+  back-end-auth:
+    build: ./authService
+    ports:
+      - "8081:8081"
+    restart: on-failure
+    depends_on:
+      - postgres-db
+      - redis
+    links:
+      - postgres-db
+      - redis
+    container_name: back-end-auth
+
+  back-end-api:
+     build: ./backEnd
+     ports:
+       - "8080:8080"
+     depends_on:
+       - postgres-db
+       - redis
+     links:
+       - postgres-db
+       - redis
+     container_name: back-end-api
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+    volumes:
+      - $PWD/redis-data:/var/lib/redis
+      - $PWD/redis.conf:/usr/local/etc/redis/redis.conf
+    environment:
+      - REDIS_REPLICATION_MODE=master
+#    command: redis-server
+    container_name: redis-db
+
+  postgres-db:
+    image: postgres:11
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: "postgres"
+      POSTGRES_USER: "postgres"
+      POSTGRES_HOST: "postgres-db"
+      POSTGRES_PORT: 5432
+
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./backEnd/db/schema_init.sql:/docker-entrypoint-initdb.d/1-schema_init.sql
+      - ./backEnd/db/data_init.sql:/docker-entrypoint-initdb.d/2-data_init.sql
+    container_name: postgres-db
+volumes:
+  pg-data:

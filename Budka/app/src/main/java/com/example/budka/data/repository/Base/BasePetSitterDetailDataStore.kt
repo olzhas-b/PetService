@@ -20,25 +20,26 @@ import retrofit2.Response
 import timber.log.Timber
 
 abstract class BasePetSitterDetailDataStore(@PublishedApi internal val service: ApiService) {
-    abstract fun getServiceDetail(serviceId: Int): LiveData<ServiceDetail>
-    inline fun fetchData(crossinline call: (ApiService) -> Deferred<Response<ServiceDetail>>): LiveData<ServiceDetail> {
-        val result = MutableLiveData<ServiceDetail>()
+    abstract fun getServiceDetail(serviceId: Int):  LiveData<NetworkResult<ServiceDetail>>
+    inline fun fetchData(crossinline call: (ApiService) -> Deferred<Response<ServiceDetail>>):  LiveData<NetworkResult<ServiceDetail>> {
+        val result = MutableLiveData<NetworkResult<ServiceDetail>>()
         CoroutineScope(Dispatchers.IO).launch {
             val request = call(service)
             withContext(Dispatchers.Main){
                 try {
+                    result.value = NetworkResult.Loading()
                     val response = request.await()
                     if (response.isSuccessful) {
-                        result.value = response.body()
-                        Log.d("result", result.value.toString())
-
+                        result.value = NetworkResult.Success(response.body())
                     } else {
+                        result.value = NetworkResult.Error("Запрос завершился с кодом${response.code()}")
                         Timber.d("Error occurred with code ${response.code()}")
                     }
-
                 } catch (e: HttpException){
+                    result.value = NetworkResult.Error("Ошибка: ${e.message()}")
                     Timber.d("Error: ${e.message()}")
                 } catch (e: Throwable){
+                    result.value = NetworkResult.Error("Ошибка: ${e.message}")
                     Timber.d("Error: ${e.message}")
                 }
             }

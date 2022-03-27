@@ -23,7 +23,7 @@ import timber.log.Timber
 abstract class BaseCountries (@PublishedApi internal val service: ApiService) {
     abstract fun getAllCountries(): LiveData<List<CountryData>>
 
-    inline fun fetchData(crossinline call: (ApiService) -> Deferred<Response<Countries>>): LiveData<List<CountryData>> {
+    inline fun fetchData(crossinline call: (ApiService) -> Deferred<Response<List<CountryData>>>): LiveData<List<CountryData>> {
         val result = MutableLiveData<List<CountryData>>()
         CoroutineScope(Dispatchers.IO).launch {
             val request = call(service)
@@ -31,7 +31,7 @@ abstract class BaseCountries (@PublishedApi internal val service: ApiService) {
                 try {
                     val response = request.await()
                     if (response.isSuccessful) {
-                        result.value = response.body()?.data
+                        result.value = response.body()
                     } else {
                         Timber.d("Error occurred with code ${response.code()}")
                     }
