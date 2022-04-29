@@ -53,7 +53,7 @@ func (h *Handler) AddRoutes(srv *fiber.App) {
 	profile := v1.Group("/profile")
 	{
 		profile.Get("/:id", h.CtlGetUser)
-		profile.Get("", h.CtlGetCurrentUser)
+		profile.Get("", middles.AuthorizationMiddleWare(h.services), h.CtlGetCurrentUser)
 		profile.Put("/edit", middles.AuthorizationMiddleWare(h.services), h.CtlUpdateUser)
 	}
 
