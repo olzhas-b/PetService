@@ -173,7 +173,21 @@ class CreatePetFragment : Fragment() {
                         viewLifecycleOwner, petObserver
                     ) }
                 else
-                    petsListViewModel.createPet(image, pet).observe(viewLifecycleOwner, petObserver)
+                    if(validateFields())
+                        petsListViewModel.createPet(image, pet).observe(viewLifecycleOwner, petObserver)
+                    else{
+                        val errorDialog = AlertDialog.Builder(requireContext())
+                        errorDialog.setIcon(R.drawable.ic_baseline_error_24)
+                        errorDialog.setTitle("Заполните поля")
+                        errorDialog.setPositiveButton(
+                            "Вернуться"
+                        ) { dialog, _ ->
+
+                            dialog.cancel()
+                        }
+                        errorDialog.create()
+                        errorDialog.show()
+                    }
             }
 
 
@@ -350,6 +364,16 @@ class CreatePetFragment : Fragment() {
             }
 
         }
+    }
+
+    private fun validateFields(): Boolean {
+        val name = viewBinding.petNameEt.text.toString()
+
+        val petType = viewBinding.petTypeSp.selectedItem.toString()
+        val breed = viewBinding.petBreedEt.text.toString()
+        val petSize = viewBinding.petSizeSp.selectedItem.toString()
+
+        return name!=""&&petSize!=""&&petType!=""&&petSize!=""&&breed!=""
     }
 
     }

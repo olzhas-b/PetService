@@ -8,6 +8,8 @@
 
 package com.example.budka.view
 
+import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,6 +17,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.budka.R
 import com.example.budka.data.model.NetworkResult
 import com.example.budka.data.model.ServiceProvider
 import com.example.budka.data.model.doIfFailure
@@ -59,9 +62,14 @@ class FavoriteServicesFragment: Fragment(), FavListener, NavigationListener {
 
             }
             result.doIfFailure{ error, data ->
-                (activity as MainActivity).showProgressBar()
-                error?.let{(activity as MainActivity).showAlert(it)}
-
+                if (error != null) {
+                    if(error.contains("401")){
+                        showLogin()
+                    }else {
+                        (activity as MainActivity).showProgressBar()
+                        error.let{(activity as MainActivity).showAlert(it)}
+                    }
+                }
             }
 
             if(result is NetworkResult.Loading){
@@ -93,6 +101,27 @@ class FavoriteServicesFragment: Fragment(), FavListener, NavigationListener {
 
     override fun deleteService(serviceId: Int) {
         Log.d("not", "not")
+    }
+
+    private fun showLogin(){
+        val errorDialog = AlertDialog.Builder(requireContext())
+        errorDialog.setIcon(R.drawable.ic_baseline_error_24)
+        errorDialog.setTitle("Войдите пожалуйста в аккаунт")
+        errorDialog.setNegativeButton(
+            "Вернуться"
+        ) { dialog, _ ->
+
+            dialog.cancel()
+        }
+        errorDialog.setPositiveButton(
+            "Войти",
+        ){dialog, _ ->
+            val intent = Intent(requireContext(), LoginActivity::class.java)
+            this.startActivity(intent)
+            dialog.dismiss()
+        }
+        errorDialog.create()
+        errorDialog.show()
     }
 
 }

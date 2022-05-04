@@ -159,9 +159,14 @@ class CreateServiceOptionalFragment : Fragment(), UploadNewImageListener, EditTe
                 successDialog.show()
             }
             result.doIfFailure{ error, data ->
-                (activity as MainActivity).showProgressBar()
-                error?.let{(activity as MainActivity).showAlert(it)}
-
+                if (error != null) {
+                    if(error.contains("401")){
+                        showLogin()
+                    }else {
+                        (activity as MainActivity).showProgressBar()
+                        error.let { (activity as MainActivity).showAlert(it) }
+                    }
+                }
             }
 
             if(result is NetworkResult.Loading){
@@ -411,5 +416,26 @@ class CreateServiceOptionalFragment : Fragment(), UploadNewImageListener, EditTe
             intent.type = "image/*"
             startActivityForResult(intent, REQUEST_CODE);
         }
+    }
+
+    private fun showLogin(){
+        val errorDialog = AlertDialog.Builder(requireContext())
+        errorDialog.setIcon(R.drawable.ic_baseline_error_24)
+        errorDialog.setTitle("Войдите пожалуйста в аккаунт")
+        errorDialog.setNegativeButton(
+            "Вернуться"
+        ) { dialog, _ ->
+
+            dialog.cancel()
+        }
+        errorDialog.setPositiveButton(
+            "Войти",
+        ){dialog, _ ->
+            val intent = Intent(requireContext(), LoginActivity::class.java)
+            this.startActivity(intent)
+            dialog.dismiss()
+        }
+        errorDialog.create()
+        errorDialog.show()
     }
 }

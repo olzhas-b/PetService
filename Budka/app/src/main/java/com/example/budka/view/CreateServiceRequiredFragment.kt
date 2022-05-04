@@ -8,6 +8,7 @@
 
 package com.example.budka.view
 
+import android.app.AlertDialog
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.MediaScannerConnection
@@ -121,39 +122,56 @@ class CreateServiceRequiredFragment : Fragment(), SetLocationInterface {
 
         }
         viewBinding.optionalNavigateBtn.setOnClickListener {
-            var serviceType: Int = 0
-            ServiceType.from(viewBinding.serviceTypeSp.selectedItem.toString())?.let {
-                serviceType = ServiceType.valueOf(it.name).ordinal + 1
-            }
+            if(validateFields()) {
+                var serviceType: Int = 0
+                ServiceType.from(viewBinding.serviceTypeSp.selectedItem.toString())?.let {
+                    serviceType = ServiceType.valueOf(it.name).ordinal + 1
+                }
 
-            val summary = viewBinding.summaryEt.text.toString()
-            val petType = viewBinding.petTypeSp.selectedItem.toString()
-            val petSize = viewBinding.petSizeSp.selectedItem.toString()
-            val currencyCode = if(viewBinding.currencySp.selectedItem.toString().equals(" ")) null else viewBinding.currencySp.selectedItem.toString()
-            val country = viewBinding.countriesEdV.text.toString()
-            val city = viewBinding.cityEdV.text.toString()
-            val price = viewBinding.priceEt.text.toString().toInt()
-            val pricePerTime = viewBinding.pricePerTime.selectedItem.toString()
-            val requireFields = ServiceRequiredField(
-                args.user?.id,
-                serviceType,
-                summary,
-                petType,
-                petSize,
-                country,
-                city,
-                this.longitude,
-                this.latitude,
-                price,
-                currencyCode,
-                pricePerTime
-            )
-            createSerViewModel.imageList.value = uriList
-            it.findNavController().navigate(
-                CreateServiceRequiredFragmentDirections.actionCreateServiceRequiredFragmentToCreateServiceOptionalFragment(
-                    requiredField = requireFields, operationType = args.operationType
+                val summary = viewBinding.summaryEt.text.toString()
+                val petType = viewBinding.petTypeSp.selectedItem.toString()
+                val petSize = viewBinding.petSizeSp.selectedItem.toString()
+                val currencyCode = if (viewBinding.currencySp.selectedItem.toString()
+                        .equals(" ")
+                ) null else viewBinding.currencySp.selectedItem.toString()
+                val country = viewBinding.countriesEdV.text.toString()
+                val city = viewBinding.cityEdV.text.toString()
+                val price = viewBinding.priceEt.text.toString().toInt()
+                val pricePerTime = viewBinding.pricePerTime.selectedItem.toString()
+                val requireFields = ServiceRequiredField(
+                    args.user?.id,
+                    serviceType,
+                    summary,
+                    petType,
+                    petSize,
+                    country,
+                    city,
+                    this.longitude,
+                    this.latitude,
+                    price,
+                    currencyCode,
+                    pricePerTime
                 )
-            )
+                createSerViewModel.imageList.value = uriList
+                it.findNavController().navigate(
+                    CreateServiceRequiredFragmentDirections.actionCreateServiceRequiredFragmentToCreateServiceOptionalFragment(
+                        requiredField = requireFields, operationType = args.operationType
+                    )
+                )
+            }
+            else{
+                val errorDialog = AlertDialog.Builder(requireContext())
+                errorDialog.setIcon(R.drawable.ic_baseline_error_24)
+                errorDialog.setTitle("Заполните поля")
+                errorDialog.setPositiveButton(
+                    "Вернуться"
+                ) { dialog, _ ->
+
+                    dialog.cancel()
+                }
+                errorDialog.create()
+                errorDialog.show()
+            }
         }
     }
 
@@ -365,6 +383,21 @@ class CreateServiceRequiredFragment : Fragment(), SetLocationInterface {
 
             }
         }
+
+    private fun validateFields(): Boolean {
+        val serviceType = viewBinding.serviceTypeSp.selectedItem.toString()
+
+        val summary = viewBinding.summaryEt.text.toString()
+        val petType = viewBinding.petTypeSp.selectedItem.toString()
+        val petSize = viewBinding.petSizeSp.selectedItem.toString()
+        val currencyCode = if(viewBinding.currencySp.selectedItem.toString().equals(" ")) null else viewBinding.currencySp.selectedItem.toString()
+        val country = viewBinding.countriesEdV.text.toString()
+        val city = viewBinding.cityEdV.text.toString()
+        val price = viewBinding.priceEt.text.toString()
+        val pricePerTime = viewBinding.pricePerTime.selectedItem.toString()
+        return serviceType!=""&&summary!=""&&petType!=""&&petSize!=""&&currencyCode!=""&&country!=""&&
+                city!=""&&price!=""&&pricePerTime!=""
+    }
 
 
 
