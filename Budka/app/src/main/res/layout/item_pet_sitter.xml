@@ -32,7 +32,7 @@
             android:id="@+id/perSitterIv"
             android:layout_width="match_parent"
             android:layout_height="230dp"
-            android:scaleType="centerCrop"
+            android:scaleType="fitXY"
             android:contentDescription="@string/petSitter"
             tools:src="@drawable/akimbek" />
             <FrameLayout
@@ -71,10 +71,19 @@
 >
 
             <ImageView
+                android:id="@+id/bookmarkIv"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/ic_bookmark"
                 />
+
+            <ImageView
+                android:id="@+id/deleteBtn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:visibility="gone"
+                android:layout_marginEnd="15dp"
+                android:src = "@drawable/ic_baseline_close_24"/>
         </LinearLayout>
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

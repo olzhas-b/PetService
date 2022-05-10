@@ -29,6 +29,7 @@ class AcceptablePetSizesAdapter internal constructor(): RecyclerView.Adapter<Acc
         holder.setUp(petSizeList[position])
     }
 
+
     override fun getItemCount(): Int {
         return petSizeList.size
     }

@@ -8,26 +8,26 @@
   -->
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="180dp"
-    android:layout_height="80dp"
+    android:layout_width="150dp"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         app:cardCornerRadius="14dp"
         app:layout_constraintStart_toStartOf="parent"
         android:backgroundTint="@color/detailsMainColor"
         app:layout_constraintTop_toTopOf="parent">
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
             <ImageView
                 android:id="@+id/serviceIconIv"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="30dp"
+                android:layout_height="35dp"
                 android:layout_marginStart="10dp"
                 android:layout_gravity="center"
                 tools:src="@drawable/ic_pet_walking"/>
@@ -42,9 +42,9 @@
                     tools:text="Выгул"
                     android:fontFamily="@font/trueno_round_bd"
                     android:textColor="@color/white"
-                    android:textSize="20sp"
+                    android:textSize="14sp"
                     android:layout_marginTop="10dp"
-                    android:layout_marginStart="25dp"/>
+                    android:layout_marginStart="5dp"/>
                 <TextView
                     android:id="@+id/servicePriceTv"
                     android:layout_width="wrap_content"
@@ -52,9 +52,10 @@
                     tools:text="₸ 500"
                     android:fontFamily="@font/avenir_black"
                     android:textColor="@color/white"
-                    android:textSize="11sp"
+                    android:textSize="9sp"
                     android:layout_marginTop="2dp"
-                    android:layout_marginStart="25dp"/>
+                    android:layout_marginStart="5dp"
+                   />
             </LinearLayout>
 
 

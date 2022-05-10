@@ -24,14 +24,27 @@
         app:cardCornerRadius="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/nearestPerSitterIv"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="157dp"
-            android:scaleType="centerCrop"
-            android:contentDescription="@string/petSitter"
-            tools:src="@drawable/akimbek" />
+            android:layout_height="match_parent"
+            >
+
+            <ImageView
+                android:id="@+id/nearestPerSitterIv"
+                android:layout_width="match_parent"
+                android:layout_height="157dp"
+                android:scaleType="fitXY"
+                android:contentDescription="@string/petSitter"
+                tools:src="@drawable/akimbek" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/gradient_low_bg">
+
+            </FrameLayout>
+        </FrameLayout>
+
+
 
         <LinearLayout
             android:layout_width="wrap_content"

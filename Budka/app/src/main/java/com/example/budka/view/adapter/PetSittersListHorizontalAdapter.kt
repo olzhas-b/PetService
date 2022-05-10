@@ -8,6 +8,7 @@
 
 package com.example.budka.view.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -16,11 +17,13 @@ import com.example.budka.data.model.ServiceProvider
 import com.example.budka.data.model.User
 import com.example.budka.databinding.ItemNearestPetsBinding
 import com.example.budka.databinding.NearestPetSitterItemBinding
+import com.example.budka.view.adapter.viewHolder.NavigationListener
 import com.example.budka.view.adapter.viewHolder.PetSittersListHorizontalViewHolder
 import com.example.budka.view.adapter.viewHolder.PetsListHorizontalViewHolder
 
 class PetSittersListHorizontalAdapter internal constructor(
-): RecyclerView.Adapter<PetSittersListHorizontalViewHolder>() {
+    var navigationListener: NavigationListener?= null,
+    ): RecyclerView.Adapter<PetSittersListHorizontalViewHolder>() {
     var petSitterList: List<ServiceProvider> = emptyList()
 
     override fun onCreateViewHolder(
@@ -29,7 +32,7 @@ class PetSittersListHorizontalAdapter internal constructor(
     ): PetSittersListHorizontalViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val itemBinding = NearestPetSitterItemBinding.inflate(inflater, parent, false)
-        return PetSittersListHorizontalViewHolder(itemBinding)
+        return PetSittersListHorizontalViewHolder(itemBinding, navigationListener)
 
     }
 
@@ -41,8 +44,11 @@ class PetSittersListHorizontalAdapter internal constructor(
         return  petSitterList.size
     }
 
-    fun updatePetSittersList(petSitterList: List<ServiceProvider>){
-        this.petSitterList = petSitterList
+    fun updatePetSittersList(petSitterList: List<ServiceProvider>?){
+        if (petSitterList != null) {
+            this.petSitterList = petSitterList
+        }
+        Log.d("myList", petSitterList.toString())
         notifyDataSetChanged()
     }
 
