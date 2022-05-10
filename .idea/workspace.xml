@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="AutoImportSettings">
-    <option name="autoReloadType" value="NONE" />
+    <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="44e36ab3-fabc-4002-9092-567f0b24b8d3" name="Changes" comment="">
@@ -9,8 +9,12 @@
       <change afterPath="$PROJECT_DIR$/../hello_world_crud/docker-compose.yml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../hello_world_crud/server.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/authService/.env" beforeDir="false" afterPath="$PROJECT_DIR$/authService/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backEnd/.env" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backEnd/db/schema_init.sql" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/db/schema_init.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backEnd/pkg/interfaces/repositories/service_provider.go" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/pkg/interfaces/repositories/service_provider.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backEnd/pkg/interfaces/services/service_provider.go" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/pkg/interfaces/services/service_provider.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backEnd/pkg/repositories/postgres/service_provider.go" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/pkg/repositories/postgres/service_provider.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backEnd/pkg/services/service_provider.go" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/pkg/services/service_provider.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backEnd/pkg/transport/restful/handler/service_provider.go" beforeDir="false" afterPath="$PROJECT_DIR$/backEnd/pkg/transport/restful/handler/service_provider.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,11 +30,6 @@
   </component>
   <component name="GOROOT" url="file:///usr/lib/go-1.17" />
   <component name="Git.Settings">
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$" value="android" />
-      </map>
-    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitSEFilterConfiguration">
@@ -42,12 +41,12 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/backEnd/pkg/transport/restful/handler/service_provider.go" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/backEnd/cmd/root.go" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/backEnd/main.go" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/backEnd/db/schema_init.sql" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/backEnd/db/data_init.sql" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/backEnd/cmd/root.go" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/backEnd/db/schema_init.sql" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/backEnd/pkg/database/redis.go" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/backEnd/main.go" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/backEnd/pkg/transport/restful/handler/service_provider.go" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/docker-compose.yml" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -71,7 +70,7 @@
     <property name="go.modules.go.list.on.any.changes.was.set" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
     <property name="go.watchers.conflict.with.on.save.actions.check.performed" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/backEnd" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/authService" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -94,15 +93,6 @@
     </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
-  <component name="TaskManager">
-    <task active="true" id="Default" summary="Default task">
-      <created>1644764199665</created>
-      <option name="number" value="Default" />
-      <option name="presentableId" value="Default" />
-      <updated>1644764199665</updated>
-    </task>
-    <servers />
-  </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
@@ -116,6 +106,5 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>
