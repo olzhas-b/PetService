@@ -21,6 +21,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.budka.R
 import com.example.budka.data.model.CountryData
 import com.example.budka.data.model.Pet
@@ -35,6 +37,8 @@ import org.koin.android.viewmodel.ext.android.viewModel
 class ServiceProviderFilterFragment:Fragment() {
     private lateinit var viewBinding: ServiceProviderFilterFragmentBinding
     private val countriesListViewModel: CountriesListViewModel by viewModel()
+    val arg: ServiceProviderFilterFragmentArgs by navArgs()
+
 
 
     override fun onCreateView(
@@ -53,6 +57,7 @@ class ServiceProviderFilterFragment:Fragment() {
             setCountries(it)
         })
         setPetTypes()
+        setListeners()
     }
 
 
@@ -90,6 +95,16 @@ class ServiceProviderFilterFragment:Fragment() {
         val petAdapter = ArrayAdapter<String>(requireActivity(),R.layout.item_pet_type_filter, R.id.text_view_pet_type_item, petTypeList)
         viewBinding.petTypeSp.adapter = petAdapter
 
+    }
+
+
+    private fun setListeners(){
+        viewBinding.applyBtn.setOnClickListener {
+            it.findNavController().navigate(ServiceProviderFilterFragmentDirections
+                .actionServiceProviderFilterFragmentToServiceProvidersListFragment(arg.serviceType,
+                    viewBinding.countriesEdV.text.toString(), viewBinding.cityEdV.text.toString(),
+                viewBinding.petTypeSp.selectedItem.toString()))
+        }
     }
 
 }

@@ -14,15 +14,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.budka.data.model.ServiceProvider
 import com.example.budka.data.model.User
 import com.example.budka.databinding.ItemPetSitterBinding
+import com.example.budka.view.adapter.viewHolder.EditTextChangeListener
+import com.example.budka.view.adapter.viewHolder.FavListener
+import com.example.budka.view.adapter.viewHolder.NavigationListener
 import com.example.budka.view.adapter.viewHolder.ServiceProvidersViewHolder
 
-class ServiceProvidersAdapter internal constructor(): RecyclerView.Adapter<ServiceProvidersViewHolder>(){
+class ServiceProvidersAdapter internal constructor(
+    var favListener: FavListener?= null,
+    var navigationListener: NavigationListener?= null,
+    var isMyServicesPage: Boolean = false
+
+): RecyclerView.Adapter<ServiceProvidersViewHolder>(){
     var employeesList: List<ServiceProvider> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ServiceProvidersViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val itemBinding = ItemPetSitterBinding.inflate(inflater, parent, false)
-        return  ServiceProvidersViewHolder(itemBinding)
+        return  ServiceProvidersViewHolder(itemBinding, favListener, navigationListener, isMyServicesPage)
     }
 
     override fun onBindViewHolder(holder: ServiceProvidersViewHolder, position: Int) {
@@ -33,8 +41,10 @@ class ServiceProvidersAdapter internal constructor(): RecyclerView.Adapter<Servi
         return employeesList.size
     }
 
-    fun updateEmployeeList(employeeList: List<ServiceProvider>){
-        this.employeesList = employeeList
+    fun updateEmployeeList(employeeList: List<ServiceProvider>?){
+        if (employeeList != null) {
+            this.employeesList = employeeList
+        }
         notifyDataSetChanged()
     }
 

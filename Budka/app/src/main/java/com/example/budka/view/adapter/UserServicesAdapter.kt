@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.budka.data.model.Pet
+import com.example.budka.data.model.ServiceProvider
 import com.example.budka.data.model.Services
 import com.example.budka.databinding.ItemOtherServiceBinding
 import com.example.budka.databinding.ItemPetBinding
@@ -20,7 +21,7 @@ import com.example.budka.view.adapter.viewHolder.UserServicesViewHolder
 
 class UserServicesAdapter internal constructor(
 ): RecyclerView.Adapter<UserServicesViewHolder>() {
-    var serviceList: List<Services> = emptyList()
+    var serviceList: List<ServiceProvider> = emptyList()
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -40,7 +41,7 @@ class UserServicesAdapter internal constructor(
         return serviceList.size
     }
 
-    fun updateServiceList(serviceList: List<Services>) {
+    fun updateServiceList(serviceList: List<ServiceProvider>) {
         this.serviceList = serviceList
         notifyDataSetChanged()
     }

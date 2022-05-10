@@ -19,6 +19,6 @@ import com.example.budka.domain.repository.PetSittersListRepository
 
 class CountriesDataStore (apiService: ApiService) : CountriesRepository, BaseCountries(apiService) {
     override fun getAllCountries(): LiveData<List<CountryData>> {
-        return fetchData { service.getCountries("https://countriesnow.space/api/v0.1/countries") }
+        return fetchData { service.getCountries() }
     }
 }

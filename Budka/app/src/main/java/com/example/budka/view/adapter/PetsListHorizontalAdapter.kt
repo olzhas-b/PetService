@@ -18,7 +18,7 @@ import com.example.budka.databinding.ItemPetBinding
 import com.example.budka.view.adapter.viewHolder.PetsListHorizontalViewHolder
 import com.example.budka.viewModel.PetsListViewModel
 
-class PetsListHorizontalAdapter internal constructor(
+class PetsListHorizontalAdapter internal constructor(val listener: ((Pet) -> Unit)? = null
 ): RecyclerView.Adapter<PetsListHorizontalViewHolder>() {
     var petList: List<Pet> = emptyList()
 
@@ -28,7 +28,7 @@ class PetsListHorizontalAdapter internal constructor(
     ): PetsListHorizontalViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val itemBinding = ItemNearestPetsBinding.inflate(inflater, parent, false)
-        return PetsListHorizontalViewHolder(itemBinding)
+        return PetsListHorizontalViewHolder(itemPetBinding = itemBinding, listener = listener)
 
     }
 

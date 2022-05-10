@@ -1,0 +1,20 @@
+<!--
+  ~ /**
+  ~  * Created by Ali Ashkeyev on 12.01.22 15:29
+  ~  * Copyright (c) 2022 . All rights reserved.
+  ~  * Last modified 12.01.22 15:29
+  ~  */
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="17dp"
+    android:height="21dp"
+    android:viewportWidth="17"
+    android:viewportHeight="21">
+  <path
+      android:pathData="M13.75,13.0833C14.9926,13.0833 16,14.1467 16,15.4583V16.0241C16,18.8565 12.8421,21 8.5,21C4.1579,21 1,18.968 1,16.0241V15.4583C1,14.1467 2.0074,13.0833 3.25,13.0833H13.75Z"
+      android:fillColor="#737373"/>
+  <path
+      android:pathData="M8.5,2C10.9853,2 13,4.1266 13,6.75C13,9.3734 10.9853,11.5 8.5,11.5C6.0147,11.5 4,9.3734 4,6.75C4,4.1266 6.0147,2 8.5,2Z"
+      android:fillColor="#737373"/>
+</vector>

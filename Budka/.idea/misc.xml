@@ -5,14 +5,18 @@
       <map>
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/drawable-v24/confirm_button.xml" value="0.3592592592592593" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/drawable-v24/my_button.xml" value="0.1" />
+        <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/drawable/circle_avatar.xml" value="0.18697916666666667" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/drawable/corner_date_time.xml" value="0.3592592592592593" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/drawable/corner_input.xml" value="0.3592592592592593" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/drawable/corner_pet_sitter_bg.xml" value="0.3111111111111111" />
+        <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/drawable/corner_profile_page_items.xml" value="0.15462962962962962" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/drawable/drop_down_input_field.xml" value="0.3592592592592593" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/drawable/ic___5kg.xml" value="0.10364583333333334" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/drawable/ic_baseline_arrow_drop_down_24.xml" value="0.3592592592592593" />
+        <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/drawable/ic_baseline_location_on_24.xml" value="0.13333333333333333" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/drawable/ic_dog.xml" value="0.1125" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/drawable/ic_grooming.xml" value="0.3111111111111111" />
+        <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/drawable/only_top_corner.xml" value="0.1671875" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/drawable/price_corner.xml" value="0.3111111111111111" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/drawable/rating_corner.xml" value="0.3111111111111111" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/drawable/selector.xml" value="0.12916666666666668" />
@@ -20,20 +24,34 @@
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/font/poppins_bold.xml" value="0.17777777777777778" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/activity_main.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/confirm_button.xml" value="0.3541666666666667" />
-        <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/confirm_service_application_fragment.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/confirm_service_application_fragment.xml" value="0.30407523510971785" />
+        <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/create_pet.xml" value="0.22" />
+        <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/create_pet_fragment.xml" value="0.12083333333333333" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/create_service_application_fragment.xml" value="0.3333333333333333" />
-        <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/fragment_pet_sitter_detail.xml" value="0.1" />
+        <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/create_service_optional_fragment.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/create_service_required_fragment.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/fragment_favorite_services.xml" value="0.1" />
+        <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/fragment_maps.xml" value="0.14666666666666667" />
+        <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/fragment_my_services.xml" value="0.16145833333333334" />
+        <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/fragment_pet_sitter_detail.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/fragment_pet_sitters_page.xml" value="0.14666666666666667" />
+        <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/fragment_profile.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/fragment_update_profile.xml" value="0.2738496071829405" />
+        <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/item_album_view_pager.xml" value="0.12" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/item_city.xml" value="0.12134207870837538" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/item_country.xml" value="0.35555555555555557" />
+        <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/item_create_other_properties.xml" value="0.25" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/item_nearest_pets.xml" value="0.10666666666666667" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/item_other_properties.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/item_other_service.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/item_pet.xml" value="0.4466666666666667" />
+        <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/item_pet_profile.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/item_pet_sitter.xml" value="0.14666666666666667" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/item_pet_size.xml" value="0.22" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/item_pet_type.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/item_pet_type_filter.xml" value="0.1" />
+        <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/item_pet_vertical.xml" value="0.83125" />
+        <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/item_upload_image.xml" value="0.10416666666666667" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/main_page_fragment.xml" value="0.22" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/nearest_pet_sitter_item.xml" value="0.4466666666666667" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/pet_sitters_filter_fragment.xml" value="0.2111111111111111" />
@@ -44,7 +62,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

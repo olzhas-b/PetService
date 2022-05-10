@@ -12,6 +12,7 @@ import android.annotation.SuppressLint
 import androidx.recyclerview.widget.RecyclerView
 import com.example.budka.R
 import com.example.budka.data.model.Pet
+import com.example.budka.data.model.ServiceProvider
 import com.example.budka.data.model.Services
 import com.example.budka.databinding.ItemOtherServiceBinding
 import com.example.budka.databinding.ItemPetBinding
@@ -23,32 +24,33 @@ class UserServicesViewHolder (
 ): RecyclerView.ViewHolder(itemOtherServiceBinding.root) {
 
     @SuppressLint("SetTextI18n")
-    fun setUp(services: Services){
+    fun setUp(services: ServiceProvider){
         when(services.serviceType) {
-            "petSitting" ->     {
+            1 ->     {
                 itemOtherServiceBinding.serviceNameTv.text = "Зооняня"
                 itemOtherServiceBinding.serviceIconIv.setImageResource(R.drawable.ic_pet_sitter)
             }
-            "petWalking" ->     {
+            2 ->     {
                 itemOtherServiceBinding.serviceNameTv.text = "Выгул"
                 itemOtherServiceBinding.serviceIconIv.setImageResource(R.drawable.ic_pet_walking)
             }
-            "vet" ->     {
+            3 ->     {
                 itemOtherServiceBinding.serviceNameTv.text = "Ветеринария"
                 itemOtherServiceBinding.serviceIconIv.setImageResource(R.drawable.ic_vet)
             }
-            "training" ->     {
+            4 ->     {
                 itemOtherServiceBinding.serviceNameTv.text = "Дрессировка"
                 itemOtherServiceBinding.serviceIconIv.setImageResource(R.drawable.ic_training)
             }
-            "grooming" ->     {
+            5 ->     {
                 itemOtherServiceBinding.serviceNameTv.text = "Груминг"
                 itemOtherServiceBinding.serviceIconIv.setImageResource(R.drawable.ic_grooming)
             }
-            "hostel" ->     {
+            6 ->     {
                 itemOtherServiceBinding.serviceNameTv.text = "Зоогостиницы"
                 itemOtherServiceBinding.serviceIconIv.setImageResource(R.drawable.ic_zoohostel)
             }
+
 
     }
         itemOtherServiceBinding.servicePriceTv.setUpPriceMask(services.price.toString(),services.currencyCode ,services.pricePerTime)

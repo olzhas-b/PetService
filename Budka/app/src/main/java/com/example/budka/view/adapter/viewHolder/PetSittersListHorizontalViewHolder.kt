@@ -19,19 +19,31 @@ import com.example.budka.databinding.ItemPetSitterBinding
 import com.example.budka.databinding.NearestPetSitterItemBinding
 import com.example.budka.utils.setUpPriceMask
 import com.squareup.picasso.Picasso
+import java.text.DecimalFormat
 
 class PetSittersListHorizontalViewHolder  constructor(
-    val nearestPetSitterItemBinding: NearestPetSitterItemBinding
-): RecyclerView.ViewHolder(nearestPetSitterItemBinding.root) {
+    val nearestPetSitterItemBinding: NearestPetSitterItemBinding,
+    var navigationListener: NavigationListener ?= null,
+
+    ): RecyclerView.ViewHolder(nearestPetSitterItemBinding.root) {
 
     @SuppressLint("SetTextI18n")
     fun setUp(petSitterData: ServiceProvider){
-        nearestPetSitterItemBinding.nearestPetSitterNameTv.text = petSitterData.first_name
-        nearestPetSitterItemBinding.nearestPetSitterLocation.text = petSitterData.city + ',' + petSitterData.country
-        nearestPetSitterItemBinding.nearestPerSitterRatingTv.text = petSitterData.average_rating.toString()
+        var image: String? = null
+        val df = DecimalFormat("#.#")
+        nearestPetSitterItemBinding.nearestPetSitterNameTv.text = petSitterData.user?.fullName
+        nearestPetSitterItemBinding.nearestPetSitterLocation.text = petSitterData.user?.country + ", " + petSitterData.user?.city
+        nearestPetSitterItemBinding.nearestPerSitterRatingTv.text = (df.format(petSitterData.user?.averageRating)?:"0.0")
         nearestPetSitterItemBinding.nearestPetSitterPriceTv.setUpPriceMask(petSitterData.price.toString(),petSitterData.currencyCode ,petSitterData.pricePerTime)
-        Picasso.get().load(petSitterData.avatar).fit().centerCrop().placeholder(R.drawable.akimbek).into(nearestPetSitterItemBinding.nearestPerSitterIv
-        )
+        if(!petSitterData.images.isNullOrEmpty()){
+            image = petSitterData.images[0]
+        }
+        Picasso.get().load(image).fit().centerCrop().placeholder(R.drawable.akimbek).into(nearestPetSitterItemBinding.nearestPerSitterIv)
+        itemView.setOnClickListener {
+            navigationListener?.navigate(petSitterData)
+        }
+
+
 
     }
 }

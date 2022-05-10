@@ -8,21 +8,23 @@
   -->
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/profileCv"
         android:layout_width="80dp"
         android:layout_height="80dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
-        app:cardCornerRadius="80dp"
-        android:layout_marginStart="10dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:cardCornerRadius="40dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
         <ImageView
             android:id="@+id/petsAvatarIv"
             android:layout_width="match_parent"
@@ -31,20 +33,20 @@
             tools:src="@drawable/img_warik" />
 
     </com.google.android.material.card.MaterialCardView>
+
     <TextView
         android:id="@+id/petNameTv"
-        app:layout_constraintStart_toStartOf="@id/profileCv"
-        app:layout_constraintTop_toBottomOf="@id/profileCv"
-        app:layout_constraintEnd_toEndOf="@id/profileCv"
-        android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:fontFamily="@font/avenir_ltstd_roman"
-        android:textSize="17sp"
         android:textColor="@color/black"
+        android:textSize="17sp"
+        app:layout_constraintEnd_toEndOf="@id/profileCv"
+        app:layout_constraintStart_toStartOf="@id/profileCv"
+        app:layout_constraintTop_toBottomOf="@id/profileCv"
 
-        tools:text="Рекс"/>
-
+        tools:text="Рекс" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
