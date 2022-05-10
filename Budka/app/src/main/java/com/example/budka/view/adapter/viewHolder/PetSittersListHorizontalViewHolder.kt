@@ -32,7 +32,7 @@ class PetSittersListHorizontalViewHolder  constructor(
         var image: String? = null
         val df = DecimalFormat("#.#")
         nearestPetSitterItemBinding.nearestPetSitterNameTv.text = petSitterData.user?.fullName
-        nearestPetSitterItemBinding.nearestPetSitterLocation.text = petSitterData.user?.country + ',' + petSitterData.user?.city
+        nearestPetSitterItemBinding.nearestPetSitterLocation.text = petSitterData.user?.country + ", " + petSitterData.user?.city
         nearestPetSitterItemBinding.nearestPerSitterRatingTv.text = (df.format(petSitterData.user?.averageRating)?:"0.0")
         nearestPetSitterItemBinding.nearestPetSitterPriceTv.setUpPriceMask(petSitterData.price.toString(),petSitterData.currencyCode ,petSitterData.pricePerTime)
         if(!petSitterData.images.isNullOrEmpty()){

@@ -80,7 +80,7 @@ class FavoriteServicesFragment: Fragment(), FavListener, NavigationListener {
     }
 
     private fun setupAdapter() {
-        serviceProvidersAdapter = ServiceProvidersAdapter(favListener = this)
+        serviceProvidersAdapter = ServiceProvidersAdapter(favListener = this, navigationListener = this)
         viewBinding.serviceProvidersRv.adapter = serviceProvidersAdapter
         viewBinding.serviceProvidersRv.setHasFixedSize(true)
         viewBinding.serviceProvidersRv.setItemViewCacheSize(20)

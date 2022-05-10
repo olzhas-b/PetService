@@ -380,14 +380,18 @@ class CreateServiceOptionalFragment : Fragment(), UploadNewImageListener, EditTe
 
     private fun prepareFilePart(partName: String, fileUri: Uri): MultipartBody.Part{
         val file = FileUtils.getFile(requireContext(), fileUri)
-        val requestFile = RequestBody.create(MediaType.parse(requireContext().contentResolver.getType(fileUri)), file)
-        return MultipartBody.Part.createFormData(partName, file.name, requestFile)
+        val requestFile = RequestBody.create(MediaType.parse(requireContext()
+            .contentResolver.getType(fileUri)), file)
+        val fileName = if(file.name.length>=40) file.name.substring(0..39) else file.name
+        return MultipartBody.Part.createFormData(partName, fileName, requestFile)
     }
 
 
     private fun requestStoragePermission() {
         if (!hasStoragePermission()) {
-            val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+            val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
             ActivityCompat.requestPermissions(requireActivity(), permissions, REQUEST_STORAGE_PERMISSION)
         }
     }

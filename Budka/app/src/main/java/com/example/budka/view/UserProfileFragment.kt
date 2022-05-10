@@ -168,7 +168,26 @@ class UserProfileFragment: Fragment() {
                     result.doIfSuccess {
                         (activity as MainActivity).showProgressBar()
                         profileViewModel.fetchProfile(arg.userId)
-                        profileViewModel.getProfile()
+                        profileViewModel.getProfile().observe(viewLifecycleOwner,
+                            {result->
+                                result.doIfSuccess {  profile ->
+                                    profile?.apply {
+                                        user = profile
+                                        Picasso.get().load(avatar).into(viewBinding.userAvatar)
+                                        viewBinding.tvName.text = fullName
+                                        viewBinding.tvAddress.text = city + ", " + country
+                                        viewBinding.userRating.rating = averageRating
+                                        viewBinding.profileAboutTv.text = description
+                                        viewBinding.rateCount.text = (countRating?:0).toString()
+                                        viewBinding.favCount.text = (cntFavorite?:0).toString()
+                                    }
+                                }
+                                result.doIfFailure { error, data ->
+                                    error?.let { (activity as MainActivity).showAlert(it) }
+
+                                }
+                            }
+                        )
 
                     }
                     result.doIfFailure{ error, data ->

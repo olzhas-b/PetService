@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:background="@drawable/confirm_button"
-        android:text="Sign In"
+        android:text="Войти"
         android:theme="@style/appMainTheme"
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="@+id/evPassword"

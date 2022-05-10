@@ -17,6 +17,8 @@ import com.example.budka.data.model.ServiceProvider
 import com.example.budka.databinding.ItemNearestPetsBinding
 import com.example.budka.databinding.ItemPetBinding
 import com.example.budka.databinding.ItemPetProfileBinding
+import com.squareup.picasso.MemoryPolicy
+import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 
 class PetsListHorizontalViewHolder constructor(
@@ -51,7 +53,8 @@ class PetsListVerticalViewHolder constructor(
     fun setUp(petsData: Pet){
         itemPetBinding.petNameTv.text= petsData.name
 //        itemPetBinding.mainPagePetOwnerNameTv.text = petsData.user?.first_name+" "+ petsData.user?.last_name
-        Picasso.get().load(petsData.image).fit().centerCrop().placeholder(R.drawable.img_aktos).into(itemPetBinding.petsAvatarIv)
+        Picasso.get().load(petsData.image).memoryPolicy(MemoryPolicy.NO_CACHE)
+            .networkPolicy(NetworkPolicy.NO_CACHE).fit().centerCrop().placeholder(R.drawable.img_aktos).into(itemPetBinding.petsAvatarIv)
         itemView.setOnClickListener {
             navigationListener?.navigate(petsData)
             listener?.invoke(petsData)

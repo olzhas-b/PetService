@@ -170,7 +170,8 @@ class MainPageFragment: Fragment(), NavigationListener {
     private fun setOnClickListener(){
         viewBinding.apply {
             petSitterBtn.setOnClickListener {
-                it.findNavController().navigate(MainPageFragmentDirections.actionMainPageFragmentToServiceProvidersFragment(1))
+                it.findNavController().navigate(MainPageFragmentDirections
+                    .actionMainPageFragmentToServiceProvidersFragment(1))
             }
             nearestPetSitterMoreTv.setOnClickListener {
                 it.findNavController().navigate(MainPageFragmentDirections.actionMainPageFragmentToServiceProvidersFragment(1))

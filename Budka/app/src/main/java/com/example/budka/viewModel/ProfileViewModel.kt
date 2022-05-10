@@ -10,6 +10,7 @@ package com.example.budka.viewModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.example.budka.data.model.NetworkResult
 import com.example.budka.data.model.Pet
 import com.example.budka.data.model.User
@@ -20,7 +21,7 @@ import okhttp3.MultipartBody
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
-class ProfileViewModel(private val profileUseCase: ProfileUseCase): BaseViewModel() {
+class ProfileViewModel(private val profileUseCase: ProfileUseCase): ViewModel() {
     private var profile = MutableLiveData< NetworkResult<User>>()
 
     fun fetchProfile(){

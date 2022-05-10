@@ -9,6 +9,7 @@
 package com.example.budka.view
 
 import android.Manifest
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
@@ -61,6 +62,10 @@ class ChangeProfileFragment: Fragment() {
     private val profileViewModel: ProfileViewModel by viewModel()
     val REQUEST_CODE = 200
     private  val REQUEST_STORAGE_PERMISSION = 1
+    private val PERMISSION_STORAGE = arrayOf(
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE
+    )
     private var imageUri: Uri? = null
 
 
@@ -248,15 +253,14 @@ class ChangeProfileFragment: Fragment() {
 
     private fun requestStoragePermission() {
         if (!hasStoragePermission()) {
-            val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+            val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE )
             ActivityCompat.requestPermissions(requireActivity(), permissions, REQUEST_STORAGE_PERMISSION)
         }
     }
 
     private fun hasStoragePermission() = ContextCompat.checkSelfPermission(
         requireContext(),
-        Manifest.permission.READ_EXTERNAL_STORAGE
-    ) == PackageManager.PERMISSION_GRANTED
+        Manifest.permission.WRITE_EXTERNAL_STORAGE    ) == PackageManager.PERMISSION_GRANTED
 
 
     private fun openFileExplorer(){

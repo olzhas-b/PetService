@@ -60,106 +60,104 @@ class ProfileFragment: Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun setObservers(){
-        profileViewModel.getProfile().observe(viewLifecycleOwner, { result ->
-            result.doIfSuccess { profile ->
-                profile?.apply {
-                    user = profile
-                    Picasso.get().isLoggingEnabled = true
-                    Picasso.get().load(avatar).into(viewBinding.userAvatar)
-                    viewBinding.tvName.text = fullName
-                    viewBinding.tvAddress.text = city + ", " + country
-                    viewBinding.userRating.rating = averageRating
-                    viewBinding.rateCount.text = (countRating?:0).toString()
-                    viewBinding.favCount.text = (cntFavorite?:0).toString()
-                }
-                unauthorized = false
-            }
-            result.doIfFailure { error, data ->
-                unauthorized = true
-                if (error != null) {
-                    if(error.contains("401")){
-                        showLogin()
-                    }else
-                        error.let { (activity as MainActivity).showAlert(it) }
-                }
+        with(viewBinding) {
+            profileViewModel.getProfile().observe(viewLifecycleOwner, { result ->
+                result.doIfSuccess { profile ->
 
-            }
-        })
+                    profile?.apply {
+                        user = profile
+                        Picasso.get().load(avatar).into(userAvatar)
+                        tvName.text = fullName
+                        tvAddress.text = city + ", " + country
+                        userRating.rating = averageRating
+                        rateCount.text = (countRating ?: 0).toString()
+                        favCount.text = (cntFavorite ?: 0).toString()
+                    }
+                    logOutBtn.text = "Выйти"
+                    unauthorized = false
+                }
+                result.doIfFailure { error, data ->
+                    logOutBtn.text = "Войти"
+                    unauthorized = true
+                    if (error != null) {
+                        if (error.contains("401")) {
+                            showLogin()
+                        } else
+                            error.let { (activity as MainActivity).showAlert(it) }
+                    }
+
+                }
+            })
+        }
     }
 
     private fun setListeners(){
-        if(!unauthorized) {
+
             viewBinding.myServicesLayout.setOnClickListener {
-                it.findNavController().navigate(
-                    ProfileFragmentDirections.actionProfileFragmentToMyServices(
-                        "service",
-                        user.id
+                if(!unauthorized) {
+                    it.findNavController().navigate(
+                        ProfileFragmentDirections.actionProfileFragmentToMyServices(
+                            "service",
+                            user.id
+                        )
                     )
-                )
+                } else {
+                    showLogin()
+                }
             }
             viewBinding.myPetsLayout.setOnClickListener {
+                if(!unauthorized) {
                 it.findNavController().navigate(
                     ProfileFragmentDirections.actionProfileFragmentToMyServices(
                         "pets",
                         user.id
                     )
-                )
+                )} else
+                    showLogin()
             }
-            viewBinding.logOutBtn.visibility = View.VISIBLE
             viewBinding.logOutBtn.setOnClickListener {
-                profileViewModel.logOut().observe(viewLifecycleOwner, { result ->
-                    (activity as MainActivity).showProgressBar(result.show)
-                    result.doIfSuccess {
-                        (activity as MainActivity).showProgressBar()
-                        sessionManager.deleteSession()
-                        val intent = Intent(activity, LoginActivity::class.java)
-                        intent.flags =
-                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        startActivity(intent)
-                        activity?.finish()
+                if(!unauthorized) {
+                    profileViewModel.logOut().observe(viewLifecycleOwner, { result ->
+                        (activity as MainActivity).showProgressBar(result.show)
+                        result.doIfSuccess {
+                            (activity as MainActivity).showProgressBar()
+                            sessionManager.deleteSession()
+                            val intent = Intent(activity, LoginActivity::class.java)
+                            intent.flags =
+                                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            startActivity(intent)
+                            activity?.finish()
 
-                    }
-                    result.doIfFailure { error, data ->
-                        error?.let { (activity as MainActivity).showAlert(it) }
-                        sessionManager.deleteSession()
-                        val intent = Intent(activity, LoginActivity::class.java)
-                        intent.flags =
-                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        startActivity(intent)
-                        activity?.finish()
+                        }
+                        result.doIfFailure { error, data ->
+                            error?.let { (activity as MainActivity).showAlert(it) }
+                            sessionManager.deleteSession()
+                            val intent = Intent(activity, LoginActivity::class.java)
+                            intent.flags =
+                                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            startActivity(intent)
+                            activity?.finish()
 
-                    }
+                        }
 
-                })
+                    })
+                }
+                else {
+                    val intent = Intent(requireContext(), LoginActivity::class.java)
+                    this.startActivity(intent)
+                }
 
 
             }
             viewBinding.accountLayout.setOnClickListener {
-                it.findNavController().navigate(
+                if(!unauthorized)
+                    it.findNavController().navigate(
                     ProfileFragmentDirections.actionProfileFragmentToChangeProfileFragment(user)
                 )
-            }
-        } else{
-            viewBinding.myServicesLayout.setOnClickListener {
-                showLogin()
-            }
-            viewBinding.myPetsLayout.setOnClickListener {
-                showLogin()
-
-            }
-            viewBinding.logOutBtn.visibility = View.GONE
-            viewBinding.logOutBtn.setOnClickListener {
-                profileViewModel.logOut().observe(viewLifecycleOwner, {
+                else
                     showLogin()
-            })
-            }
-            viewBinding.accountLayout.setOnClickListener {
-                    showLogin()
-
             }
         }
-    }
-
     private fun showLogin(){
         val errorDialog = AlertDialog.Builder(requireContext())
         errorDialog.setIcon(R.drawable.ic_baseline_error_24)
@@ -180,4 +178,6 @@ class ProfileFragment: Fragment() {
         errorDialog.create()
         errorDialog.show()
     }
+
+
 }

@@ -54,17 +54,14 @@ class MyServicesFragment : Fragment(), NavigationListener, PetEditListener {
         super.onViewCreated(view, savedInstanceState)
         when(args.toPage){
             "service" -> {
-                if(savedInstanceState==null) {
                     myservicesViewModel.fetchUserServicesList(args.userId)
-                }
+
                 setMyServicesObserver()
                 setServiceListeners()
                 setupServiceAdapter()
             }
             "pets" -> {
-                if(savedInstanceState==null) {
                     petsListViewModel.fetchUserPetsList(args.userId)
-                }
                 setMyPetsObserver()
                 setupPetsAdapter()
                 setPetsListeners()
