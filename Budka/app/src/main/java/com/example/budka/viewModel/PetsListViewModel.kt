@@ -35,6 +35,10 @@ class PetsListViewModel(private val petsListUseCase: PetsListUseCase): BaseViewM
         userPetsList = petsListUseCase.getUserPets(user_id) as MutableLiveData<NetworkResult<List<Pet>>>
     }
 
+//    fun fetchUserPetsList(user_id: Int): LiveData<NetworkResult<List<Pet>>>{
+//        return userPetsList = petsListUseCase.getUserPets(user_id) as MutableLiveData<NetworkResult<List<Pet>>>
+//    }
+
     fun getUserPetsList(): LiveData<NetworkResult<List<Pet>>>{
         return userPetsList
     }

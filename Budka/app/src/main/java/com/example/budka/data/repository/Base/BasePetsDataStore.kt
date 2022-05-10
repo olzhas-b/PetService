@@ -27,7 +27,9 @@ abstract class BasePetsDataStore(@PublishedApi internal val service: ApiService)
                            body: PetCreate, petId: Int ): LiveData<NetworkResult<Pet>>
     abstract fun deletePet(petId: Int): LiveData<NetworkResult<String>>
 
-    inline fun fetchData(crossinline call: (ApiService) -> Deferred<Response<List<Pet>>>): LiveData<NetworkResult<List<Pet>>> {
+    inline fun fetchData(crossinline call:
+                             (ApiService) -> Deferred<Response<List<Pet>>>)
+    : LiveData<NetworkResult<List<Pet>>> {
         val result = MutableLiveData<NetworkResult<List<Pet>>>()
         CoroutineScope(Dispatchers.IO).launch {
             val request = call(service)
@@ -38,23 +40,21 @@ abstract class BasePetsDataStore(@PublishedApi internal val service: ApiService)
                     if (response.isSuccessful) {
                         result.value = NetworkResult.Success(response.body())
                     } else {
-                        result.value = NetworkResult.Error("Запрос завершился с кодом${response.code()}")
-                        Timber.d("Error occurred with code ${response.code()}")
+                        result.value = NetworkResult
+                            .Error("Запрос завершился с кодом${response.code()}")
                     }
                 } catch (e: HttpException){
                     result.value = NetworkResult.Error("Ошибка: ${e.message()}")
-                    Timber.d("Error: ${e.message()}")
                 } catch (e: Throwable){
                     result.value = NetworkResult.Error("Ошибка: ${e.message}")
-                    Timber.d("Error: ${e.message}")
                 }
             }
         }
         return result
-
     }
 
-    inline fun getPetResponse(crossinline call: (ApiService) -> Deferred<Response<Pet>>): LiveData<NetworkResult<Pet>> {
+    inline fun getPetResponse(crossinline call: (ApiService) -> Deferred<Response<Pet>>)
+    : LiveData<NetworkResult<Pet>> {
         val result = MutableLiveData<NetworkResult<Pet>>()
         CoroutineScope(Dispatchers.IO).launch {
             val request = call(service)
@@ -65,20 +65,17 @@ abstract class BasePetsDataStore(@PublishedApi internal val service: ApiService)
                     if (response.isSuccessful) {
                         result.value = NetworkResult.Success(response.body())
                     } else {
-                        result.value = NetworkResult.Error("Запрос завершился с кодом${response.code()}")
-                        Timber.d("Error occurred with code ${response.code()}")
+                        result.value = NetworkResult
+                            .Error("Запрос завершился с кодом${response.code()}")
                     }
                 } catch (e: HttpException){
                     result.value = NetworkResult.Error("Ошибка: ${e.message()}")
-                    Timber.d("Error: ${e.message()}")
                 } catch (e: Throwable){
                     result.value = NetworkResult.Error("Ошибка: ${e.message}")
-                    Timber.d("Error: ${e.message}")
                 }
             }
         }
         return result
-
     }
 
     inline fun deleteResponse(crossinline call: (ApiService) -> Deferred<Response<String>>):LiveData<NetworkResult<String>> {

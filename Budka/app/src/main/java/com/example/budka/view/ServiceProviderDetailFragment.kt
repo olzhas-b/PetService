@@ -139,7 +139,7 @@ checkPermission()
     }
 
     fun callPhone(){
-        val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + arg.user.user?.phone))
+        val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + arg.user.user?.phone))
         startActivity(intent)
     }
 

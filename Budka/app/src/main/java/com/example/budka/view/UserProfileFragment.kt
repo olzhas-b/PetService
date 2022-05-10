@@ -11,6 +11,7 @@ package com.example.budka.view
 import android.R
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -167,13 +168,37 @@ class UserProfileFragment: Fragment() {
                     result.doIfSuccess {
                         (activity as MainActivity).showProgressBar()
                         profileViewModel.fetchProfile(arg.userId)
-                        profileViewModel.getProfile()
+                        profileViewModel.getProfile().observe(viewLifecycleOwner,
+                            {result->
+                                result.doIfSuccess {  profile ->
+                                    profile?.apply {
+                                        user = profile
+                                        Picasso.get().load(avatar).into(viewBinding.userAvatar)
+                                        viewBinding.tvName.text = fullName
+                                        viewBinding.tvAddress.text = city + ", " + country
+                                        viewBinding.userRating.rating = averageRating
+                                        viewBinding.profileAboutTv.text = description
+                                        viewBinding.rateCount.text = (countRating?:0).toString()
+                                        viewBinding.favCount.text = (cntFavorite?:0).toString()
+                                    }
+                                }
+                                result.doIfFailure { error, data ->
+                                    error?.let { (activity as MainActivity).showAlert(it) }
+
+                                }
+                            }
+                        )
 
                     }
                     result.doIfFailure{ error, data ->
-                        (activity as MainActivity).showProgressBar()
-                        error?.let{(activity as MainActivity).showAlert(it)}
-
+                        if (error != null) {
+                            if(error.contains("401")){
+                                showLogin()
+                            }else {
+                                (activity as MainActivity).showProgressBar()
+                                error.let{(activity as MainActivity).showAlert(it)}
+                            }
+                        }
                     }
 
                     result.doIfLoading {
@@ -190,6 +215,27 @@ class UserProfileFragment: Fragment() {
             ) { dialog, id -> dialog.cancel() }
         voteDialog.create()
         voteDialog.show()
+    }
+
+    private fun showLogin(){
+        val errorDialog = AlertDialog.Builder(requireContext())
+        errorDialog.setIcon(com.example.budka.R.drawable.ic_baseline_error_24)
+        errorDialog.setTitle("Войдите пожалуйста в аккаунт")
+        errorDialog.setNegativeButton(
+            "Вернуться"
+        ) { dialog, _ ->
+
+            dialog.cancel()
+        }
+        errorDialog.setPositiveButton(
+            "Войти",
+        ){dialog, _ ->
+            val intent = Intent(requireContext(), LoginActivity::class.java)
+            this.startActivity(intent)
+            dialog.dismiss()
+        }
+        errorDialog.create()
+        errorDialog.show()
     }
 
 }

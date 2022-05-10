@@ -40,11 +40,11 @@ class MainActivity: AppCompatActivity() {
         MapKitFactory.setApiKey(Constants.YANDEX_MAPS_API_KEY)
 
 
-        sessionManager = SessionManager(this)
-        if (sessionManager.fetchSessionId() == null) {
-            val intent = Intent(this, LoginActivity::class.java)
-            this.startActivity(intent)
-        }
+//        sessionManager = SessionManager(this)
+//        if (sessionManager.fetchSessionId() == null) {
+//            val intent = Intent(this, LoginActivity::class.java)
+//            this.startActivity(intent)
+//        }
 
             if(!checkPermission()) {
                 requestPermission()

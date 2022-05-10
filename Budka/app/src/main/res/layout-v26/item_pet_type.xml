@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ /**
-  ~  * Created by Ali Ashkeyev on 03.01.2022, 22:55
+  ~  * Created by Ali Ashkeyev on 27.04.2022, 15:52
   ~  * Copyright (c) 2022 . All rights reserved.
-  ~  * Last modified 03.01.2022, 22:53
+  ~  * Last modified 27.04.2022, 15:52
   ~  */
   -->
 
@@ -40,10 +40,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:autoSizeTextType="uniform"
-                android:autoSizeMinTextSize="13sp"
+                android:autoSizeMinTextSize="11sp"
                 tools:text="Собаки"
                 android:fontFamily="@font/trueno_round_bd"
                 android:textColor="@color/white"
+                android:autoSizeStepGranularity="2sp"
                 android:autoSizeMaxTextSize="16sp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"

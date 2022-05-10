@@ -8,6 +8,7 @@
 
 package com.example.budka.view
 
+import android.app.AlertDialog
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.MediaScannerConnection
@@ -21,6 +22,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -95,65 +97,100 @@ class CreateServiceRequiredFragment : Fragment(), SetLocationInterface {
         countriesListViewModel.fetchCountryList().observe(viewLifecycleOwner, Observer {
             setCountries(it)
         })
-
-        serviceDetailViewModel.getServiceDetail().observe(viewLifecycleOwner, {
-            viewBinding.apply {
-                it.doIfSuccess {
-                    it?.apply {
-                        summaryEt.setText(description)
-                        acceptablePetTypes.value = acceptablePets
-                        acceptablePetSize.value = acceptableSize
-                        this@CreateServiceRequiredFragment.latitude = latitude
-                        this@CreateServiceRequiredFragment.longitude = longitude
-                        createSerViewModel.propertiesList.value = additionalProperties
-                    }
-
+        viewBinding.serviceTypeSp.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                var serviceType: Int = 0
+                ServiceType.from(viewBinding.serviceTypeSp.selectedItem.toString())?.let {
+                    serviceType = ServiceType.valueOf(it.name).ordinal + 1
                 }
+                if(serviceType!= args.user?.serviceType)
+                    createSerViewModel.propertiesList.value = null
+
+
             }
-        })
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+            }
+        }
+
+        if(args.operationType=="update") {
+            serviceDetailViewModel.getServiceDetail().observe(viewLifecycleOwner, {
+                viewBinding.apply {
+                    it.doIfSuccess {
+                        it?.apply {
+                            summaryEt.setText(description)
+                            acceptablePetTypes.value = acceptablePets
+                            acceptablePetSize.value = acceptableSize
+                            this@CreateServiceRequiredFragment.latitude = latitude
+                            this@CreateServiceRequiredFragment.longitude = longitude
+                            createSerViewModel.propertiesList.value = additionalProperties
+                        }
+
+                    }
+                }
+            })
+        }
     }
 
     private fun setListeners(){
         viewBinding.mapIv.setOnClickListener {
-            val fragment = MapsFragment(true, setLocationInterface = this)
+            val countryCity = if(validateCountryCity()) with(viewBinding){countriesEdV.text.toString()+", "+cityEdV.text.toString()} else null
+            val fragment = MapsFragment(countryCity, true, setLocationInterface = this)
             parentFragmentManager.beginTransaction().add(R.id.fragment, fragment).addToBackStack("requiredFm").commit()
 //            it.findNavController().navigate(CreateServiceRequiredFragmentDirections.actionCreateServiceRequiredFragmentToMapsFragment(true))
 
         }
         viewBinding.optionalNavigateBtn.setOnClickListener {
-            var serviceType: Int = 0
-            ServiceType.from(viewBinding.serviceTypeSp.selectedItem.toString())?.let {
-                serviceType = ServiceType.valueOf(it.name).ordinal + 1
-            }
+            if(validateFields()) {
+                var serviceType: Int = 0
+                ServiceType.from(viewBinding.serviceTypeSp.selectedItem.toString())?.let {
+                    serviceType = ServiceType.valueOf(it.name).ordinal + 1
+                }
 
-            val summary = viewBinding.summaryEt.text.toString()
-            val petType = viewBinding.petTypeSp.selectedItem.toString()
-            val petSize = viewBinding.petSizeSp.selectedItem.toString()
-            val currencyCode = if(viewBinding.currencySp.selectedItem.toString().equals(" ")) null else viewBinding.currencySp.selectedItem.toString()
-            val country = viewBinding.countriesEdV.text.toString()
-            val city = viewBinding.cityEdV.text.toString()
-            val price = viewBinding.priceEt.text.toString().toInt()
-            val pricePerTime = viewBinding.pricePerTime.selectedItem.toString()
-            val requireFields = ServiceRequiredField(
-                args.user?.id,
-                serviceType,
-                summary,
-                petType,
-                petSize,
-                country,
-                city,
-                this.longitude,
-                this.latitude,
-                price,
-                currencyCode,
-                pricePerTime
-            )
-            createSerViewModel.imageList.value = uriList
-            it.findNavController().navigate(
-                CreateServiceRequiredFragmentDirections.actionCreateServiceRequiredFragmentToCreateServiceOptionalFragment(
-                    requiredField = requireFields, operationType = args.operationType
+                val summary = viewBinding.summaryEt.text.toString()
+                val petType = viewBinding.petTypeSp.selectedItem.toString()
+                val petSize = viewBinding.petSizeSp.selectedItem.toString()
+                val currencyCode = if (viewBinding.currencySp.selectedItem.toString()
+                        .equals(" ")
+                ) null else viewBinding.currencySp.selectedItem.toString()
+                val country = viewBinding.countriesEdV.text.toString()
+                val city = viewBinding.cityEdV.text.toString()
+                val price = viewBinding.priceEt.text.toString().toInt()
+                val pricePerTime = viewBinding.pricePerTime.selectedItem.toString()
+                val requireFields = ServiceRequiredField(
+                    args.user?.id,
+                    serviceType,
+                    summary,
+                    petType,
+                    petSize,
+                    country,
+                    city,
+                    this.longitude,
+                    this.latitude,
+                    price,
+                    currencyCode,
+                    pricePerTime
                 )
-            )
+                createSerViewModel.imageList.value = uriList
+                it.findNavController().navigate(
+                    CreateServiceRequiredFragmentDirections.actionCreateServiceRequiredFragmentToCreateServiceOptionalFragment(
+                        requiredField = requireFields, operationType = args.operationType
+                    )
+                )
+            }
+            else{
+                val errorDialog = AlertDialog.Builder(requireContext())
+                errorDialog.setIcon(R.drawable.ic_baseline_error_24)
+                errorDialog.setTitle("Заполните поля")
+                errorDialog.setPositiveButton(
+                    "Вернуться"
+                ) { dialog, _ ->
+
+                    dialog.cancel()
+                }
+                errorDialog.create()
+                errorDialog.show()
+            }
         }
     }
 
@@ -365,6 +402,28 @@ class CreateServiceRequiredFragment : Fragment(), SetLocationInterface {
 
             }
         }
+
+    private fun validateFields(): Boolean {
+        val serviceType = viewBinding.serviceTypeSp.selectedItem.toString()
+
+        val summary = viewBinding.summaryEt.text.toString()
+        val petType = viewBinding.petTypeSp.selectedItem.toString()
+        val petSize = viewBinding.petSizeSp.selectedItem.toString()
+        val currencyCode = if(viewBinding.currencySp.selectedItem.toString().equals(" ")) null else viewBinding.currencySp.selectedItem.toString()
+        val country = viewBinding.countriesEdV.text.toString()
+        val city = viewBinding.cityEdV.text.toString()
+        val price = viewBinding.priceEt.text.toString()
+        val pricePerTime = viewBinding.pricePerTime.selectedItem.toString()
+        return serviceType!=""&&summary!=""&&petType!=""&&petSize!=""&&currencyCode!=""&&country!=""&&
+                city!=""&&price!=""&&pricePerTime!=""
+    }
+
+    private fun validateCountryCity(): Boolean {
+        val country = viewBinding.countriesEdV.text.toString()
+        val city = viewBinding.cityEdV.text.toString()
+        return country!=""&&
+                city!=""
+    }
 
 
 

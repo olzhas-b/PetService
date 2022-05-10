@@ -9,6 +9,9 @@
 package com.example.budka.data.model
 
 import android.os.Parcelable
+import androidx.room.*
+import com.example.budka.data.localDB.Converters
+import com.example.budka.utils.Constants
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.parcel.RawValue
@@ -37,28 +40,37 @@ data class ServiceProviderResponse(
     val total: Int
 )
 
+@Entity(tableName = Constants.SERVICE_PROVIDERS_TABLE)
 @Parcelize
 data class ServiceProvider(
+    @PrimaryKey
     @SerializedName("id")
     val id: Int,
+    @ColumnInfo(name = "service_type")
     @SerializedName("serviceType")
     val serviceType: Int?,
     @SerializedName("price")
     val price: Int?,
+    @ColumnInfo(name = "currency_code")
     @SerializedName("currencyCode")
     val currencyCode: String?,
+    @ColumnInfo(name = "price_per_time")
     @SerializedName("pricePerTime")
     val pricePerTime: String?,
     @SerializedName("status")
     val status: Int?,
+    @Embedded(prefix = "user")
     @SerializedName("user")
     val user: @RawValue
     User?,
     @SerializedName("images")
     val images: List<String>?,
+    @ColumnInfo(name = "is_favorite")
     @SerializedName("isFavorite")
     var isFavorite: Boolean?
 ): Parcelable
+
+
 
 
 

@@ -29,6 +29,7 @@ import com.yandex.runtime.ui_view.ViewProvider
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MapsFragment constructor(
+    val countryCity: String? = "Казахстан, Алматы",
     val setLocation: Boolean = false,
     var setLocationInterface: SetLocationInterface ?= null
 ): Fragment() {
@@ -69,7 +70,6 @@ class MapsFragment constructor(
             Animation(Animation.Type.SMOOTH, 2F),
             null
         )
-
         val locationCircle = Circle(Point( latitude, longitude),
             1000F)
         mapView.map.mapObjects.addCircle(locationCircle, ResourcesCompat
@@ -87,7 +87,7 @@ class MapsFragment constructor(
     private fun setProvidableServiceLocation() {
 
         val geoCoder = Geocoder(context)
-        val addresses = geoCoder.getFromLocationName("Казахстан, Алматы",1)
+        val addresses = geoCoder.getFromLocationName(countryCity,1)
         if(addresses.size > 0){
             mapView.map.move(
                 CameraPosition(Point( addresses[0].latitude, addresses[0].longitude), 14.0f, 0.0f, 0.0f),
@@ -113,14 +113,8 @@ class MapsFragment constructor(
                 viewBinding.setLocationBtn.setOnClickListener {
                     setLocationInterface?.sendLocation(longitude = p1.longitude, latitude = p1.latitude)
                     parentFragmentManager.beginTransaction().remove(this@MapsFragment).commit()
-//                    parentFragmentManager.popBackStackImmediate()
-//                    fragmentManager?.popBackStackImmediate()
-//                    activity?.onBackPressed()
-//                    findNavController().navigate(
-//                        MapsFragmentDirections.actionMapsFragmentToCreateServiceRequiredFragment(p1.longitude.toFloat(), p1.latitude.toFloat()))
                 }
             }
-
             override fun onMapObjectDragEnd(p0: MapObject) {
 
             }

@@ -122,7 +122,8 @@ class ServiceProvidersListFragment: Fragment(), FavListener, NavigationListener 
                 this@ServiceProvidersListFragment.petType = petType
             }
             petSittersListViewModel.fetchPetSittersList(arg.serviceType, country, city, petType)
-            viewBinding.petSitterLocationTv.text = "$city, $country"
+            viewBinding.petSitterLocationTv.text = if(country==null&& city==null)"" else "${
+                city ?:""}, ${country?:""}"
 
 
 

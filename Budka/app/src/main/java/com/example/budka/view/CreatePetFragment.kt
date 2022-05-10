@@ -173,7 +173,21 @@ class CreatePetFragment : Fragment() {
                         viewLifecycleOwner, petObserver
                     ) }
                 else
-                    petsListViewModel.createPet(image, pet).observe(viewLifecycleOwner, petObserver)
+                    if(validateFields())
+                        petsListViewModel.createPet(image, pet).observe(viewLifecycleOwner, petObserver)
+                    else{
+                        val errorDialog = AlertDialog.Builder(requireContext())
+                        errorDialog.setIcon(R.drawable.ic_baseline_error_24)
+                        errorDialog.setTitle("Заполните поля")
+                        errorDialog.setPositiveButton(
+                            "Вернуться"
+                        ) { dialog, _ ->
+
+                            dialog.cancel()
+                        }
+                        errorDialog.create()
+                        errorDialog.show()
+                    }
             }
 
 
@@ -276,7 +290,9 @@ class CreatePetFragment : Fragment() {
 
     private fun requestStoragePermission() {
         if (!hasStoragePermission()) {
-            val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+            val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
             ActivityCompat.requestPermissions(requireActivity(), permissions, REQUEST_STORAGE_PERMISSION)
         }
     }
@@ -308,7 +324,8 @@ class CreatePetFragment : Fragment() {
     private fun prepareFilePart(partName: String, fileUri: Uri): MultipartBody.Part{
         val file = FileUtils.getFile(requireContext(), fileUri)
         val requestFile = RequestBody.create(MediaType.parse(requireContext().contentResolver.getType(fileUri)), file)
-        return MultipartBody.Part.createFormData(partName, file.name, requestFile)
+        val fileName = if(file.name.length>=40) file.name.substring(0..39) else file.name
+        return MultipartBody.Part.createFormData(partName, fileName , requestFile)
     }
 
     fun savePhotoFromUrl(){
@@ -350,6 +367,16 @@ class CreatePetFragment : Fragment() {
             }
 
         }
+    }
+
+    private fun validateFields(): Boolean {
+        val name = viewBinding.petNameEt.text.toString()
+
+        val petType = viewBinding.petTypeSp.selectedItem.toString()
+        val breed = viewBinding.petBreedEt.text.toString()
+        val petSize = viewBinding.petSizeSp.selectedItem.toString()
+
+        return name!=""&&petSize!=""&&petType!=""&&petSize!=""&&breed!=""
     }
 
     }

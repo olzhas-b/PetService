@@ -9,6 +9,7 @@
 package com.example.budka.view
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,6 +17,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import com.example.budka.R
 import com.example.budka.data.model.*
 import com.example.budka.databinding.FragmentProfileBinding
 import com.example.budka.viewModel.ProfileViewModel
@@ -29,6 +31,7 @@ class ProfileFragment: Fragment() {
     private lateinit var sessionManager: SessionManager
     private val profileViewModel: ProfileViewModel by viewModel()
     private lateinit var user: User
+    private var unauthorized: Boolean = false
 
 
     override fun onCreateView(
@@ -57,61 +60,124 @@ class ProfileFragment: Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun setObservers(){
-        profileViewModel.getProfile().observe(viewLifecycleOwner, { result ->
-            result.doIfSuccess { profile ->
-                profile?.apply {
-                    user = profile
-                    Picasso.get().isLoggingEnabled = true
-                    Picasso.get().load(avatar).into(viewBinding.userAvatar)
-                    viewBinding.tvName.text = fullName
-                    viewBinding.tvAddress.text = city + ", " + country
-                    viewBinding.userRating.rating = averageRating
-                    viewBinding.rateCount.text = (countRating?:0).toString()
-                    viewBinding.favCount.text = (cntFavorite?:0).toString()
-                }
-            }
-            result.doIfFailure { error, data ->
-                error?.let { (activity as MainActivity).showAlert(it) }
+        with(viewBinding) {
+            profileViewModel.getProfile().observe(viewLifecycleOwner, { result ->
+                result.doIfSuccess { profile ->
 
-            }
-        })
+                    profile?.apply {
+                        user = profile
+                        Picasso.get().load(avatar).into(userAvatar)
+                        tvName.text = fullName
+                        tvAddress.text = city + ", " + country
+                        userRating.rating = averageRating
+                        rateCount.text = (countRating ?: 0).toString()
+                        favCount.text = (cntFavorite ?: 0).toString()
+                    }
+                    logOutBtn.text = "Выйти"
+                    unauthorized = false
+                }
+                result.doIfFailure { error, data ->
+                    logOutBtn.text = "Войти"
+                    unauthorized = true
+                    if (error != null) {
+                        if (error.contains("401")) {
+                            showLogin()
+                        } else
+                            error.let { (activity as MainActivity).showAlert(it) }
+                    }
+
+                }
+            })
+        }
     }
 
     private fun setListeners(){
-        viewBinding.myServicesLayout.setOnClickListener {
-            it.findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToMyServices("service", user.id ))
-        }
-        viewBinding.myPetsLayout.setOnClickListener{
-            it.findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToMyServices("pets", user.id))
-        }
-        viewBinding.logOutBtn.setOnClickListener {
-            profileViewModel.logOut().observe(viewLifecycleOwner, {result->
-                (activity as MainActivity).showProgressBar(result.show)
-                result.doIfSuccess {
-                    (activity as MainActivity).showProgressBar()
-                    sessionManager.deleteSession()
-                    val intent = Intent(activity, LoginActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    startActivity(intent)
-                    activity?.finish()
 
+            viewBinding.myServicesLayout.setOnClickListener {
+                if(!unauthorized) {
+                    it.findNavController().navigate(
+                        ProfileFragmentDirections.actionProfileFragmentToMyServices(
+                            "service",
+                            user.id
+                        )
+                    )
+                } else {
+                    showLogin()
                 }
-                result.doIfFailure{ error, data ->
-                    error?.let{(activity as MainActivity).showAlert(it)}
-                    sessionManager.deleteSession()
-                    val intent = Intent(activity, LoginActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    startActivity(intent)
-                    activity?.finish()
+            }
+            viewBinding.myPetsLayout.setOnClickListener {
+                if(!unauthorized) {
+                it.findNavController().navigate(
+                    ProfileFragmentDirections.actionProfileFragmentToMyServices(
+                        "pets",
+                        user.id
+                    )
+                )} else
+                    showLogin()
+            }
+            viewBinding.logOutBtn.setOnClickListener {
+                if(!unauthorized) {
+                    profileViewModel.logOut().observe(viewLifecycleOwner, { result ->
+                        (activity as MainActivity).showProgressBar(result.show)
+                        result.doIfSuccess {
+                            (activity as MainActivity).showProgressBar()
+                            sessionManager.deleteSession()
+                            val intent = Intent(activity, LoginActivity::class.java)
+                            intent.flags =
+                                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            startActivity(intent)
+                            activity?.finish()
 
+                        }
+                        result.doIfFailure { error, data ->
+                            error?.let { (activity as MainActivity).showAlert(it) }
+                            sessionManager.deleteSession()
+                            val intent = Intent(activity, LoginActivity::class.java)
+                            intent.flags =
+                                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            startActivity(intent)
+                            activity?.finish()
+
+                        }
+
+                    })
+                }
+                else {
+                    val intent = Intent(requireContext(), LoginActivity::class.java)
+                    this.startActivity(intent)
                 }
 
-            })
 
+            }
+            viewBinding.accountLayout.setOnClickListener {
+                if(!unauthorized)
+                    it.findNavController().navigate(
+                    ProfileFragmentDirections.actionProfileFragmentToChangeProfileFragment(user)
+                )
+                else
+                    showLogin()
+            }
+        }
+    private fun showLogin(){
+        val errorDialog = AlertDialog.Builder(requireContext())
+        errorDialog.setIcon(R.drawable.ic_baseline_error_24)
+        errorDialog.setTitle("Войдите пожалуйста в аккаунт")
+        errorDialog.setNegativeButton(
+            "Вернуться"
+        ) { dialog, _ ->
 
+            dialog.cancel()
         }
-        viewBinding.accountLayout.setOnClickListener {
-            it.findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToChangeProfileFragment(user))
+        errorDialog.setPositiveButton(
+            "Войти",
+        ){dialog, _ ->
+            val intent = Intent(requireContext(), LoginActivity::class.java)
+            this.startActivity(intent)
+            dialog.dismiss()
         }
+        errorDialog.create()
+        errorDialog.show()
     }
+
+
 }

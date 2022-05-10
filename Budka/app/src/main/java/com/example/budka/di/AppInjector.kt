@@ -46,7 +46,7 @@ val SignInUseCaseModule = module{
 
 val repositoryModule = module{
     single{PetsListDataStore(get())}
-    single{PetSittersListDataStore(get())}
+    single{PetSittersListDataStore(get(), androidApplication())}
     single{ServiceDetailDataStore(get())}
     single{ServicesDataStore(get())}
     single { CountriesDataStore(get()) }

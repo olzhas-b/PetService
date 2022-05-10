@@ -8,6 +8,7 @@
 
 package com.example.budka.data.repository.DataStore
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import com.example.budka.data.api.ApiService
 import com.example.budka.data.model.NetworkResult
@@ -17,8 +18,8 @@ import com.example.budka.data.repository.Base.BasePetSittersDataStore
 import com.example.budka.domain.repository.PetSittersListRepository
 
 
-class PetSittersListDataStore(apiService: ApiService) : PetSittersListRepository, BasePetSittersDataStore(
-    apiService
+class PetSittersListDataStore(apiService: ApiService, context: Context) : PetSittersListRepository, BasePetSittersDataStore(
+    apiService, context
 ) {
     override fun getPetSitters(serviceType: Int, country: String?, city: String?, petType: String?):  LiveData<NetworkResult<ServiceProviderResponse>> {
         val data: MutableMap<String, String?> = HashMap()
