@@ -39,6 +39,6 @@ class MyPageDataStore (apiService: ApiService) :  BaseProfileDataStore(apiServic
     }
 
     override fun deleteSession(): LiveData<NetworkResult<String>> {
-        return deleteResponse { service.deleteSession("http://192.168.43.226:8081/api/v1/user/sign-out") }
+        return deleteResponse { service.deleteSession("https://auth-pet-service.herokuapp.com/api/v1/user/sign-out") }
     }
 }

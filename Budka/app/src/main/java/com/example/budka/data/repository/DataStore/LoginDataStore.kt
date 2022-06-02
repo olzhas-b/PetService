@@ -17,10 +17,10 @@ import com.example.budka.domain.repository.LoginRepository
 
 class LoginDataStore (apiService: ApiService, context: Context): LoginRepository, BaseLoginDataStore(apiService, context) {
     override fun validateWithLogin(data: LoginData):  LiveData<NetworkResult<LoginResponse>> {
-        return authenticate {service.validateWithLogin("http://192.168.43.226:8081/api/v1/user/sign-in", data.signIn) }
+        return authenticate {service.validateWithLogin("https://auth-pet-service.herokuapp.com/api/v1/user/sign-in", data.signIn) }
     }
 
     override fun registerUser(data: SignUpData): LiveData<NetworkResult<ServiceProvider>> {
-        return registrationResponse { service.register("http://192.168.43.226:8081/api/v1/user/sign-up", data) }
+        return registrationResponse { service.register("https://auth-pet-service.herokuapp.com/api/v1/user/sign-up", data) }
     }
 }
