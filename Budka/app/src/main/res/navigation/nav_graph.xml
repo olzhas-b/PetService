@@ -142,6 +142,9 @@
         <action
             android:id="@+id/action_profileFragment_to_changeProfileFragment"
             app:destination="@id/changeProfileFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_otpPhoneFragment"
+            app:destination="@id/otpPhoneFragment" />
     </fragment>
     <fragment
         android:id="@+id/myServices"
@@ -325,9 +328,16 @@
         android:id="@+id/petDetailFragment"
         android:name="com.example.budka.view.PetDetailFragment"
         android:label="PetDetailFragment">
-    <argument
-        android:name="pet"
-        app:argType="com.example.budka.data.model.Pet"/>
+        <argument
+            android:name="pet"
+            android:defaultValue="@null"
+            app:argType="com.example.budka.data.model.Pet"
+            app:nullable="true" />
+        <argument
+            android:name="petId"
+            android:defaultValue="0"
+            app:argType="integer"
+             />
         <action
             android:id="@+id/action_petDetailFragment_to_petsFragment"
             app:destination="@id/petsFragment" />
@@ -337,6 +347,32 @@
         <action
             android:id="@+id/action_petDetailFragment_to_service_provider_detail_fragment"
             app:destination="@id/service_provider_detail_fragment" />
+        <deepLink
+            android:id="@+id/deepLink"
+            app:uri="https://api-service-pod1.herokuapp.com/api/v1/pet/{petId}" />
 
+    </fragment>
+    <fragment
+        android:id="@+id/otpPhoneFragment"
+        android:name="com.example.budka.view.OtpPhoneFragment"
+        android:label="OtpPhoneFragment" >
+        <action
+            android:id="@+id/action_otpPhoneFragment_to_otpSmsFragment"
+            app:destination="@id/otpSmsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/otpSmsFragment"
+        android:name="com.example.budka.view.OtpSmsFragment"
+        android:label="OtpSmsFragment">
+        <argument
+            android:name="verificationId"
+            android:defaultValue=""
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="phoneNumber"
+            android:defaultValue=""
+            app:argType="string"
+            />
     </fragment>
 </navigation>

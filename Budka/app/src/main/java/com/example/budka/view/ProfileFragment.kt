@@ -157,6 +157,11 @@ class ProfileFragment: Fragment() {
                 else
                     showLogin()
             }
+        viewBinding.verificationLayout.setOnClickListener {
+                it.findNavController().navigate(
+                    ProfileFragmentDirections.actionProfileFragmentToOtpPhoneFragment()
+                )
+        }
         }
     private fun showLogin(){
         val errorDialog = AlertDialog.Builder(requireContext())
