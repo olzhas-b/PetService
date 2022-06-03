@@ -29,6 +29,14 @@ class PetsListDataStore(apiService: ApiService): PetsListRepository, BasePetsDat
         return fetchData { service.getUserPets(user_id) }
     }
 
+    override fun getPetDetail(petId: Int): LiveData<NetworkResult<Pet>> {
+        return getPetResponse { service.getPetDetail(petId) }
+    }
+
+    override fun uploadAttachment(petId: Int, attachments: List<MultipartBody.Part>): LiveData<NetworkResult<String>> {
+        return deleteResponse { service.uploadAttachment(petId, attachments) }
+    }
+
     override fun createPet(image: MultipartBody.Part,
                         body: PetCreate
     ):  LiveData<NetworkResult<Pet>> {
@@ -41,5 +49,9 @@ class PetsListDataStore(apiService: ApiService): PetsListRepository, BasePetsDat
 
     override fun deletePet(petId: Int):  LiveData<NetworkResult<String>> {
         return deleteResponse {service.deletePet(petId)}
+    }
+
+    override fun deletePetDoc(petId: Int):  LiveData<NetworkResult<String>> {
+        return deleteResponse {service.deletePetDoc(petId)}
     }
 }

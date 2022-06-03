@@ -181,13 +181,62 @@
 
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/uploadImageBlock"
+            android:id="@+id/vacExpireDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/petSizeBlock">
+
+        <TextView
+            android:id="@+id/vacDateLl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Дата истечения вакцины"
+            android:textColor="@color/gray"
+            android:textSize="20sp"
+            />
+        <LinearLayout
+            android:id="@+id/vacDateBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:elevation="2dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/corner_input"
+            >
+        <EditText
+            android:id="@+id/vacDateEt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="09.05.2021"
+            android:layout_weight="3"
+            android:layout_gravity="bottom"
+            android:textColor="@color/black"
+            android:clickable="false"
+            android:textSize="18sp"
+            android:cursorVisible="false"
+            android:focusable="false"/>
+        <ImageView
+            android:id="@+id/vacDateIv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_calendar___calendar_event"/>
+        </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/uploadImageBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/vacExpireDate">
             <TextView
                 android:id="@+id/imageText"
                 android:layout_width="match_parent"
@@ -219,6 +268,32 @@
             </androidx.cardview.widget.CardView>
 
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/uploadPdfBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/uploadImageBlock"
+            >
+            <TextView
+                android:id="@+id/pdfText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
+                android:text="Загрузите документы вашего питомца)"
+                android:textSize="20sp"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/uploadPdfRv"
+                android:layout_width="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/item_upload_image"
+                tools:itemCount="3"/>
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/confirm_button"
@@ -230,6 +305,6 @@
             android:text="Сохранить"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/uploadImageBlock"/>
+            app:layout_constraintTop_toBottomOf="@id/uploadPdfBlock"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

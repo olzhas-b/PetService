@@ -102,6 +102,7 @@ class MainPageFragment: Fragment(), NavigationListener {
         Picasso.get().load(R.drawable.banner).fit().centerCrop().placeholder(R.drawable.banner).into(viewBinding.bannerIv)
         if(savedInstanceState==null){
             petSittersListViewModel.fetchPetSittersList(1, country, city,null)
+            petsListViewModel.fetchPetsList()
 
         }
         petSitterListObserver = Observer {result->

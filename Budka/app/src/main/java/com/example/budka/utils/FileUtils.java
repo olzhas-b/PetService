@@ -198,7 +198,7 @@ public class FileUtils {
                                        String[] selectionArgs) {
 
         Cursor cursor = null;
-        final String column = "_data";
+        final String column = MediaStore.Images.Media.DATA;
         final String[] projection = {
                 column
         };

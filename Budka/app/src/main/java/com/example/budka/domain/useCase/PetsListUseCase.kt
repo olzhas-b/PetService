@@ -24,6 +24,11 @@ class PetsListUseCase(val petsListRepository: PetsListRepository){
         return petsListRepository.getUserPets(user_id)
     }
 
+    fun getPetDetail(petId: Int): LiveData<NetworkResult<Pet>>
+    {
+        return petsListRepository.getPetDetail(petId)
+    }
+
     fun createPet(
         image: MultipartBody.Part,
         body: PetCreate
@@ -41,5 +46,13 @@ class PetsListUseCase(val petsListRepository: PetsListRepository){
 
     fun deletePet(petId: Int): LiveData<NetworkResult<String>> {
         return petsListRepository.deletePet(petId)
+    }
+
+    fun deletePetDoc(petId: Int): LiveData<NetworkResult<String>> {
+        return petsListRepository.deletePetDoc(petId)
+    }
+
+    fun uploadAttachment(petId: Int, attachments: List<MultipartBody.Part>): LiveData<NetworkResult<String>> {
+        return petsListRepository.uploadAttachment(petId, attachments)
     }
 }
