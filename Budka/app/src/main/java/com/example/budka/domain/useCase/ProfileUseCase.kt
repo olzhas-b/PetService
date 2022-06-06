@@ -35,4 +35,8 @@ class ProfileUseCase (val myPageRepository: MyPageRepository){
     fun deleteSession(): LiveData<NetworkResult<String>>{
         return myPageRepository.deleteSession()
     }
+
+    fun verifyPhone(): LiveData<NetworkResult<String>>{
+        return myPageRepository.verifyPhone()
+    }
 }

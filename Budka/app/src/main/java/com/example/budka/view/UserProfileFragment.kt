@@ -92,6 +92,10 @@ class UserProfileFragment: Fragment() {
                     viewBinding.profileAboutTv.text = description
                     viewBinding.rateCount.text = (countRating?:0).toString()
                     viewBinding.favCount.text = (cntFavorite?:0).toString()
+                    if(user.isVerified)
+                        viewBinding.verificationBlock.visibility = View.VISIBLE
+                    else
+                        viewBinding.verificationBlock.visibility = View.GONE
                 }
             }
             result.doIfFailure { error, data ->

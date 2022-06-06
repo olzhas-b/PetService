@@ -25,7 +25,7 @@ interface ServiceProvidersDao {
     fun getAll(): List<ServiceProvider>
 }
 
-@Database(entities = [ServiceProvider::class], version = 1, exportSchema = false)
+@Database(entities = [ServiceProvider::class], version = 2, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class ServiceProvidersDatabase : RoomDatabase() {
     abstract fun serviceProviderDao(): ServiceProvidersDao
@@ -46,7 +46,8 @@ abstract class ServiceProvidersDatabase : RoomDatabase() {
                 context.applicationContext,
                 ServiceProvidersDatabase::class.java,
                 "serviceProviders.db"
-            ).allowMainThreadQueries().build()
+            ).allowMainThreadQueries().fallbackToDestructiveMigration()
+                .build()
         }
     }
 }

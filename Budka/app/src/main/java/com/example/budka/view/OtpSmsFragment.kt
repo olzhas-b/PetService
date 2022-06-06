@@ -8,6 +8,7 @@
 
 package com.example.budka.view
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -17,13 +18,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.budka.R
+import com.example.budka.data.model.doIfFailure
+import com.example.budka.data.model.doIfSuccess
 import com.example.budka.databinding.FragmentOtpSmsBinding
+import com.example.budka.viewModel.ProfileViewModel
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import org.koin.android.viewmodel.ext.android.viewModel
 import java.util.concurrent.TimeUnit
 
 class OtpSmsFragment: Fragment() {
@@ -33,6 +40,8 @@ class OtpSmsFragment: Fragment() {
     private lateinit var callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
     private var verificationId: String? = null
     private val args: OtpSmsFragmentArgs by navArgs()
+    private val profileViewModel: ProfileViewModel by viewModel()
+
 
 
 
@@ -127,8 +136,31 @@ class OtpSmsFragment: Fragment() {
                 .addOnCompleteListener { task ->
                     viewBinding.progressBar.visibility = View.GONE
                     if (task.isSuccessful) {
-                        Toast.makeText(requireContext(), "Yes", Toast.LENGTH_LONG)
-                            .show()
+                        profileViewModel.verifyPhone().observe(viewLifecycleOwner){result ->
+                            result.doIfSuccess {
+                                (activity as MainActivity).showProgressBar()
+                                val successDialog = AlertDialog.Builder(requireContext())
+                                successDialog.setIcon(R.drawable.ic_baseline_check_24)
+                                successDialog.setTitle("Номер подтвержден!")
+                                successDialog.setPositiveButton(
+                                    "OK"
+                                ) {_,_ ->
+                                    findNavController().navigate(OtpSmsFragmentDirections.actionOtpSmsFragmentToProfileFragment())
+                                }
+                                successDialog.create()
+                                successDialog.show()
+                                Toast.makeText(requireContext(), "", Toast.LENGTH_LONG) .show()
+
+                            }
+                            result.doIfFailure { error, data ->
+                                if (error != null) {
+                                    (activity as MainActivity).showProgressBar()
+                                    error.let { (activity as MainActivity).showAlert(it) }
+                                }
+
+                            }
+                        }
+
 
                     } else {
                         Toast.makeText(

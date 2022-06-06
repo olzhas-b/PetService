@@ -24,6 +24,9 @@ interface ApiService {
     @GET(API + "profile/{userId}")
     fun getUserProfile(@Path("userId") userId: Int): Deferred<Response<User>>
 
+    @POST(API + "user/verify")
+    fun verifyPhone(): Deferred<Response<String>>
+
     @GET(API + "user/pet/all")
     fun getPets(): Deferred<Response<List<Pet>>>
 

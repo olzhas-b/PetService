@@ -28,6 +28,7 @@ abstract class BaseProfileDataStore (@PublishedApi internal val service: ApiServ
     abstract fun getUserProfile(userId: Int) : LiveData<NetworkResult<User>>
     abstract fun setRating(userId: Int, rating: Int): LiveData<NetworkResult<String>>
     abstract fun deleteSession(): LiveData<NetworkResult<String>>
+    abstract fun verifyPhone(): LiveData<NetworkResult<String>>
 
 
     inline fun profileByTokenResponse(crossinline call: (ApiService) -> Deferred<Response<User>>): LiveData<NetworkResult<User>> {
