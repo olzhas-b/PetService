@@ -41,11 +41,12 @@
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/create_service_optional_fragment.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/create_service_required_fragment.xml" value="0.22" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/fragment_favorite_services.xml" value="0.1" />
+        <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/fragment_information_page.xml" value="0.22" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/fragment_maps.xml" value="0.14666666666666667" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/fragment_my_services.xml" value="0.16145833333333334" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/fragment_otp_phone.xml" value="0.21666666666666667" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/fragment_otp_sms.xml" value="0.22" />
-        <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/fragment_pet_detail.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/fragment_pet_detail.xml" value="0.13333333333333333" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/fragment_pet_sitter_detail.xml" value="0.22" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/fragment_pet_sitters_page.xml" value="0.14666666666666667" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/fragment_profile.xml" value="0.13333333333333333" />
@@ -72,6 +73,7 @@
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/nearest_pet_sitter_item.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/pet_sitters_filter_fragment.xml" value="0.2111111111111111" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/service_provider_filter_fragment.xml" value="0.22" />
+        <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/slider_layout.xml" value="0.146875" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/toolbar_transparent.xml" value="0.14221014492753623" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/layout/vremenno.xml" value="0.22" />
         <entry key="..\:/Users/User/Desktop/android/PetService/Budka/app/src/main/res/menu/bottom_navigation.xml" value="0.1" />
@@ -80,7 +82,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

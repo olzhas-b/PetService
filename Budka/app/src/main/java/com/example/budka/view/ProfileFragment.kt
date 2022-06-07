@@ -166,6 +166,12 @@ class ProfileFragment: Fragment() {
                     ProfileFragmentDirections.actionProfileFragmentToOtpPhoneFragment()
                 )
         }
+
+        viewBinding.infoLayout.setOnClickListener {
+            it.findNavController().navigate(
+                ProfileFragmentDirections.actionProfileFragmentToInformationPageFragment()
+            )
+        }
         }
     private fun showLogin(){
         val errorDialog = AlertDialog.Builder(requireContext())

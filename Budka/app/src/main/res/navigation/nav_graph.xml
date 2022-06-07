@@ -145,6 +145,9 @@
         <action
             android:id="@+id/action_profileFragment_to_otpPhoneFragment"
             app:destination="@id/otpPhoneFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_informationPageFragment"
+            app:destination="@id/informationPageFragment" />
     </fragment>
     <fragment
         android:id="@+id/myServices"
@@ -376,6 +379,14 @@
             />
         <action
             android:id="@+id/action_otpSmsFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/informationPageFragment"
+        android:name="com.example.budka.view.InformationPageFragment"
+        android:label="InformationPageFragment" >
+        <action
+            android:id="@+id/action_informationPageFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
     </fragment>
 </navigation>
