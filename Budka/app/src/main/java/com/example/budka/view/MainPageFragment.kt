@@ -145,7 +145,7 @@ class MainPageFragment: Fragment(), NavigationListener {
     }
 
     private fun setupAdapter(){
-        petsListHorizontalAdapter = PetsListHorizontalAdapter {pet-> findNavController().navigate(MainPageFragmentDirections.actionMainPageFragmentToPetDetailFragment(pet))}
+        petsListHorizontalAdapter = PetsListHorizontalAdapter {pet-> findNavController().navigate(MainPageFragmentDirections.actionMainPageFragmentToPetDetailFragment(petId = pet.id))}
         petSittersListHorizontalAdapter = PetSittersListHorizontalAdapter(navigationListener = this)
         val petsLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false )
         with(viewBinding){

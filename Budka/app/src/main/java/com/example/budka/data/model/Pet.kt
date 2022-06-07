@@ -32,7 +32,11 @@ data class Pet(
     @SerializedName("userID")
     val userID: Int,
     @SerializedName("expireDate")
-    val expireDate: String?
+    val expireDate: String?,
+    @SerializedName("count")
+    val count: Int?,
+    @SerializedName("isGroup")
+    val isGroup: Boolean?
 ): Parcelable
 
 @Parcelize
@@ -57,7 +61,11 @@ data class PetCreate(
     @SerializedName("weight")
     val weight: Int?,
     @SerializedName("expireDate")
-    val expireDate: String?
+    val expireDate: String?,
+    @SerializedName("count")
+    val count: Int?,
+    @SerializedName("isGroup")
+    val isGroup: Boolean?
 )
 
 data class PetResponse(

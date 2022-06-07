@@ -11,6 +11,7 @@ package com.example.budka.view
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -23,6 +24,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -70,6 +72,8 @@ class PetDetailFragment: Fragment(), PdfActionListener {
     private val profileViewModel: ProfileViewModel by viewModel()
     private val petsListViewModel: PetsListViewModel by viewModel()
     private var pdfList = mutableListOf<UploadImage>()
+    private val REQUEST_STORAGE_PERMISSION = 1
+
 
 
 
@@ -155,6 +159,7 @@ class PetDetailFragment: Fragment(), PdfActionListener {
         propertiesList.add(Properties(label = "Порода", text = pet.breed))
         propertiesList.add(Properties(label = "Истечение вакцинации", text = pet.expireDate))
         propertiesList.add(Properties(label = "Вес", text = weight))
+        pet.count?.let{if (it>1) propertiesList.add(Properties(label = "Количество", text = it.toString()))}
         otherPropertiesAdapter.updatePropertiesList(propertiesList)
 
     }
@@ -220,7 +225,37 @@ class PetDetailFragment: Fragment(), PdfActionListener {
         }
     }
 
+    private fun hasStoragePermission() = ContextCompat.checkSelfPermission(
+        requireContext(),
+        Manifest.permission.READ_EXTERNAL_STORAGE
+    ) == PackageManager.PERMISSION_GRANTED
+
+    private fun requestStoragePermission() {
+        if (!hasStoragePermission()) {
+            val permissions = arrayOf(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                permissions,
+                REQUEST_STORAGE_PERMISSION
+            )
+        }
+    }
+
     override fun upload(isFirstElement: Boolean, image: UploadImage) {
+        requestStoragePermission()
+        val target =  Intent(Intent.ACTION_VIEW)
+        target.setDataAndType(image.imageUri, "application/pdf")
+        val intent = Intent.createChooser(target, "Открыть файл")
+        try {
+            startActivity(intent)
+        }
+        catch (e: ActivityNotFoundException){
+            val toast = Toast.makeText(requireContext(), "Установите приложение для PDF", Toast.LENGTH_LONG )
+            toast.show()
+        }
     }
 
     override fun deletePdf(image: UploadImage) {

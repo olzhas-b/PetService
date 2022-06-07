@@ -30,7 +30,7 @@ class PetSittersListHorizontalViewHolder  constructor(
     @SuppressLint("SetTextI18n")
     fun setUp(petSitterData: ServiceProvider){
         var image: String? = null
-        val df = DecimalFormat("#.#")
+        val df = DecimalFormat("0.0")
         nearestPetSitterItemBinding.nearestPetSitterNameTv.text = petSitterData.user?.fullName
         nearestPetSitterItemBinding.nearestPetSitterLocation.text = petSitterData.user?.country + ", " + petSitterData.user?.city
         nearestPetSitterItemBinding.nearestPerSitterRatingTv.text = (df.format(petSitterData.user?.averageRating)?:"0.0")

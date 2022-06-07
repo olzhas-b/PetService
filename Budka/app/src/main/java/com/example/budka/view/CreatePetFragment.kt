@@ -29,8 +29,6 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -57,7 +55,7 @@ import java.net.URL
 import com.pusher.pushnotifications.PushNotifications;
 import android.provider.OpenableColumns
 import android.util.Log
-import android.widget.DatePicker
+import android.widget.*
 import com.example.budka.utils.WebDownloadSource
 import com.pspdfkit.document.download.DownloadJob
 import com.pspdfkit.document.download.DownloadRequest
@@ -167,11 +165,27 @@ class CreatePetFragment : Fragment(), PdfActionListener {
         }
         viewBinding.petNameEt.setText(args.pet?.name)
         viewBinding.petBreedEt.setText(args.pet?.breed)
+        viewBinding.groupCb.isChecked = args.pet?.isGroup == true
+        args.pet?.count?.let { viewBinding.petCountEt.setText(it.toString()) }
         uploadPdfAdapter.updatePdfList(pdfList)
         val date = args.pet?.expireDate?.split('.')
         date?.let{initDate(it)}
 
         saveDocumentsFromUrl()
+        viewBinding.petCountBk.visibility =
+            if (viewBinding.groupCb.isChecked)
+                View.VISIBLE
+            else
+                View.GONE
+        viewBinding.groupCb.setOnCheckedChangeListener { _, checked ->
+            viewBinding.petCountBk.visibility =
+                if (checked)
+                    View.VISIBLE
+                else
+                    View.GONE
+        }
+
+
     }
 
     private fun initDate(date: List<String>){
@@ -288,54 +302,63 @@ class CreatePetFragment : Fragment(), PdfActionListener {
             }
         }
         viewBinding.confirmButton.setOnClickListener {
+            if (viewBinding.groupCb.isChecked && viewBinding.petCountEt.text.toString()
+                    .toInt() < 2
+            ) {
+                viewBinding.errorText.visibility = View.VISIBLE
+            } else {
+                viewBinding.errorText.visibility = View.GONE
 
-            val petSize =
-                when (viewBinding.petSizeSp.selectedItem) {
-                    "меньше 5кг" -> 5
-                    "меньше 10кг" -> 10
-                    "меньше 20кг" -> 20
-                    "меньше 30кг" -> 30
-                    "меньше 40кг" -> 40
-                    "больше 40кг" -> 50
-                    else -> null
-                }
-            val pet = PetCreate(
-                name = viewBinding.petNameEt.text.toString(),
-                type = viewBinding.petTypeSp.selectedItem.toString(),
-                breed = viewBinding.petBreedEt.text.toString(),
-                weight = petSize,
-                expireDate = viewBinding.vacDateEt.text.toString()
-            )
-
-            val image = imageUri?.let { it1 -> prepareFilePart("image", it1) }
-
-            if (image != null) {
-                if (args.operationType == "update")
-                    args.pet?.let { it1 ->
-                        petsListViewModel.updatePet(image, pet, it1.id).observe(
-                            viewLifecycleOwner, petObserver
-                        )
+                val petSize =
+                    when (viewBinding.petSizeSp.selectedItem) {
+                        "меньше 5кг" -> 5
+                        "меньше 10кг" -> 10
+                        "меньше 20кг" -> 20
+                        "меньше 30кг" -> 30
+                        "меньше 40кг" -> 40
+                        "больше 40кг" -> 50
+                        else -> null
                     }
-                else
-                    if (validateFields())
-                        petsListViewModel.createPet(image, pet)
-                            .observe(viewLifecycleOwner, petObserver)
-                    else {
-                        val errorDialog = AlertDialog.Builder(requireContext())
-                        errorDialog.setIcon(R.drawable.ic_baseline_error_24)
-                        errorDialog.setTitle("Заполните поля")
-                        errorDialog.setPositiveButton(
-                            "Вернуться"
-                        ) { dialog, _ ->
+                val pet = PetCreate(
+                    name = viewBinding.petNameEt.text.toString(),
+                    type = viewBinding.petTypeSp.selectedItem.toString(),
+                    breed = viewBinding.petBreedEt.text.toString(),
+                    weight = petSize,
+                    expireDate = viewBinding.vacDateEt.text.toString(),
+                    isGroup = viewBinding.groupCb.isChecked,
+                    count = viewBinding.petCountEt.text.toString().toInt()
+                )
 
-                            dialog.cancel()
+                val image = imageUri?.let { it1 -> prepareFilePart("image", it1) }
+
+                if (image != null) {
+                    if (args.operationType == "update")
+                        args.pet?.let { it1 ->
+                            petsListViewModel.updatePet(image, pet, it1.id).observe(
+                                viewLifecycleOwner, petObserver
+                            )
                         }
-                        errorDialog.create()
-                        errorDialog.show()
-                    }
+                    else
+                        if (validateFields())
+                            petsListViewModel.createPet(image, pet)
+                                .observe(viewLifecycleOwner, petObserver)
+                        else {
+                            val errorDialog = AlertDialog.Builder(requireContext())
+                            errorDialog.setIcon(R.drawable.ic_baseline_error_24)
+                            errorDialog.setTitle("Заполните поля")
+                            errorDialog.setPositiveButton(
+                                "Вернуться"
+                            ) { dialog, _ ->
+
+                                dialog.cancel()
+                            }
+                            errorDialog.create()
+                            errorDialog.show()
+                        }
+                }
+
+
             }
-
-
         }
 
 
