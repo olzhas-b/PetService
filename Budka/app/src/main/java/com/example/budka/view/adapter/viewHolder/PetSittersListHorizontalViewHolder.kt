@@ -20,6 +20,9 @@ import com.example.budka.databinding.NearestPetSitterItemBinding
 import com.example.budka.utils.setUpPriceMask
 import com.squareup.picasso.Picasso
 import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.text.NumberFormat
+import java.util.*
 
 class PetSittersListHorizontalViewHolder  constructor(
     val nearestPetSitterItemBinding: NearestPetSitterItemBinding,
@@ -30,7 +33,10 @@ class PetSittersListHorizontalViewHolder  constructor(
     @SuppressLint("SetTextI18n")
     fun setUp(petSitterData: ServiceProvider){
         var image: String? = null
-        val df = DecimalFormat("0.0")
+        val currentLocal = Locale.getDefault()
+        val otherSymbols = DecimalFormatSymbols(currentLocal)
+        otherSymbols.decimalSeparator = '.'
+        val df = DecimalFormat("0.0", otherSymbols)
         nearestPetSitterItemBinding.nearestPetSitterNameTv.text = petSitterData.user?.fullName
         nearestPetSitterItemBinding.nearestPetSitterLocation.text = petSitterData.user?.country + ", " + petSitterData.user?.city
         nearestPetSitterItemBinding.nearestPerSitterRatingTv.text = (df.format(petSitterData.user?.averageRating)?:"0.0")

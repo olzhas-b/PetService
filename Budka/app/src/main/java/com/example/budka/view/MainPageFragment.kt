@@ -99,6 +99,7 @@ class MainPageFragment: Fragment(), NavigationListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.window?.statusBarColor = resources.getColor(R.color.mainColor)
+        activity?.window?.decorView?.systemUiVisibility = 0
         Picasso.get().load(R.drawable.banner).fit().centerCrop().placeholder(R.drawable.banner).into(viewBinding.bannerIv)
         if(savedInstanceState==null){
             petSittersListViewModel.fetchPetSittersList(1, country, city,null)
@@ -271,6 +272,8 @@ class MainPageFragment: Fragment(), NavigationListener {
         fusedLocationClient.removeLocationUpdates(locationUpdates)
 
         petSittersListViewModel.getPetSittersList().removeObserver (petSitterListObserver)
+        activity?.window?.statusBarColor = resources.getColor(R.color.white)
+        activity?.window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
     }
 
     override fun navigate(serviceProviderData: ServiceProvider) {
