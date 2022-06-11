@@ -31,7 +31,7 @@ import com.example.budka.viewModel.PetsListViewModel
 import com.example.budka.viewModel.ProfileViewModel
 import com.example.budka.viewModel.ServicesViewModel
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_pet_sitter_detail.*
+import kotlinx.android.synthetic.main.fragment_user_profile.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 

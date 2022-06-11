@@ -39,7 +39,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.budka.R
 import com.example.budka.data.model.*
 import com.example.budka.databinding.FragmentPetDetailBinding
-import com.example.budka.databinding.FragmentPetSitterDetailBinding
 import com.example.budka.utils.GenericFileProvider
 import com.example.budka.utils.WebDownloadSource
 import com.example.budka.view.adapter.*
@@ -52,8 +51,6 @@ import com.pspdfkit.document.download.DownloadJob
 import com.pspdfkit.document.download.DownloadRequest
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_pet_detail.*
-import kotlinx.android.synthetic.main.fragment_pet_sitter_detail.*
-import kotlinx.android.synthetic.main.fragment_pet_sitter_detail.otherPropertiesRv
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

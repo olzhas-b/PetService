@@ -43,7 +43,6 @@ import com.example.budka.utils.FileUtils
 import com.example.budka.viewModel.CountriesListViewModel
 import com.example.budka.viewModel.ProfileViewModel
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_pet_sitter_detail.*
 import kotlinx.coroutines.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
