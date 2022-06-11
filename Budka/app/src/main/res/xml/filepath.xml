@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ /**
+  ~  * Created by Ali Ashkeyev on 09.06.2022, 16:57
+  ~  * Copyright (c) 2022 . All rights reserved.
+  ~  * Last modified 09.06.2022, 16:57
+  ~  */
+  -->
+
+<path>
+    <external-path name = "external_files" path="."/>
+</path>

@@ -23,8 +23,10 @@ import android.graphics.BitmapFactory
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Environment
+import android.os.StrictMode
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
@@ -56,9 +58,12 @@ import com.pusher.pushnotifications.PushNotifications;
 import android.provider.OpenableColumns
 import android.util.Log
 import android.widget.*
+import androidx.core.content.FileProvider.getUriForFile
+import com.example.budka.utils.GenericFileProvider
 import com.example.budka.utils.WebDownloadSource
 import com.pspdfkit.document.download.DownloadJob
 import com.pspdfkit.document.download.DownloadRequest
+import com.pspdfkit.internal.utilities.a.getUriForFile
 import java.net.MalformedURLException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -153,16 +158,22 @@ class CreatePetFragment : Fragment(), PdfActionListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         pdfList.add(UploadImage(null, true))
+        if(hasStoragePermission()) {
+            args.pet?.image?.let {
+                savePhotoFromUrl()
+                Picasso.get().load(args.pet?.image).into(viewBinding.uploadIv)
+
+            } ?: run {
+                viewBinding.uploadIv.setImageResource(R.drawable.ic_upload_photo)
+            }
+            saveDocumentsFromUrl()
+        }
+        else {
+            requestStoragePermission()
+        }
         setObservers()
         setAdapters()
         setListeners()
-        args.pet?.image?.let {
-            savePhotoFromUrl()
-            Picasso.get().load(args.pet?.image).into(viewBinding.uploadIv)
-
-        } ?: run {
-            viewBinding.uploadIv.setImageResource(R.drawable.ic_upload_photo)
-        }
         viewBinding.petNameEt.setText(args.pet?.name)
         viewBinding.petBreedEt.setText(args.pet?.breed)
         viewBinding.groupCb.isChecked = args.pet?.isGroup == true
@@ -171,7 +182,6 @@ class CreatePetFragment : Fragment(), PdfActionListener {
         val date = args.pet?.expireDate?.split('.')
         date?.let{initDate(it)}
 
-        saveDocumentsFromUrl()
         viewBinding.petCountBk.visibility =
             if (viewBinding.groupCb.isChecked)
                 View.VISIBLE
@@ -467,18 +477,36 @@ class CreatePetFragment : Fragment(), PdfActionListener {
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             )
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                permissions,
-                REQUEST_STORAGE_PERMISSION
-            )
+            if(SDK_INT >=Build.VERSION_CODES.R){
+                try {
+                    val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+                    intent.addCategory("android.intent.category.DEFAULT")
+                    intent.data = Uri.parse(String.format("package:%s", requireContext().applicationContext.packageName))
+                    startActivityForResult(intent, REQUEST_STORAGE_PERMISSION)
+                } catch (e: Exception){
+                    val intent = Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
+                    startActivityForResult(intent, REQUEST_STORAGE_PERMISSION)
+                }
+            }else {
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    permissions,
+                    REQUEST_STORAGE_PERMISSION
+                )
+            }
         }
     }
 
-    private fun hasStoragePermission() = ContextCompat.checkSelfPermission(
-        requireContext(),
-        Manifest.permission.READ_EXTERNAL_STORAGE
-    ) == PackageManager.PERMISSION_GRANTED
+
+    private fun hasStoragePermission(): Boolean {
+        if(SDK_INT >=Build.VERSION_CODES.R){
+            return Environment.isExternalStorageManager()
+        } else{
+            val result = ContextCompat.checkSelfPermission(requireContext(),Manifest.permission.READ_EXTERNAL_STORAGE)
+            val result1 = ContextCompat.checkSelfPermission(requireContext(),Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            return result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED
+        }
+    }
 
 
     private fun openFileExplorer() {
@@ -582,7 +610,8 @@ class CreatePetFragment : Fragment(), PdfActionListener {
                     val job = DownloadJob.startDownload(request)
                     job.setProgressListener(object : DownloadJob.ProgressListenerAdapter() {
                         override fun onComplete(output: File) {
-                            pdfList.add(UploadImage(Uri.fromFile(output), false))
+                            pdfList.add(UploadImage(GenericFileProvider.getUriForFile(requireContext(),
+                            requireContext().applicationContext.packageName, output), false))
                             uploadPdfAdapter.updatePdfList(pdfList)
                         }
 
@@ -613,6 +642,7 @@ class CreatePetFragment : Fragment(), PdfActionListener {
             requestStoragePermission()
             val target =  Intent(Intent.ACTION_VIEW)
             target.setDataAndType(image.imageUri, "application/pdf")
+            target.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
             val intent = Intent.createChooser(target, "Открыть файл")
             try {
                 startActivity(intent)
