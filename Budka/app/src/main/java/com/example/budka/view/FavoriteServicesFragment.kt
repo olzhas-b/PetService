@@ -11,6 +11,8 @@ package com.example.budka.view
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -34,6 +36,7 @@ class FavoriteServicesFragment: Fragment(), FavListener, NavigationListener {
     private lateinit var viewBinding: FragmentFavoriteServicesBinding
     private lateinit var serviceProvidersAdapter: ServiceProvidersAdapter
     private val petSittersListViewModel: PetSittersListViewModel by viewModel()
+    private lateinit var runnable: Runnable
 
 
     override fun onCreateView(
@@ -50,33 +53,53 @@ class FavoriteServicesFragment: Fragment(), FavListener, NavigationListener {
         if (savedInstanceState == null) {
             petSittersListViewModel.fetchFavoriteServices()
         }
+        viewBinding.petSittersShimmerLayout.startShimmerAnimation()
+        viewBinding.swipeRefreshLayout.setOnRefreshListener {
+            runnable = Runnable {
+                viewBinding.petSittersShimmerLayout.startShimmerAnimation()
+                viewBinding.petSittersShimmerLayout.visibility = View.VISIBLE
+                petSittersListViewModel.fetchFavoriteServices()
+                setObservers()
+                viewBinding.swipeRefreshLayout.isRefreshing = false
+            }
+            Handler(
+                Looper.getMainLooper()).postDelayed(runnable, 3000.toLong())
+        }
+        viewBinding.swipeRefreshLayout.setColorSchemeResources(R.color.mainColor)
         setupAdapter()
         setObservers()
     }
 
     private fun setObservers() {
-        petSittersListViewModel.getFavoriteServices().observe(viewLifecycleOwner, { result ->
+        petSittersListViewModel.getFavoriteServices().observe(viewLifecycleOwner) { result ->
             result.doIfSuccess {
                 (activity as MainActivity).showProgressBar()
+                viewBinding.petSittersShimmerLayout.stopShimmerAnimation()
+                viewBinding.petSittersShimmerLayout.visibility = View.GONE
+                viewBinding.errorTv.visibility =
+                    if(it.isNullOrEmpty())
+                        View.VISIBLE
+                    else
+                         View.GONE
                 serviceProvidersAdapter.updateEmployeeList(it)
 
             }
-            result.doIfFailure{ error, data ->
+            result.doIfFailure { error, data ->
                 if (error != null) {
-                    if(error.contains("401")){
+                    if (error.contains("401")) {
                         showLogin()
-                    }else {
+                    } else {
                         (activity as MainActivity).showProgressBar()
-                        error.let{(activity as MainActivity).showAlert(it)}
+                        error.let { (activity as MainActivity).showAlert(it) }
                     }
                 }
             }
 
-            if(result is NetworkResult.Loading){
+            if (result is NetworkResult.Loading) {
                 (activity as MainActivity).showProgressBar(true)
 
             }
-        })
+        }
     }
 
     private fun setupAdapter() {
@@ -93,6 +116,8 @@ class FavoriteServicesFragment: Fragment(), FavListener, NavigationListener {
         } else {
             petSittersListViewModel.deleteLike(serviceId)
         }
+        serviceProvidersAdapter.removeElement(serviceId)
+
     }
 
     override fun navigate(serviceProviderData: ServiceProvider) {
