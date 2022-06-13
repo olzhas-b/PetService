@@ -14,6 +14,8 @@ import android.graphics.Color
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,6 +39,7 @@ import com.example.budka.viewModel.PetSittersListViewModel
 import com.example.budka.viewModel.PetsListViewModel
 import com.google.android.gms.location.*
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.main_page_fragment.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.util.*
 
@@ -49,6 +52,7 @@ class MainPageFragment: Fragment(), NavigationListener {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var country: String? = null
     private var city: String? = null
+    private lateinit var runnable: Runnable
     private lateinit var petSitterListObserver: Observer<NetworkResult<ServiceProviderResponse>>
     private lateinit var locationUpdates: LocationCallback
 
@@ -99,13 +103,34 @@ class MainPageFragment: Fragment(), NavigationListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.window?.statusBarColor = resources.getColor(R.color.mainColor)
+        activity?.window?.decorView?.systemUiVisibility = 0
+        viewBinding.petSittersShimmerLayout.startShimmerAnimation()
+        viewBinding.petsShimmerLayout.startShimmerAnimation()
+        viewBinding.swipeRefreshLayout.setOnRefreshListener {
+            runnable = Runnable {
+                viewBinding.petSittersShimmerLayout.startShimmerAnimation()
+                viewBinding.petSittersShimmerLayout.visibility = View.VISIBLE
+                viewBinding.petsShimmerLayout.startShimmerAnimation()
+                viewBinding.petsShimmerLayout.visibility = View.VISIBLE
+                petSittersListViewModel.fetchPetSittersList(1, country, city,null)
+                petsListViewModel.fetchPetsList()
+                setObservers()
+                viewBinding.swipeRefreshLayout.isRefreshing = false
+            }
+            Handler(
+                Looper.getMainLooper()).postDelayed(runnable, 3000.toLong())
+        }
+        viewBinding.swipeRefreshLayout.setColorSchemeResources(R.color.mainColor)
         Picasso.get().load(R.drawable.banner).fit().centerCrop().placeholder(R.drawable.banner).into(viewBinding.bannerIv)
         if(savedInstanceState==null){
             petSittersListViewModel.fetchPetSittersList(1, country, city,null)
+            petsListViewModel.fetchPetsList()
 
         }
         petSitterListObserver = Observer {result->
             result.doIfSuccess {
+                viewBinding.petSittersShimmerLayout.stopShimmerAnimation()
+                viewBinding.petSittersShimmerLayout.visibility = View.GONE
                 petSittersListHorizontalAdapter.updatePetSittersList(it?.rows)
 
             }
@@ -115,7 +140,7 @@ class MainPageFragment: Fragment(), NavigationListener {
             }
 
             result.doIfLoading {  }
-            }
+        }
         setupAdapter()
         setObservers()
         setOnClickListener()
@@ -126,6 +151,8 @@ class MainPageFragment: Fragment(), NavigationListener {
     private fun setObservers(){
         petsListViewModel.getPetsList().observe(viewLifecycleOwner, Observer {result ->
             result.doIfSuccess { pets ->
+                viewBinding.petsShimmerLayout.stopShimmerAnimation()
+                viewBinding.petsShimmerLayout.visibility = View.GONE
                 pets?.let{petsListHorizontalAdapter.updatePetList(it)}
             }
             result.doIfFailure{ error, data ->
@@ -144,7 +171,7 @@ class MainPageFragment: Fragment(), NavigationListener {
     }
 
     private fun setupAdapter(){
-        petsListHorizontalAdapter = PetsListHorizontalAdapter {pet-> findNavController().navigate(MainPageFragmentDirections.actionMainPageFragmentToPetDetailFragment(pet))}
+        petsListHorizontalAdapter = PetsListHorizontalAdapter {pet-> findNavController().navigate(MainPageFragmentDirections.actionMainPageFragmentToPetDetailFragment(petId = pet.id))}
         petSittersListHorizontalAdapter = PetSittersListHorizontalAdapter(navigationListener = this)
         val petsLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false )
         with(viewBinding){
@@ -270,6 +297,8 @@ class MainPageFragment: Fragment(), NavigationListener {
         fusedLocationClient.removeLocationUpdates(locationUpdates)
 
         petSittersListViewModel.getPetSittersList().removeObserver (petSitterListObserver)
+        activity?.window?.statusBarColor = resources.getColor(R.color.white)
+        activity?.window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
     }
 
     override fun navigate(serviceProviderData: ServiceProvider) {

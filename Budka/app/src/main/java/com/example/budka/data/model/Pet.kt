@@ -11,6 +11,7 @@ package com.example.budka.data.model
 import com.google.gson.annotations.SerializedName
 import dev.icerock.moko.parcelize.Parcelable
 import kotlinx.android.parcel.Parcelize
+import kotlinx.android.parcel.RawValue
 
 @Parcelize
 data class Pet(
@@ -26,8 +27,28 @@ data class Pet(
     val weight: Int,
     @SerializedName("image")
     val image: String,
+    @SerializedName("attachments")
+    val docs: @RawValue List<Attachment>?,
     @SerializedName("userID")
     val userID: Int,
+    @SerializedName("expireDate")
+    val expireDate: String?,
+    @SerializedName("count")
+    val count: Int?,
+    @SerializedName("isGroup")
+    val isGroup: Boolean?
+): Parcelable
+
+@Parcelize
+data class Attachment(
+    @SerializedName("contentType")
+    val contentType: String?,
+    @SerializedName("id")
+    val id: Int,
+    @SerializedName("name")
+    val name: String?,
+    @SerializedName("url")
+    val url: String?,
 ): Parcelable
 
 data class PetCreate(
@@ -38,7 +59,13 @@ data class PetCreate(
     @SerializedName("breed")
     val breed: String,
     @SerializedName("weight")
-    val weight: Int?
+    val weight: Int?,
+    @SerializedName("expireDate")
+    val expireDate: String?,
+    @SerializedName("count")
+    val count: Int?,
+    @SerializedName("isGroup")
+    val isGroup: Boolean?
 )
 
 data class PetResponse(

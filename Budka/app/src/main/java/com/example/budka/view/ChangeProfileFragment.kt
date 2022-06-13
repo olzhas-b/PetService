@@ -43,7 +43,6 @@ import com.example.budka.utils.FileUtils
 import com.example.budka.viewModel.CountriesListViewModel
 import com.example.budka.viewModel.ProfileViewModel
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_pet_sitter_detail.*
 import kotlinx.coroutines.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -83,7 +82,12 @@ class ChangeProfileFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        savePhotoFromUrl()
+        if(hasStoragePermission()) {
+            savePhotoFromUrl()
+        }
+        else {
+            requestStoragePermission()
+        }
         autoFillFields(arg.profile)
         setObservers()
         setListeners()
@@ -253,15 +257,40 @@ class ChangeProfileFragment: Fragment() {
 
     private fun requestStoragePermission() {
         if (!hasStoragePermission()) {
-            val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE )
-            ActivityCompat.requestPermissions(requireActivity(), permissions, REQUEST_STORAGE_PERMISSION)
+            val permissions = arrayOf(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+            if(Build.VERSION.SDK_INT >=Build.VERSION_CODES.R){
+                try {
+                    val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+                    intent.addCategory("android.intent.category.DEFAULT")
+                    intent.data = Uri.parse(String.format("package:%s", requireContext().applicationContext.packageName))
+                    startActivityForResult(intent, REQUEST_STORAGE_PERMISSION)
+                } catch (e: Exception){
+                    val intent = Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
+                    startActivityForResult(intent, REQUEST_STORAGE_PERMISSION)
+                }
+            }else {
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    permissions,
+                    REQUEST_STORAGE_PERMISSION
+                )
+            }
         }
     }
 
-    private fun hasStoragePermission() = ContextCompat.checkSelfPermission(
-        requireContext(),
-        Manifest.permission.WRITE_EXTERNAL_STORAGE    ) == PackageManager.PERMISSION_GRANTED
 
+    private fun hasStoragePermission(): Boolean {
+        if(Build.VERSION.SDK_INT >=Build.VERSION_CODES.R){
+            return Environment.isExternalStorageManager()
+        } else{
+            val result = ContextCompat.checkSelfPermission(requireContext(),Manifest.permission.READ_EXTERNAL_STORAGE)
+            val result1 = ContextCompat.checkSelfPermission(requireContext(),Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            return result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED
+        }
+    }
 
     private fun openFileExplorer(){
         if (Build.VERSION.SDK_INT < 19) {

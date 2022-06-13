@@ -77,28 +77,41 @@ class MyServicesFragment : Fragment(), NavigationListener, PetEditListener {
 
 
     private fun setMyPetsObserver(){
-        petsListViewModel.getUserPetsList().observe(viewLifecycleOwner, { result ->
+        petsListViewModel.getUserPetsList().observe(viewLifecycleOwner) { result ->
             result.doIfSuccess { pets ->
+                viewBinding.errorTextTv.visibility =
+                    if(pets.isNullOrEmpty())
+                        View.VISIBLE
+                    else
+                        View.GONE
+                viewBinding.errorTextTv.text = "У вас нет питомцев"
                 pets?.let { myPetsAdapter.updatePetList(pets) }
             }
             result.doIfFailure { error, data ->
                 error?.let { (activity as MainActivity).showAlert(it) }
 
             }
-        })
+        }
     }
 
     private fun setMyServicesObserver(){
-        myservicesViewModel.getUserServicesList().observe(viewLifecycleOwner,
-            { result ->
-                result.doIfSuccess { services ->
-                    services?.let { serviceProvidersAdapter.updateEmployeeList(services) }
-                }
-                result.doIfFailure { error, data ->
-                    error?.let { (activity as MainActivity).showAlert(it) }
+        myservicesViewModel.getUserServicesList().observe(viewLifecycleOwner
+        ) { result ->
+            result.doIfSuccess { services ->
+                viewBinding.errorTextTv.visibility =
+                    if(services.isNullOrEmpty())
+                        View.VISIBLE
+                    else
+                        View.GONE
+                viewBinding.errorTextTv.text = "У вас нет текущих объявлений"
 
-                }
-            })
+                services?.let { serviceProvidersAdapter.updateEmployeeList(services) }
+            }
+            result.doIfFailure { error, data ->
+                error?.let { (activity as MainActivity).showAlert(it) }
+
+            }
+        }
     }
 
     private fun setServiceListeners(){

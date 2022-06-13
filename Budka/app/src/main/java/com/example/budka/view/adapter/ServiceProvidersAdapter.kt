@@ -48,4 +48,9 @@ class ServiceProvidersAdapter internal constructor(
         notifyDataSetChanged()
     }
 
+    fun removeElement(id: Int){
+        this.employeesList = this.employeesList.filter { it.id != id }
+        notifyDataSetChanged()
+    }
+
 }

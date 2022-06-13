@@ -19,6 +19,7 @@ import okhttp3.MultipartBody
 interface PetsListRepository {
     fun getAllPets(): LiveData<NetworkResult<List<Pet>>>
     fun getUserPets(user_id:Int): LiveData<NetworkResult<List<Pet>>>
+    fun getPetDetail(petId:Int): LiveData<NetworkResult<Pet>>
     fun createPet(
         image: MultipartBody.Part,
         body: PetCreate
@@ -30,4 +31,8 @@ interface PetsListRepository {
     ):  LiveData<NetworkResult<Pet>>
 
     fun deletePet(petId: Int):  LiveData<NetworkResult<String>>
+
+    fun deletePetDoc(petId: Int):  LiveData<NetworkResult<String>>
+
+    fun uploadAttachment(petId: Int, attachments: List<MultipartBody.Part>):  LiveData<NetworkResult<String>>
 }

@@ -117,27 +117,11 @@ class CreateServiceOptionalFragment : Fragment(), UploadNewImageListener, EditTe
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         imageList.add(UploadImage(null, true))
-//        arg.imageList.let {
-//            imageListLiveData.value = it
-//        }
-
-//        arg.propertiesList?.let {
-//           additionalPropertiesList.value = it
-//        } ?:run{
-//            populateProperty(arg.requiredField.serviceType)
-//            addPropertiesAdapter.updatePropertiesList(propertiesList)
-//
-//        }
-
-
-
-
         setupAdapter()
         setObservers()
         populateProperty(arg.requiredField.serviceType)
         addPropertiesAdapter.updatePropertiesList(propertiesList)
         uploadImageAdapter.updateImageList(imageList)
-//        uploadImageAdapter.updateImageList(imageList)
         viewBinding.check.setOnClickListener {
             serverData()
         }

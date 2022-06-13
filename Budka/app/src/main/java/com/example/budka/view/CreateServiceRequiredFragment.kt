@@ -8,14 +8,19 @@
 
 package com.example.budka.view
 
+import android.Manifest
 import android.app.AlertDialog
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.MediaScannerConnection
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.Parcelable
+import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -24,6 +29,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
@@ -60,7 +67,7 @@ class CreateServiceRequiredFragment : Fragment(), SetLocationInterface {
     private var acceptablePetTypes = MutableLiveData<String>()
     private var acceptablePetSize = MutableLiveData<Int>()
     private var uriList = mutableListOf<UploadImage>()
-    private  var properties: List<Properties>? = null
+    private  val REQUEST_STORAGE_PERMISSION = 1
 
 
     override fun onCreateView(
@@ -79,7 +86,12 @@ class CreateServiceRequiredFragment : Fragment(), SetLocationInterface {
                 it.price?.let { it1 -> viewBinding.priceEt.setText(it1.toString()) }
                 viewBinding.countriesEdV.setText(it.user?.country)
                 viewBinding.cityEdV.setText(it.user?.city)
-                savePhotoFromUrl()
+                if(hasStoragePermission()) {
+                    savePhotoFromUrl()
+                }
+                else {
+                    requestStoragePermission()
+                }
                 serviceDetailViewModel.fetchServiceDetail(it.id)
             }
         }
@@ -426,9 +438,46 @@ class CreateServiceRequiredFragment : Fragment(), SetLocationInterface {
     }
 
 
+    private fun requestStoragePermission() {
+        if (!hasStoragePermission()) {
+            val permissions = arrayOf(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+                try {
+                    val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+                    intent.addCategory("android.intent.category.DEFAULT")
+                    intent.data = Uri.parse(String.format("package:%s", requireContext().applicationContext.packageName))
+                    startActivityForResult(intent, REQUEST_STORAGE_PERMISSION)
+                } catch (e: Exception){
+                    val intent = Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
+                    startActivityForResult(intent, REQUEST_STORAGE_PERMISSION)
+                }
+            }else {
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    permissions,
+                    REQUEST_STORAGE_PERMISSION
+                )
+            }
+        }
+    }
 
+
+    private fun hasStoragePermission(): Boolean {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+            return Environment.isExternalStorageManager()
+        } else{
+            val result = ContextCompat.checkSelfPermission(requireContext(),Manifest.permission.READ_EXTERNAL_STORAGE)
+            val result1 = ContextCompat.checkSelfPermission(requireContext(),Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            return result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED
+        }
+    }
 
 }
+
+
 
 @Parcelize
 data class UriList(

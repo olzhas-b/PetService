@@ -72,6 +72,10 @@ class ProfileFragment: Fragment() {
                         userRating.rating = averageRating
                         rateCount.text = (countRating ?: 0).toString()
                         favCount.text = (cntFavorite ?: 0).toString()
+                        if(user.isVerified)
+                            verificationBlock.visibility = View.VISIBLE
+                        else
+                            verificationBlock.visibility = View.GONE
                     }
                     logOutBtn.text = "Выйти"
                     unauthorized = false
@@ -157,6 +161,17 @@ class ProfileFragment: Fragment() {
                 else
                     showLogin()
             }
+        viewBinding.verificationLayout.setOnClickListener {
+                it.findNavController().navigate(
+                    ProfileFragmentDirections.actionProfileFragmentToOtpPhoneFragment()
+                )
+        }
+
+        viewBinding.infoLayout.setOnClickListener {
+            it.findNavController().navigate(
+                ProfileFragmentDirections.actionProfileFragmentToInformationPageFragment()
+            )
+        }
         }
     private fun showLogin(){
         val errorDialog = AlertDialog.Builder(requireContext())

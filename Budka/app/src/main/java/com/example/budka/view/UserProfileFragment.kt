@@ -31,7 +31,7 @@ import com.example.budka.viewModel.PetsListViewModel
 import com.example.budka.viewModel.ProfileViewModel
 import com.example.budka.viewModel.ServicesViewModel
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_pet_sitter_detail.*
+import kotlinx.android.synthetic.main.fragment_user_profile.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
@@ -92,6 +92,10 @@ class UserProfileFragment: Fragment() {
                     viewBinding.profileAboutTv.text = description
                     viewBinding.rateCount.text = (countRating?:0).toString()
                     viewBinding.favCount.text = (cntFavorite?:0).toString()
+                    if(user.isVerified)
+                        viewBinding.verificationBlock.visibility = View.VISIBLE
+                    else
+                        viewBinding.verificationBlock.visibility = View.GONE
                 }
             }
             result.doIfFailure { error, data ->

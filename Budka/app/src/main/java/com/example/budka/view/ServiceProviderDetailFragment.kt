@@ -10,16 +10,15 @@ package com.example.budka.view
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.net.Uri
 import android.os.*
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
+import android.util.Log
+import android.view.*
 import android.webkit.WebView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -31,13 +30,16 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.budka.R
 import com.example.budka.data.model.*
-import com.example.budka.databinding.FragmentPetSitterDetailBinding
+import com.example.budka.databinding.FragmentServiceProviderDetailBinding
+import com.example.budka.databinding.FragmentUserProfileBinding
 import com.example.budka.view.adapter.*
+import com.example.budka.viewModel.PetSittersListViewModel
 import com.example.budka.viewModel.PetsListViewModel
 import com.example.budka.viewModel.ServiceDetailViewModel
 import com.example.budka.viewModel.ServicesViewModel
+import com.google.android.material.appbar.AppBarLayout
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_pet_sitter_detail.*
+import kotlinx.android.synthetic.main.fragment_service_provider_detail.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.util.*
 
@@ -47,8 +49,10 @@ class ServiceProviderDetailFragment: Fragment() {
     private val serviceDetailViewModel: ServiceDetailViewModel by viewModel()
     private val petListViewModel: PetsListViewModel by viewModel()
     private val servicesViewModel: ServicesViewModel by viewModel()
+    private val petSittersListViewModel: PetSittersListViewModel by viewModel()
     val arg: ServiceProviderDetailFragmentArgs by navArgs()
-    private lateinit var viewBinding: FragmentPetSitterDetailBinding
+    private var _viewBinding: FragmentServiceProviderDetailBinding? = null
+    private val viewBinding get() = _viewBinding!!
     private lateinit var acceptablePetTypesAdapter: AcceptablePetTypesAdapter
     private lateinit var acceptablePetSizesAdapter: AcceptablePetSizesAdapter
     private lateinit var otherPropertiesAdapter: OtherPropertiesAdapter
@@ -64,7 +68,7 @@ class ServiceProviderDetailFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewBinding = FragmentPetSitterDetailBinding.inflate(inflater, container, false)
+        _viewBinding = FragmentServiceProviderDetailBinding.inflate(inflater, container, false)
         return viewBinding.root
 
     }
@@ -86,9 +90,48 @@ class ServiceProviderDetailFragment: Fragment() {
         }
         setUpAdapter()
         setObservers()
-        viewBinding.callBtn.setOnClickListener {
-checkPermission()
+        if(serviceProvider.isFavorite==true)
+            viewBinding.bookmark.setImageResource(R.drawable.ic_filled_bookmark_black)
+        else
+            viewBinding.bookmark.setImageResource(R.drawable.ic_bookmark_details)
+
+
+        viewBinding.detailsAppBar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
+            var colorCode = 0
+            override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
+                colorCode = -verticalOffset
+                if(colorCode>255)
+                    colorCode=255
+                viewBinding.detailsToolbar.background.alpha = colorCode
+            }
+        })
+
+        viewBinding.detailsToolbar.setOnClickListener {
+            findNavController().popBackStack()
         }
+
+
+        viewBinding.callBtn.setOnClickListener {
+            checkPermission()
+        }
+
+        viewBinding.bookmark.setOnClickListener {
+            if(serviceProvider.isFavorite==true) {
+                petSittersListViewModel.deleteLike(serviceId = serviceProvider.id)
+                viewBinding.bookmark.setImageResource(R.drawable.ic_bookmark_details)
+                serviceProvider.isFavorite = false
+            }
+            else {
+                petSittersListViewModel.putLike(serviceId = serviceProvider.id)
+                viewBinding.bookmark.setImageResource(R.drawable.ic_filled_bookmark_black)
+                serviceProvider.isFavorite = true
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _viewBinding = null
     }
 
     fun checkPermission() {
@@ -99,7 +142,6 @@ checkPermission()
             != PackageManager.PERMISSION_GRANTED) {
 
             // Permission is not granted
-            // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(
                     requireActivity(),
                     Manifest.permission.CALL_PHONE

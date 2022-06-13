@@ -96,13 +96,44 @@
             app:layout_constraintEnd_toEndOf="@id/tv_name"
             android:textColor="@color/address"
             android:textSize="14sp" />
+        <LinearLayout
+            android:id="@+id/verificationBlock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="@id/tv_name"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/tv_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_address">
+            <ImageView
+                android:id="@+id/verifiedIv"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/ic_protectedicon"
+                android:layout_marginEnd="10dp"/>
+
+            <TextView
+                android:id="@+id/verifiedTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_name"
+                android:layout_gravity="center_vertical"
+                android:fontFamily="sans-serif"
+                android:text="Ваш телефон подтвержден"
+                android:textColor="@color/address"
+                android:textSize="14sp" />
+        </LinearLayout>
+
         <RatingBar
             android:id="@+id/userRating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:theme="@style/MyRatingBar"
-            app:layout_constraintTop_toBottomOf="@id/tv_address"
+            app:layout_constraintTop_toBottomOf="@id/verificationBlock"
             app:layout_constraintStart_toStartOf="@id/tv_address"
             app:layout_constraintEnd_toEndOf="@id/tv_address"
             style="?android:attr/ratingBarStyleIndicator"/>
@@ -261,7 +292,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:src="@drawable/ic_right_arrow"
-                android:layout_gravity="end"
+                android:layout_gravity="end|center_vertical"
                 android:layout_weight="0"
                 />
         </LinearLayout>
@@ -290,7 +321,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:src="@drawable/ic_right_arrow"
-                android:layout_gravity="end"
+                android:layout_gravity="end|center_vertical"
                 android:layout_weight="0"
                 />
         </LinearLayout>
@@ -319,7 +350,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:src="@drawable/ic_right_arrow"
-                android:layout_gravity="end"
+                android:layout_gravity="end|center_vertical"
                 android:layout_weight="0"
                 />
         </LinearLayout>
@@ -348,7 +379,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:src="@drawable/ic_right_arrow"
-                android:layout_gravity="end"
+                android:layout_gravity="end|center_vertical"
                 android:layout_weight="0"
                 />
         </LinearLayout>
@@ -377,7 +408,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:src="@drawable/ic_right_arrow"
-                android:layout_gravity="end"
+                android:layout_gravity="end|center_vertical"
                 android:layout_weight="0"
                 />
         </LinearLayout>

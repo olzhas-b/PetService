@@ -20,9 +20,7 @@ import okhttp3.MultipartBody
 class PetsListViewModel(private val petsListUseCase: PetsListUseCase): BaseViewModel() {
     private var petsList = MutableLiveData<NetworkResult<List<Pet>>>()
     private var userPetsList = MutableLiveData<NetworkResult<List<Pet>>>()
-    init {
-        fetchPetsList()
-    }
+
     fun fetchPetsList(){
         petsList = petsListUseCase.getPetsList() as MutableLiveData<NetworkResult<List<Pet>>>
     }
@@ -33,6 +31,14 @@ class PetsListViewModel(private val petsListUseCase: PetsListUseCase): BaseViewM
 
     fun fetchUserPetsList(user_id: Int){
         userPetsList = petsListUseCase.getUserPets(user_id) as MutableLiveData<NetworkResult<List<Pet>>>
+    }
+
+    fun getPetDetail(petId: Int): LiveData<NetworkResult<Pet>>{
+        return petsListUseCase.getPetDetail(petId)
+    }
+
+    fun uploadAttachment(petId: Int, attachments: List<MultipartBody.Part>): LiveData<NetworkResult<String>>{
+        return petsListUseCase.uploadAttachment(petId, attachments)
     }
 
 //    fun fetchUserPetsList(user_id: Int): LiveData<NetworkResult<List<Pet>>>{
@@ -58,6 +64,10 @@ class PetsListViewModel(private val petsListUseCase: PetsListUseCase): BaseViewM
 
     fun deletePet(petId: Int): LiveData<NetworkResult<String>> {
        return petsListUseCase.deletePet(petId)
+    }
+
+    fun deletePetDoc(petId: Int): LiveData<NetworkResult<String>> {
+        return petsListUseCase.deletePetDoc(petId)
     }
 
 }

@@ -21,11 +21,14 @@ import timber.log.Timber
 abstract class BasePetsDataStore(@PublishedApi internal val service: ApiService) {
     abstract fun getAllPets():  LiveData<NetworkResult<List<Pet>>>
     abstract fun getUserPets(user_id: Int): LiveData<NetworkResult<List<Pet>>>
+    abstract fun getPetDetail(petId: Int): LiveData<NetworkResult<Pet>>
     abstract fun createPet(image: MultipartBody.Part,
                         body: PetCreate): LiveData<NetworkResult<Pet>>
     abstract fun updatePet(image: MultipartBody.Part,
                            body: PetCreate, petId: Int ): LiveData<NetworkResult<Pet>>
     abstract fun deletePet(petId: Int): LiveData<NetworkResult<String>>
+    abstract fun deletePetDoc(petId: Int): LiveData<NetworkResult<String>>
+    abstract fun uploadAttachment(petId: Int, attachments: List<MultipartBody.Part>): LiveData<NetworkResult<String>>
 
     inline fun fetchData(crossinline call:
                              (ApiService) -> Deferred<Response<List<Pet>>>)

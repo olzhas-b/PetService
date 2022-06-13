@@ -12,5 +12,7 @@ import android.net.Uri
 
 data class  UploadImage (
     var imageUri: Uri?,
-    var isFirstElement: Boolean = false
+    var isFirstElement: Boolean = false,
+    var fileName: String? = "",
+    var isModified: Boolean = false
 )

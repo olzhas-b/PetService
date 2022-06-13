@@ -126,10 +126,32 @@
                     tools:listitem="@layout/item_other_properties"
                     android:layout_marginBottom="30dp"
                     app:layout_constraintTop_toBottomOf="@id/otherPropertiesLl"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     tools:itemCount="5"/>
+                <TextView
+                    android:id="@+id/petDocuments"
+                    android:layout_width="300dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/trueno_round_bd"
+                    android:text="Документы питомца"
+                    android:textColor="@color/black"
+                    android:textSize="23sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/otherPropertiesRv"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/documentsRv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:listitem="@layout/item_upload_image"
+                    tools:itemCount="3"
+                    android:layout_marginTop="10dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/petDocuments"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

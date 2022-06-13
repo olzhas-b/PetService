@@ -20,11 +20,26 @@ interface ApiService {
 
     @GET(API + "profile")
     fun getProfileByToken(): Deferred<Response<User>>
+
     @GET(API + "profile/{userId}")
     fun getUserProfile(@Path("userId") userId: Int): Deferred<Response<User>>
 
+    @POST(API + "user/verify")
+    fun verifyPhone(): Deferred<Response<String>>
+
     @GET(API + "user/pet/all")
     fun getPets(): Deferred<Response<List<Pet>>>
+
+    @GET(API + "user/pet/{petId}")
+    fun getPetDetail(@Path("petId") petId: Int): Deferred<Response<Pet>>
+
+    @Multipart
+    @POST(API + "user/pet/{petId}/attachment")
+    fun uploadAttachment(@Path("petId") petId: Int,
+                         @Part attachments : List<MultipartBody.Part>): Deferred<Response<String>>
+
+    @DELETE(API +"user/pet/attachment/{petId}")
+    fun deletePetDoc(@Path("petId") petId: Int): Deferred<Response<String>>
 
     @GET(API +"user/{userId}/pet")
     fun getUserPets(@Path("userId") userId: Int): Deferred<Response<List<Pet>>>

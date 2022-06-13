@@ -12,14 +12,20 @@ import android.Manifest
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.core.view.isVisible
+import androidx.navigation.NavDeepLinkBuilder
+import androidx.navigation.NavDeepLinkRequest
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.budka.R
@@ -28,7 +34,9 @@ import com.example.budka.databinding.VoteDialogBinding
 import com.example.budka.utils.Constants
 import com.example.budka.utils.Constants.Companion.LOCATION_PERMISSION_CODE
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.pusher.pushnotifications.PushNotifications
 import com.yandex.mapkit.MapKitFactory
+import java.net.URI
 
 class MainActivity: AppCompatActivity() {
     private lateinit var bottomNavigationView: BottomNavigationView
@@ -38,6 +46,10 @@ class MainActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         MapKitFactory.setApiKey(Constants.YANDEX_MAPS_API_KEY)
+//        val bundle = intent?.extras
+//        bundle?.getString("petId")?.let { Log.d("myneeded", it) }
+        PushNotifications.start(applicationContext, "338ba64f-62e6-4d7d-af93-d34dce689bbd");
+
 
 
 //        sessionManager = SessionManager(this)
@@ -95,6 +107,18 @@ class MainActivity: AppCompatActivity() {
         }
         errorDialog.create()
         errorDialog.show()
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        val bundle = intent?.extras
+        bundle?.getString("deepLink")?.let {
+            val request = NavDeepLinkRequest.Builder
+                .fromUri(it.toUri())
+                .build()
+            Navigation.findNavController(this, R.id.fragment).navigate(request)
+
+        }
     }
 
 }
