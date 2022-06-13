@@ -33,5 +33,6 @@
     <color name="stroke_trasparent_red">#2AD2042D</color>
     <color name="lightGrey">#D3D3D3</color>
     <color name="duskYellow">#ffc922</color>
+    <color name="placeholder">#dddddd</color>
 
 </resources>

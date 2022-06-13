@@ -100,6 +100,8 @@ class MainPageFragment: Fragment(), NavigationListener {
         super.onViewCreated(view, savedInstanceState)
         activity?.window?.statusBarColor = resources.getColor(R.color.mainColor)
         activity?.window?.decorView?.systemUiVisibility = 0
+        viewBinding.petSittersShimmerLayout.startShimmerAnimation()
+        viewBinding.petsShimmerLayout.startShimmerAnimation()
         Picasso.get().load(R.drawable.banner).fit().centerCrop().placeholder(R.drawable.banner).into(viewBinding.bannerIv)
         if(savedInstanceState==null){
             petSittersListViewModel.fetchPetSittersList(1, country, city,null)
@@ -108,6 +110,8 @@ class MainPageFragment: Fragment(), NavigationListener {
         }
         petSitterListObserver = Observer {result->
             result.doIfSuccess {
+                 viewBinding.petSittersShimmerLayout.stopShimmerAnimation()
+                 viewBinding.petSittersShimmerLayout.visibility = View.GONE
                 petSittersListHorizontalAdapter.updatePetSittersList(it?.rows)
 
             }
@@ -128,6 +132,8 @@ class MainPageFragment: Fragment(), NavigationListener {
     private fun setObservers(){
         petsListViewModel.getPetsList().observe(viewLifecycleOwner, Observer {result ->
             result.doIfSuccess { pets ->
+                viewBinding.petsShimmerLayout.stopShimmerAnimation()
+                viewBinding.petsShimmerLayout.visibility = View.GONE
                 pets?.let{petsListHorizontalAdapter.updatePetList(it)}
             }
             result.doIfFailure{ error, data ->

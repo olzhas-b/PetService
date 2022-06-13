@@ -80,19 +80,21 @@ class ServiceProvidersListFragment: Fragment(), FavListener, NavigationListener 
                         country = getUserAddress(newLocation.latitude, newLocation.longitude).split(',')[1].substring(1)
                         city = getUserAddress(newLocation.latitude, newLocation.longitude).split(',')[0]
                         petSittersListViewModel.fetchPetSittersList(arg.serviceType, country, city, petType)
-                        petSittersListViewModel.getPetSittersList().observe(viewLifecycleOwner, {result->
+                        petSittersListViewModel.getPetSittersList().observe(viewLifecycleOwner) { result ->
                             result.doIfSuccess {
+                                viewBinding.petSittersShimmerLayout.stopShimmerAnimation()
+                                viewBinding.petSittersShimmerLayout.visibility = View.GONE
                                 viewBinding.petSittersResult.setText("Найдено ${it?.total} обьявлении")
-                                it?.let{serviceProvidersAdapter.updateEmployeeList(it.rows)}
+                                it?.let { serviceProvidersAdapter.updateEmployeeList(it.rows) }
 
                             }
-                            result.doIfFailure{ error, data ->
-                                error?.let{(activity as MainActivity).showAlert(it)}
+                            result.doIfFailure { error, data ->
+                                error?.let { (activity as MainActivity).showAlert(it) }
 
                             }
 
-                            result.doIfLoading {  }
-                        })
+                            result.doIfLoading { }
+                        }
 
 
                     }
@@ -115,6 +117,7 @@ class ServiceProvidersListFragment: Fragment(), FavListener, NavigationListener 
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewBinding.petSittersShimmerLayout.startShimmerAnimation()
         if(savedInstanceState==null){
             arg.apply {
                 this@ServiceProvidersListFragment.country = country
@@ -136,20 +139,22 @@ class ServiceProvidersListFragment: Fragment(), FavListener, NavigationListener 
     }
 
     private fun setObservers(){
-        petSittersListViewModel.getPetSittersList().observe(viewLifecycleOwner, {result->
+        petSittersListViewModel.getPetSittersList().observe(viewLifecycleOwner) { result ->
             result.doIfSuccess {
+                viewBinding.petSittersShimmerLayout.stopShimmerAnimation()
+                viewBinding.petSittersShimmerLayout.visibility = View.GONE
                 viewBinding.petSittersResult.setText("Найдено ${it?.total} обьявлении")
-                it?.let{serviceProvidersAdapter.updateEmployeeList(it.rows)}
+                it?.let { serviceProvidersAdapter.updateEmployeeList(it.rows) }
 
 
             }
-            result.doIfFailure{ error, data ->
-                error?.let{(activity as MainActivity).showAlert(it)}
+            result.doIfFailure { error, data ->
+                error?.let { (activity as MainActivity).showAlert(it) }
 
             }
 
-            result.doIfLoading {  }
-        })
+            result.doIfLoading { }
+        }
     }
 
     private fun setupAdapter(){
