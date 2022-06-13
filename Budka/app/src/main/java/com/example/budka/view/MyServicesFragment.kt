@@ -81,9 +81,9 @@ class MyServicesFragment : Fragment(), NavigationListener, PetEditListener {
             result.doIfSuccess { pets ->
                 viewBinding.errorTextTv.visibility =
                     if(pets.isNullOrEmpty())
-                        View.GONE
-                    else
                         View.VISIBLE
+                    else
+                        View.GONE
                 viewBinding.errorTextTv.text = "У вас нет питомцев"
                 pets?.let { myPetsAdapter.updatePetList(pets) }
             }
@@ -100,9 +100,9 @@ class MyServicesFragment : Fragment(), NavigationListener, PetEditListener {
             result.doIfSuccess { services ->
                 viewBinding.errorTextTv.visibility =
                     if(services.isNullOrEmpty())
-                        View.GONE
-                    else
                         View.VISIBLE
+                    else
+                        View.GONE
                 viewBinding.errorTextTv.text = "У вас нет текущих объявлений"
 
                 services?.let { serviceProvidersAdapter.updateEmployeeList(services) }
