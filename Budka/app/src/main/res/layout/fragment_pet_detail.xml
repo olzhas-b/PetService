@@ -137,6 +137,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/trueno_round_bd"
                     android:text="Документы питомца"
+                    android:visibility="gone"
                     android:textColor="@color/black"
                     android:textSize="23sp"
                     app:layout_constraintStart_toStartOf="parent"

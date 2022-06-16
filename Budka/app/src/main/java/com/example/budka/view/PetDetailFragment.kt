@@ -220,6 +220,7 @@ class PetDetailFragment: Fragment(), PdfActionListener {
                     val job = DownloadJob.startDownload(request)
                     job.setProgressListener(object : DownloadJob.ProgressListenerAdapter() {
                         override fun onComplete(output: File) {
+                            viewBinding.petDocuments.visibility = View.VISIBLE
                             pdfList.add(UploadImage(
                                 GenericFileProvider.getUriForFile(requireContext(),
                                 requireContext().applicationContext.packageName, output), false))

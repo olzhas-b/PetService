@@ -114,7 +114,11 @@ class CreatePetFragment : Fragment(), PdfActionListener {
                             var cursor: Cursor? = null
                             try {
                                 cursor =
-                                    pdfUri?.let { requireActivity().contentResolver.query(it, null, null, null, null) }
+                                    pdfUri?.let {
+                                        requireContext().contentResolver.takePersistableUriPermission(
+                                            Uri.parse(data.dataString),
+                                            Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                                        requireActivity().contentResolver.query(it, null, null, null, null) }
                                 if (cursor != null && cursor.moveToFirst()) {
                                     val displayName =
                                         cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
@@ -136,7 +140,10 @@ class CreatePetFragment : Fragment(), PdfActionListener {
                     var cursor: Cursor? = null
                     try {
                         cursor =
-                            pdfUri?.let { requireActivity().contentResolver.query(it, null, null, null, null) }
+                            pdfUri?.let {
+                                requireActivity().contentResolver.takePersistableUriPermission( Uri.parse(data.dataString),
+                                    Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                                requireActivity().contentResolver.query(it, null, null, null, null) }
                         if (cursor != null && cursor.moveToFirst()) {
                             val displayName =
                                 cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
@@ -329,15 +336,20 @@ class CreatePetFragment : Fragment(), PdfActionListener {
                         "больше 40кг" -> 50
                         else -> null
                     }
-                val pet = PetCreate(
-                    name = viewBinding.petNameEt.text.toString(),
-                    type = viewBinding.petTypeSp.selectedItem.toString(),
-                    breed = viewBinding.petBreedEt.text.toString(),
-                    weight = petSize,
-                    expireDate = viewBinding.vacDateEt.text.toString(),
-                    isGroup = viewBinding.groupCb.isChecked,
-                    count = viewBinding.petCountEt.text.toString().toInt()
-                )
+                val count = if(viewBinding.petCountEt.text.toString()!="") {
+                    viewBinding.petCountEt.text.toString().toInt()
+                } else {
+                    1
+                }
+                    val pet = PetCreate(
+                        name = viewBinding.petNameEt.text.toString(),
+                        type = viewBinding.petTypeSp.selectedItem.toString(),
+                        breed = viewBinding.petBreedEt.text.toString(),
+                        weight = petSize,
+                        expireDate = viewBinding.vacDateEt.text.toString(),
+                        isGroup = viewBinding.groupCb.isChecked,
+                        count = count)
+
 
                 val image = imageUri?.let { it1 -> prepareFilePart("image", it1) }
 
@@ -527,10 +539,11 @@ class CreatePetFragment : Fragment(), PdfActionListener {
 
 
     private fun openPdfFileExplorer() {
-        val pdfIntent = Intent(Intent.ACTION_GET_CONTENT)
+        val pdfIntent = Intent(Intent.ACTION_OPEN_DOCUMENT)
         pdfIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         pdfIntent.type = "application/pdf"
         pdfIntent.addCategory(Intent.CATEGORY_OPENABLE)
+        pdfIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
         startActivityForResult(pdfIntent, 12)
     }
 
@@ -642,7 +655,7 @@ class CreatePetFragment : Fragment(), PdfActionListener {
             requestStoragePermission()
             val target =  Intent(Intent.ACTION_VIEW)
             target.setDataAndType(image.imageUri, "application/pdf")
-            target.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            target.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
             val intent = Intent.createChooser(target, "Открыть файл")
             try {
                 startActivity(intent)

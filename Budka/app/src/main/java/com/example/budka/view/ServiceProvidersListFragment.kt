@@ -74,7 +74,6 @@ class ServiceProvidersListFragment: Fragment(), FavListener, NavigationListener 
     init {
         locationUpdates = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
-                fusedLocationClient.removeLocationUpdates(this)
                 if (locationResult != null && locationResult.locations.isNotEmpty()) {
                     val newLocation = locationResult.locations[0]
                     if(context!=null){
