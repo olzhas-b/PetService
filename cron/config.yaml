@@ -1,0 +1,8 @@
+Scheduler:
+    Duration: 60
+    URL: "https://api-service-pod1.herokuapp.com/api/v1/job"
+#    URL: "http://localhost:8080/api/v1/job"
+    Authorization:
+        URL: "hello"
+        Username: "admin"
+        Password: "qwerty"
