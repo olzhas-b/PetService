@@ -3,16 +3,21 @@ package handler
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/recover"
+	"github.com/olzhas-b/PetService/backEnd/pkg/jobs"
 	"github.com/olzhas-b/PetService/backEnd/pkg/services"
 	"github.com/olzhas-b/PetService/backEnd/pkg/transport/restful/middles"
 )
 
 type Handler struct {
 	services *services.Services
+	job      *jobs.Job
 }
 
-func NewHandler(services *services.Services) *Handler {
-	return &Handler{services: services}
+func NewHandler(services *services.Services, job *jobs.Job) *Handler {
+	return &Handler{
+		services: services,
+		job:      job,
+	}
 }
 
 func (h *Handler) InitializeRoutes(srv *fiber.App) error {
@@ -37,17 +42,11 @@ func (h *Handler) InitializeRoutes(srv *fiber.App) error {
 }
 
 func (h *Handler) AddRoutes(srv *fiber.App) {
-
 	v1 := srv.Group("/api/v1", middles.SetContextHolder(h.services))
-
 	user := v1.Group("/user")
 	{
 		user.Post("/estimate/:userID", middles.AuthorizationMiddleWare(h.services), h.CtlEstimateUser)
-		//user.Post("/sign-up", h.CtlCreateUser) // create
-		//user.Post("/sign-out", nil)
-		//user.Get("", h.CtlGetAllUsers)
-		//user.Post("/edit", nil) // TODO update
-		//user.Get("/:id", h.CtlGetUser)
+		user.Post("/verify", middles.AuthorizationMiddleWare(h.services), h.CtlVerifyUser)
 	}
 
 	profile := v1.Group("/profile")
@@ -81,16 +80,30 @@ func (h *Handler) AddRoutes(srv *fiber.App) {
 
 	pet := user.Group("/pet")
 	{
-		user.Get("/:id/pet", h.CtlGetPet)
+		user.Get("/:id/pet", h.CtlGetUserPets)
 
 		pet.Get("/all", h.CtlGetAllPets)
+		pet.Get("/:id", h.CtlGetPetByID)
+
+		pet.Post("/:id/attachment", middles.AuthorizationMiddleWare(h.services), h.CtlCreateAttachments)
 		pet.Post("/:id", middles.AuthorizationMiddleWare(h.services), h.CtlCreateOrUpdatePet)
 		pet.Delete("/:id/delete", middles.AuthorizationMiddleWare(h.services), h.CtlDeletePet)
-		//pet.Put("/:id/edit", middles.AuthorizationMiddleWare(h.services), h.CtlUpdatePet)
+	}
+
+	attachment := pet.Group("attachment")
+	{
+
+		attachment.Get("/:id", h.CtlGetAttachment)
+		attachment.Delete("/:id", middles.AuthorizationMiddleWare(h.services), h.CtlDeleteAttachment)
 	}
 
 	countries := v1.Group("/countries")
 	{
 		countries.Get("", h.CtlGetCountries)
+	}
+
+	job := v1.Group("/job")
+	{
+		job.Post("/:code/start", h.CtlStartJob)
 	}
 }

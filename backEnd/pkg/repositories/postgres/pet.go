@@ -2,8 +2,10 @@ package postgres
 
 import (
 	"context"
+	"github.com/google/martian/log"
 	"github.com/olzhas-b/PetService/backEnd/pkg/models"
 	"gorm.io/gorm"
+	"time"
 )
 
 type PetRepository struct {
@@ -15,7 +17,7 @@ func NewPetRepository(DB *gorm.DB) *PetRepository {
 }
 
 func (repo *PetRepository) GetAllPets(ctx context.Context) (pets models.PetList, err error) {
-	err = repo.DB.Model(models.Pet{}).
+	err = repo.DB.Model(&models.Pet{}).
 		Preload("Image", func(DB *gorm.DB) *gorm.DB {
 			return DB.Omit("content")
 		}).
@@ -33,8 +35,11 @@ func (repo *PetRepository) GetPetsByUserID(ctx context.Context, id int64) (pets 
 
 	err = repo.DB.Model(&models.Pet{}).
 		Where("user_id = ?", id).
-		Preload("Image", func(DB *gorm.DB) *gorm.DB {
-			return DB.Omit("content")
+		Preload("Attachments", func(db *gorm.DB) *gorm.DB {
+			return db.Omit("content")
+		}).
+		Preload("Image", func(db *gorm.DB) *gorm.DB {
+			return db.Omit("content")
 		}).
 		Find(&pets).
 		Error
@@ -93,12 +98,18 @@ func (repo *PetRepository) DeletePetByID(ctx context.Context, userID, petID int6
 func (repo *PetRepository) GetPetByID(ctx context.Context, id int64) (pet models.Pet, err error) {
 	defer func() {
 		if err != nil {
-
+			log.Errorf("PetRepository.GetPetByID got error: %v", err)
 		}
 	}()
 
-	err = repo.DB.Model(models.Pet{}).
+	err = repo.DB.Model(&models.Pet{}).
 		Where("id = ?", id).
+		Preload("Attachments", func(db *gorm.DB) *gorm.DB {
+			return db.Omit("content")
+		}).
+		Preload("Image", func(db *gorm.DB) *gorm.DB {
+			return db.Omit("content")
+		}).
 		Take(&pet).
 		Error
 
@@ -117,4 +128,12 @@ func (repo *PetRepository) UpdateImageID(ctx context.Context, ID int64, imageID 
 		Where("id = ?", ID).
 		Update("image_id", imageID).
 		Error
+}
+
+func (repo *PetRepository) GetPetsWhichExpiredCertificate(ctx context.Context, expiredTime time.Time) (result []models.Pet, err error) {
+	err = repo.DB.Model(&models.Pet{}).
+		Where("date(expire_date) = TO_DATE(?, 'YYYY-MM-DD')", expiredTime.Format("2006.01.02")).
+		Find(&result).
+		Error
+	return
 }

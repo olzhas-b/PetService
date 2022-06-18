@@ -3,6 +3,7 @@ package repositories
 import (
 	"context"
 	"github.com/olzhas-b/PetService/backEnd/pkg/models"
+	"time"
 )
 
 type IPetRepository interface {
@@ -14,4 +15,5 @@ type IPetRepository interface {
 	GetAllPets(ctx context.Context) (pets models.PetList, err error)
 	GetPetImageID(ctx context.Context, ID int64) (imageID int64)
 	UpdateImageID(ctx context.Context, ID int64, imageID int64) error
+	GetPetsWhichExpiredCertificate(ctx context.Context, expiredTime time.Time) (result []models.Pet, err error)
 }

@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	"github.com/google/martian/log"
 	"github.com/olzhas-b/PetService/backEnd/pkg/models"
 	"gorm.io/gorm"
 )
@@ -23,7 +24,17 @@ func (repo *FavoriteRepository) GetFavoriteList(ctx context.Context, userID int6
 }
 
 func (repo *FavoriteRepository) AddToFavorite(ctx context.Context, favorite models.Favorite) (err error) {
-	return repo.DB.Table("favorite_user_service").Create(&favorite).Error
+	defer func() {
+		if err != nil {
+			log.Errorf("FavoriteRepository.AddToFavorite got error: %v && request body %v", err, favorite)
+		}
+	}()
+
+	err = repo.DB.WithContext(ctx).
+		Table("favorite_user_service").
+		Create(&favorite).
+		Error
+	return
 }
 
 func (repo *FavoriteRepository) RemoveFromFavorite(ctx context.Context, favorite models.Favorite) (err error) {

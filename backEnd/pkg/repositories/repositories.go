@@ -15,6 +15,7 @@ type Repositories struct {
 	repositories.IRatingRepository
 	repositories.ICountryRepository
 	repositories.IFavoriteRepository
+	repositories.IAttachmentRepository
 }
 
 func NewRepositories(DB *gorm.DB) *Repositories {
@@ -27,5 +28,6 @@ func NewRepositories(DB *gorm.DB) *Repositories {
 		IRatingRepository:          postgres.NewRatingRepository(DB),
 		ICountryRepository:         postgres.NewCountryRepository(DB),
 		IFavoriteRepository:        postgres.NewFavoriteRepository(DB),
+		IAttachmentRepository:      postgres.NewAttachmentRepository(DB),
 	}
 }

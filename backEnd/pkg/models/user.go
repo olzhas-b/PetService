@@ -22,6 +22,7 @@ type User struct {
 	AverageRating float64   `gorm:"average_rating" json:"averageRating"`
 	Created       time.Time `gorm:"created" json:"created"`
 	Updated       time.Time `gorm:"updated" json:"updated"`
+	IsVerified    bool      `gorm:"is_verified" json:"isVerified"`
 	Status        int64     `gorm:"status" json:"status"`
 	IsDeleted     bool      `gorm:"is_deleted" json:"isDeleted"`
 
@@ -56,6 +57,7 @@ func (u *User) ConvertToDto() (result map[string]interface{}) {
 	result["updated"] = u.Updated
 	result["created"] = u.Created
 	result["description"] = u.Description
+	result["isVerified"] = u.IsVerified
 
 	if u.Image != nil {
 		result["image"] = u.Image.ConvertToURL()
@@ -64,7 +66,7 @@ func (u *User) ConvertToDto() (result map[string]interface{}) {
 }
 
 func (u *User) GetOmitColumns() []string {
-	omit := []string{"average_rating", "count_rating", "status", "created", "password", "username", "login", "phone"}
+	omit := []string{"average_rating", "count_rating", "status", "created", "password", "username", "login", "phone", "score"}
 	if u.Image == nil {
 		omit = append(omit, "image_id")
 	}

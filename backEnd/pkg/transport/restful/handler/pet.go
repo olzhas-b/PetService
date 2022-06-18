@@ -5,7 +5,7 @@ import (
 	"github.com/olzhas-b/PetService/backEnd/consts"
 	"github.com/olzhas-b/PetService/backEnd/pkg/transport/restful/common"
 	"github.com/olzhas-b/PetService/backEnd/tools"
-	"github.com/olzhas-b/PetService/backEnd/tools/custom-parser"
+	custom_parser "github.com/olzhas-b/PetService/backEnd/tools/custom-parser"
 	"github.com/olzhas-b/PetService/backEnd/tools/utils"
 )
 
@@ -17,7 +17,16 @@ func (h *Handler) CtlGetAllPets(ctx *fiber.Ctx) error {
 	return common.GenShortResponse(ctx, consts.Success, result.ConvertToDTO(), "")
 }
 
-func (h *Handler) CtlGetPet(ctx *fiber.Ctx) error {
+func (h *Handler) CtlGetPetByID(ctx *fiber.Ctx) error {
+	id := ctx.Params("id")
+	result, err := h.services.IPetService.CtlGetPetByID(ctx.Context(), tools.StrToInt64(id))
+	if err != nil {
+		return common.GenShortResponse(ctx, consts.NotFoundErr, err.Error(), err.Error())
+	}
+	return common.GenShortResponse(ctx, consts.Success, result.ConvertToDTO(), "")
+}
+
+func (h *Handler) CtlGetUserPets(ctx *fiber.Ctx) error {
 	id := ctx.Params("id")
 	result, err := h.services.IPetService.ServiceGetPetsByUserID(ctx.Context(), tools.StrToInt64(id))
 	if err != nil {

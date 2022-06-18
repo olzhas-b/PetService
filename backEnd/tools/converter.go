@@ -19,6 +19,10 @@ func IntToStr(num int) string {
 	return strconv.Itoa(num)
 }
 
+func Int64ToStr(num int64) string {
+	return strconv.FormatInt(num, 10)
+}
+
 func StrToBool(str string) bool {
 	if str == "true" || str == "True" || str == "TRUE" {
 		return true

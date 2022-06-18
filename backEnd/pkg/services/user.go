@@ -67,10 +67,6 @@ func (srv *UserService) ServiceGetAllUsers(f *filter.User) (result []models.User
 func (srv *UserService) ServiceUpdateUser(ctx context.Context, user models.User, file *multipart.FileHeader) (result models.User, err error) {
 	user.ID = utils.GetCurrentUserID(ctx)
 	user.Updated = time.Now()
-	//imageID := s.repo.IUserRepository.GetImageIdByUserID(user.ID)
-	//if imageID != 0 {
-	//	user.ImageID = &imageID
-	//}
 	if err = srv.repo.IUserRepository.DeleteUserImageByUserID(ctx, user.ID); err != nil {
 		return
 	}
@@ -87,4 +83,9 @@ func (srv *UserService) ServiceUpdateUser(ctx context.Context, user models.User,
 
 	omitColumns := user.GetOmitColumns()
 	return srv.repo.IUserRepository.UpdateUser(ctx, user, omitColumns)
+}
+
+func (srv *UserService) ServiceVerifyUser(ctx context.Context) error {
+	id := utils.GetCurrentUserID(ctx)
+	return srv.repo.IUserRepository.VerifyUser(ctx, id)
 }

@@ -4,18 +4,26 @@ import (
 	"fmt"
 	"github.com/joho/godotenv"
 	"github.com/olzhas-b/PetService/backEnd/tools"
-
 	"log"
+	"os"
+
 	"time"
 )
 
 type Config struct {
-	Debug    bool
-	Redis    RedisConfig
-	Database DatabaseConfig
-	Token    TokenConfig
-	HTTP     HTTPConfig
-	TimeOut  bool
+	Debug        bool
+	Redis        RedisConfig
+	Database     DatabaseConfig
+	Token        TokenConfig
+	HTTP         HTTPConfig
+	Notification Notification
+	TimeOut      bool
+	Environment  string
+}
+
+type Notification struct {
+	InstanceID string
+	SecretKey  string
 }
 
 type HTTPConfig struct {
@@ -25,6 +33,9 @@ type HTTPConfig struct {
 }
 
 func (h *HTTPConfig) DNS() string {
+	if GlobalConfig.Environment == "PROD" {
+		return fmt.Sprintf("%s://%s", h.Http, h.Name)
+	}
 	return fmt.Sprintf("%s://%s:%s", h.Http, h.Name, h.Port)
 }
 
@@ -59,13 +70,15 @@ var (
 )
 
 func InitConfig() {
-	envs, err := godotenv.Read(".env")
+	env, err := godotenv.Read(".env")
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("couldn't read env file %v", err)
 	}
-
+	port := os.Getenv("PORT")
+	if len(port) == 0 {
+		port = env["HTTP-PORT"]
+	}
 	GlobalConfig = Config{
-
 		Token: TokenConfig{
 			AccessSecret:  "asdflsadaqjwe123DEavlkjl12312312",
 			RefreshSecret: "fadsf0ivoi@vlka0sd123,vk234/adsf;1!1231$$$#123",
@@ -73,15 +86,20 @@ func InitConfig() {
 			RefreshTtl:    time.Hour * 1000000,
 		},
 		HTTP: HTTPConfig{
-			Name: envs["HTTP-NAME"],
-			Port: envs["HTTP-PORT"],
-			Http: envs["HTTP-TYPE"],
+			Name: env["HTTP-NAME"],
+			Port: port,
+			Http: env["HTTP-TYPE"],
 		},
 		Redis: RedisConfig{
-			Addr:     envs["REDIS-ADDR"],
-			Password: envs["REDIS-PASSWORD"],
+			Addr:     env["REDIS-ADDR"],
+			Password: env["REDIS-PASSWORD"],
 		},
-		TimeOut: tools.StrToBool(envs["TIME-OUT"]),
+		Notification: Notification{
+			InstanceID: env["NOTIFICATION-INSTANCE-ID"],
+			SecretKey:  env["NOTIFICATION-SECRET-KEY"],
+		},
+		TimeOut:     tools.StrToBool(env["TIME-OUT"]),
+		Environment: env["ENVIRONMENT"],
 	}
 }
 

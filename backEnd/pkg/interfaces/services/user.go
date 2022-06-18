@@ -12,4 +12,5 @@ type IUserService interface {
 	ServiceCreateUser(user models.User) (models.User, error)
 	ServiceGetAllUsers(f *filter.User) ([]models.User, error)
 	ServiceUpdateUser(ctx context.Context, user models.User, file *multipart.FileHeader) (models.User, error)
+	ServiceVerifyUser(ctx context.Context) error
 }

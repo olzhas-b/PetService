@@ -75,3 +75,10 @@ func (h *Handler) CtlUpdateUser(ctx *fiber.Ctx) error {
 
 	return common.GenShortResponse(ctx, consts.Success, updateUser.ConvertToDto(), "")
 }
+
+func (h *Handler) CtlVerifyUser(ctx *fiber.Ctx) error {
+	if err := h.services.IUserService.ServiceVerifyUser(ctx.Context()); err != nil {
+		return common.GenShortResponse(ctx, consts.DBUpdateErr, err.Error(), "")
+	}
+	return common.GenShortResponse(ctx, consts.Success, "user successfully verified", "")
+}

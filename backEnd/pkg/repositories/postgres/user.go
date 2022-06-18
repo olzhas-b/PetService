@@ -87,3 +87,10 @@ func (repo *UserRepository) DeleteUserImageByUserID(ctx context.Context, userID 
 	//		    DELETE FROM image WHERE id = user_image_id;
 	//		END;`, userID, userID).Error
 }
+
+func (repo *UserRepository) VerifyUser(ctx context.Context, id int64) error {
+	return repo.DB.Model(&models.User{}).
+		Where("id = ?", id).
+		Update("is_verified", true).
+		Error
+}

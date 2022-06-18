@@ -4,9 +4,10 @@ import (
 	"github.com/go-redis/redis"
 	interfaces "github.com/olzhas-b/PetService/backEnd/pkg/interfaces/services"
 	repo "github.com/olzhas-b/PetService/backEnd/pkg/repositories"
+	push_notifications "github.com/pusher/push-notifications-go"
 )
 
-var Service Services
+//var Service Services
 
 type Services struct {
 	interfaces.IUserService
@@ -18,9 +19,11 @@ type Services struct {
 	interfaces.IRatingService
 	interfaces.ICountryService
 	interfaces.IFavoriteService
+	interfaces.IAttachmentService
+	interfaces.INotificationService
 }
 
-func NewServices(repo *repo.Repositories, redis *redis.Client) *Services {
+func NewServices(repo *repo.Repositories, redis *redis.Client, notifications push_notifications.PushNotifications) *Services {
 	return &Services{
 		IUserService:            NewUserService(repo),
 		IImageService:           NewImageService(repo),
@@ -31,5 +34,7 @@ func NewServices(repo *repo.Repositories, redis *redis.Client) *Services {
 		IRatingService:          NewRatingService(repo),
 		ICountryService:         NewCountryService(repo),
 		IFavoriteService:        NewFavoriteService(repo),
+		IAttachmentService:      NewAttachmentService(repo),
+		INotificationService:    NewNotificationService(repo, notifications),
 	}
 }

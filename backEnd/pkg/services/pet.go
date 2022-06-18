@@ -10,6 +10,7 @@ import (
 	"github.com/olzhas-b/PetService/backEnd/tools"
 	"github.com/olzhas-b/PetService/backEnd/tools/utils"
 	"mime/multipart"
+	"time"
 )
 
 type PetService struct {
@@ -20,8 +21,16 @@ func NewPetService(repo *repositories.Repositories) *PetService {
 	return &PetService{repo: repo}
 }
 
+func (srv *PetService) CtlGetPetByID(ctx context.Context, id int64) (pets models.Pet, err error) {
+	return srv.repo.GetPetByID(ctx, id)
+}
+
 func (srv *PetService) ServiceGetPetsByUserID(ctx context.Context, id int64) (pets models.PetList, err error) {
 	return srv.repo.IPetRepository.GetPetsByUserID(ctx, id)
+}
+
+func (srv *PetService) ServiceGetPetByID(ctx context.Context, id int64) (pets models.Pet, err error) {
+	return srv.repo.IPetRepository.GetPetByID(ctx, id)
 }
 
 func (srv *PetService) ServiceCreateOrUpdatePet(ctx context.Context, pet models.Pet, file *multipart.FileHeader, requestType string) (result models.Pet, err error) {
@@ -97,4 +106,12 @@ func (srv *PetService) ServiceDeletePet(ctx context.Context, userID int64, petID
 
 func (srv *PetService) ServiceGetAllPets(ctx context.Context) (pets models.PetList, err error) {
 	return srv.repo.IPetRepository.GetAllPets(ctx)
+}
+
+func (srv *PetService) ServiceGetPetsWhichExpiredCertificate(ctx context.Context) (pets []models.Pet, err error) {
+	now := time.Now()
+	if pets, err = srv.repo.IPetRepository.GetPetsWhichExpiredCertificate(ctx, now); err != nil {
+		return nil, fmt.Errorf("PetService.ServiceGetPetsWhichExpiredCertificate got error: %w", err)
+	}
+	return
 }
