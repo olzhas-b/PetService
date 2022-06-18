@@ -33,3 +33,5 @@ func GetCurrentTimePtr() *time.Time {
 	timeNow := time.Now()
 	return &timeNow
 }
+
+// test
